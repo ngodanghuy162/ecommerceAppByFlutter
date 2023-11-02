@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/features/authentication/screens/login/login_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,7 @@ class OnBoardingController extends GetxController {
 
   void nextPage() {
     if (currentPageIndex.value == 3 - 1) {
-      // Get.to(LoginScreen());
+      Get.offAll(const LoginScreen());
     } else {
       int page = currentPageIndex.value + 1;
       pageController.animateToPage(page,
@@ -27,7 +28,10 @@ class OnBoardingController extends GetxController {
   }
 
   void skipPage() {
-    pageController.animateToPage(3 - 1,
-        duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    Get.offAll(
+      const LoginScreen(),
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
   }
 }
