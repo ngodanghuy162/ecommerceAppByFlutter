@@ -12,7 +12,8 @@ class OnBoardingController extends GetxController {
   }
 
   void dotNavigationClick(index) {
-    pageController.jumpToPage(index);
+    pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 
   void nextPage() {
@@ -20,11 +21,13 @@ class OnBoardingController extends GetxController {
       // Get.to(LoginScreen());
     } else {
       int page = currentPageIndex.value + 1;
-      pageController.jumpToPage(page);
+      pageController.animateToPage(page,
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
     }
   }
 
   void skipPage() {
-    pageController.jumpToPage(3 - 1);
+    pageController.animateToPage(3 - 1,
+        duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 }
