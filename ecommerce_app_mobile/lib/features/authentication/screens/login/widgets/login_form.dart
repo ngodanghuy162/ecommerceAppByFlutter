@@ -1,4 +1,4 @@
-import 'package:ecommerce_app_mobile/features/authentication/screens/signup/signup_screen.dart';
+import 'package:ecommerce_app_mobile/features/authentication/screens/signup/signup.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
