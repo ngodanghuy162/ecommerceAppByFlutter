@@ -6,7 +6,7 @@ import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/curved_edges/c
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/curved_edges/curved_edges_widget.dart';
 import 'package:ecommerce_app_mobile/common/widgets/image_text_widgets/vertical_image_text.dart';
 import 'package:ecommerce_app_mobile/common/widgets/images/t_rounded_image.dart';
-import 'package:ecommerce_app_mobile/common/widgets/products_cart/cart_menu_icon.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/cart_menu_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_categories.dart';
