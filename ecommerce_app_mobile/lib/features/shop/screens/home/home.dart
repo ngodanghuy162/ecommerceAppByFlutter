@@ -6,8 +6,9 @@ import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/curved_edges/c
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/curved_edges/curved_edges_widget.dart';
 import 'package:ecommerce_app_mobile/common/widgets/image_text_widgets/vertical_image_text.dart';
 import 'package:ecommerce_app_mobile/common/widgets/images/t_rounded_image.dart';
+import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart_menu_icon.dart';
-import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_cart_vertical.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_categories.dart';
@@ -29,7 +30,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
         body: SingleChildScrollView(
       child: Column(
         children: [
@@ -70,13 +71,23 @@ class HomeScreen extends StatelessWidget {
           /// Body
           Padding(
             padding: EdgeInsets.all(TSizes.defaultSpace),
-            child: TPromoSlider(banners: [
-              TImages.promoBanner1,
-              TImages.promoBanner2,
-              TImages.promoBanner3
-            ]),
+            child: Column(
+              children: [
+                TPromoSlider(banners: [
+                  TImages.promoBanner1,
+                  TImages.promoBanner2,
+                  TImages.promoBanner3
+                ]),
+                SizedBox(
+                  height: TSizes.spaceBtwSections,
+                ),
+                TGridLayout(
+                  itemCount: 4,
+                  itemBuilder: (_, index) => TProductCardVertical(),
+                )
+              ],
+            ),
           ),
-          TProductCardVertical()
         ],
       ),
     ));
