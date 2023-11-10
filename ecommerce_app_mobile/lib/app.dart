@@ -1,4 +1,5 @@
 import 'package:ecommerce_app_mobile/features/authentication/screens/onboarding/onboarding.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:ecommerce_app_mobile/utils/constants/text_strings.dart';
@@ -17,6 +18,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // initialBinding: GeneralBindings(),
       home: const OnBoardingScreen(),
+      // home: HomeScreen(),
     );
   }
 }
