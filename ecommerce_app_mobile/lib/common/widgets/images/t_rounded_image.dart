@@ -12,7 +12,7 @@ class TRoundedImage extends StatelessWidget {
     this.padding,
     this.borderRadius = TSizes.md,
     this.applyImageRadius = true,
-    this.backgroundColor = TColors.light,
+    this.backgroundColor,
     this.fit = BoxFit.contain,
     this.isNetworkImage = false,
     required this.imageUrl,
@@ -24,7 +24,7 @@ class TRoundedImage extends StatelessWidget {
   final double borderRadius;
   final bool applyImageRadius;
   final BoxBorder? border;
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final BoxFit? fit;
   final bool isNetworkImage;
   final String imageUrl;
