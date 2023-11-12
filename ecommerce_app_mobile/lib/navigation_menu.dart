@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/features/personalization/screens/settings/settings.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/home.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/store/store.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/wishlist/wishlist_screen.dart';
@@ -48,6 +49,6 @@ class NavigationController extends GetxController {
     const StoreScreen(),
     const WishlistScreen(),
     Container(color: Colors.orange),
-    Container(color: Colors.blue)
+    const SettingsScreen()
   ];
 }

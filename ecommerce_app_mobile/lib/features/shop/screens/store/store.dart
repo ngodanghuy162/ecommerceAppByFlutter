@@ -5,11 +5,13 @@ import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/sear
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart_menu_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/store/widgets/category_tab.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({super.key});
@@ -24,7 +26,7 @@ class StoreScreen extends StatelessWidget {
               Text('Store', style: Theme.of(context).textTheme.headlineMedium),
           actions: [
             TCartCounterIcon(
-              onPressed: () {},
+              onPressed: () => Get.to(const CartScreen()),
               iconColor: null,
             )
           ],
@@ -104,5 +106,3 @@ class StoreScreen extends StatelessWidget {
     );
   }
 }
-
-

@@ -22,8 +22,7 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         children: [
           /// Header
-          // ignore: prefer_const_constructors
-          TPrimaryHeaderContainer(
+          const TPrimaryHeaderContainer(
             child: Column(
               children: [
                 /// -- Appbar
@@ -51,32 +50,34 @@ class HomeScreen extends StatelessWidget {
                       THomeCategories(),
                     ],
                   ),
-                )
+                ),
+
+                SizedBox(height: TSizes.spaceBtwSections),
               ],
             ),
           ),
 
           /// Body
           Padding(
-            padding: EdgeInsets.all(TSizes.defaultSpace),
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
             child: Column(
               children: [
-                TPromoSlider(banners: [
+                const TPromoSlider(banners: [
                   TImages.promoBanner1,
                   TImages.promoBanner2,
                   TImages.promoBanner3
                 ]),
-                SizedBox(
+                const SizedBox(
                   height: TSizes.spaceBtwSections,
                 ),
 
                 /// -- Heading
-                TSectionHeading(title: "Popular Products", onPressed: (){}),
+                TSectionHeading(title: "Popular Products", onPressed: () {}),
                 const SizedBox(height: TSizes.spaceBtwItems),
 
                 TGridLayout(
                   itemCount: 4,
-                  itemBuilder: (_, index) => TProductCardVertical(),
+                  itemBuilder: (_, index) => const TProductCardVertical(),
                 )
               ],
             ),
