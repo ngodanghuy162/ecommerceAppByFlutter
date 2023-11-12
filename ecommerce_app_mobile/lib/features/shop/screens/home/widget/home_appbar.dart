@@ -36,7 +36,8 @@ class THomeAppBar extends StatelessWidget {
             onPressed: () {
               Get.to(const CartScreen());
             },
-            iconColor: TColors.white),
+            iconColor: TColors.white,
+        ),
       ],
     );
   }
