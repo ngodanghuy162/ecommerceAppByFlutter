@@ -1,10 +1,9 @@
 import 'package:ecommerce_app_mobile/common/styles/product_price_text.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/cart/add_remove_button.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/cart/t_cart_item.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../common/widgets/products_cart/add_remove_button.dart';
-import '../../../../common/widgets/products_cart/t_cart_item.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -29,14 +28,14 @@ class CartScreen extends StatelessWidget {
             },
             itemCount: 10,
             itemBuilder: (context, index) {
-              return Column(
+              return const Column(
                 children: [
-                  const TCartItem(),
-                  const SizedBox(height: TSizes.spaceBtwItems),
+                  TCartItem(),
+                  SizedBox(height: TSizes.spaceBtwItems),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(width: 70),
+                      SizedBox(width: 70),
                       TProductQuantityWithAddAndRemove(),
                       TProductPriceText(price: '256'),
                     ],

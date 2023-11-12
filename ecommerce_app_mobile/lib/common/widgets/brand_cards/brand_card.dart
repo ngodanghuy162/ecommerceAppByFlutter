@@ -20,9 +20,9 @@ class TBrandCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
     return GestureDetector(
       onTap: onTap,
+
       /// Container Design
       child: TRoundedContainer(
         padding: const EdgeInsets.all(TSizes.sm),
@@ -37,8 +37,7 @@ class TBrandCard extends StatelessWidget {
                 isNetworkImage: false,
                 image: TImages.clothIcon,
                 backgroundColor: Colors.transparent,
-                overlayColor:
-                THelperFunctions.isDarkMode(context)
+                overlayColor: THelperFunctions.isDarkMode(context)
                     ? TColors.white
                     : TColors.black,
               ),
@@ -51,19 +50,16 @@ class TBrandCard extends StatelessWidget {
             Expanded(
               child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TBrandTitleWithVerifiedIcon(
+                    const TBrandTitleWithVerifiedIcon(
                       title: 'Nike',
                       brandTextSize: TextSizes.large,
                     ),
                     Text(
                       '256 products',
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelMedium,
+                      style: Theme.of(context).textTheme.labelMedium,
                     )
                   ]),
             )

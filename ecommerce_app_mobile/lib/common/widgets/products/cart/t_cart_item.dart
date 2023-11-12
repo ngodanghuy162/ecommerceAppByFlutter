@@ -17,7 +17,7 @@ class TCartItem extends StatelessWidget {
     return Row(
       children: [
         //Image
-        TRoundImage(
+        TRoundedImage(
           imageUrl: TImages.productImage1,
           width: 60,
           height: 60,
@@ -36,7 +36,7 @@ class TCartItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               const TBrandTitleWithVerifiedIcon(title: 'Nike'),
-              Flexible(
+              const Flexible(
                 child: TProductTitleText(
                   title: 'Black sport shoes',
                   maxLines: 1,

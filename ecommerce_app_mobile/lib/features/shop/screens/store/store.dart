@@ -1,21 +1,17 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/tabbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/brand_cards/brand_card.dart';
-import 'package:ecommerce_app_mobile/common/widgets/brand_cards/brand_show_case.dart';
-import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
-import 'package:ecommerce_app_mobile/common/widgets/images/t_circular_image.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart_menu_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
-import 'package:ecommerce_app_mobile/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/store/widgets/category_tab.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
-import 'package:ecommerce_app_mobile/utils/constants/enums.dart';
-import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class StoreScreen extends StatelessWidget {
   const StoreScreen({super.key});
@@ -30,7 +26,7 @@ class StoreScreen extends StatelessWidget {
               Text('Store', style: Theme.of(context).textTheme.headlineMedium),
           actions: [
             TCartCounterIcon(
-              onPressed: () {},
+              onPressed: () => Get.to(const CartScreen()),
               iconColor: null,
             )
           ],
@@ -48,27 +44,27 @@ class StoreScreen extends StatelessWidget {
                 expandedHeight: 440,
 
                 flexibleSpace: Padding(
-                  padding: EdgeInsets.all(TSizes.defaultSpace),
+                  padding: const EdgeInsets.all(TSizes.defaultSpace),
                   child: ListView(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       /// Search bar
-                      SizedBox(height: TSizes.spaceBtwItems),
-                      TSearchContainer(
+                      const SizedBox(height: TSizes.spaceBtwItems),
+                      const TSearchContainer(
                         text: 'Search in Store',
                         showBorder: true,
                         showBackground: false,
                         padding: EdgeInsets.zero,
                       ),
-                      SizedBox(height: TSizes.spaceBtwSections),
+                      const SizedBox(height: TSizes.spaceBtwSections),
 
                       /// Featured Brands
                       TSectionHeading(
                         title: 'Featured Brands',
                         onPressed: () {},
                       ),
-                      SizedBox(height: TSizes.spaceBtwItems / 1.5),
+                      const SizedBox(height: TSizes.spaceBtwItems / 1.5),
 
                       TGridLayout(
                         itemCount: 4,
@@ -82,7 +78,7 @@ class StoreScreen extends StatelessWidget {
                 ),
 
                 /// Tabs
-                bottom: TTabBar(
+                bottom: const TTabBar(
                   tabs: [
                     Tab(child: Text('Sport')),
                     Tab(child: Text('Furniture')),
@@ -96,7 +92,7 @@ class StoreScreen extends StatelessWidget {
           },
 
           /// Body
-          body: TabBarView(
+          body: const TabBarView(
             children: [
               TCategoryTab(),
               TCategoryTab(),
@@ -110,5 +106,3 @@ class StoreScreen extends StatelessWidget {
     );
   }
 }
-
-

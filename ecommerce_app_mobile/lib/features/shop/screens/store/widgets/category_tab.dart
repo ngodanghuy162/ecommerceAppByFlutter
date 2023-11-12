@@ -20,15 +20,35 @@ class TCategoryTab extends StatelessWidget {
           child: Column(
             children: [
               /// -- Brands
-              TBrandShowcase(images: [TImages.productImage3, TImages.productImage2, TImages.productImage1],),
-              TBrandShowcase(images: [TImages.productImage3, TImages.productImage2, TImages.productImage1],),
-              const SizedBox(height: TSizes.spaceBtwItems,),
+              const TBrandShowcase(
+                images: [
+                  TImages.productImage3,
+                  TImages.productImage2,
+                  TImages.productImage1
+                ],
+              ),
+              const TBrandShowcase(
+                images: [
+                  TImages.productImage3,
+                  TImages.productImage2,
+                  TImages.productImage1
+                ],
+              ),
+              const SizedBox(
+                height: TSizes.spaceBtwItems,
+              ),
 
               /// -- Products
-              TSectionHeading(title: 'You might like', showActionButton: true, onPressed: () {},),
+              TSectionHeading(
+                title: 'You might like',
+                showActionButton: true,
+                onPressed: () {},
+              ),
               const SizedBox(height: TSizes.spaceBtwItems),
 
-              TGridLayout(itemCount: 4, itemBuilder: (_, index) => const TProductCardVertical()),
+              TGridLayout(
+                  itemCount: 4,
+                  itemBuilder: (_, index) => const TProductCardVertical()),
               const SizedBox(height: TSizes.spaceBtwSections),
             ],
           ),

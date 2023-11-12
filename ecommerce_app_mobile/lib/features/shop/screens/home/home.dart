@@ -1,13 +1,6 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/primary_header_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
-import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/curved_edges/curved_edges.dart';
-import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/curved_edges/curved_edges_widget.dart';
-import 'package:ecommerce_app_mobile/common/widgets/image_text_widgets/vertical_image_text.dart';
-import 'package:ecommerce_app_mobile/common/widgets/images/t_rounded_image.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
-import 'package:ecommerce_app_mobile/common/widgets/products/cart_menu_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_appbar.dart';
@@ -29,7 +22,7 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         children: [
           /// Header
-          TPrimaryHeaderContainer(
+          const TPrimaryHeaderContainer(
             child: Column(
               children: [
                 /// -- Appbar
@@ -64,25 +57,25 @@ class HomeScreen extends StatelessWidget {
 
           /// Body
           Padding(
-            padding: EdgeInsets.all(TSizes.defaultSpace),
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
             child: Column(
               children: [
-                TPromoSlider(banners: [
+                const TPromoSlider(banners: [
                   TImages.promoBanner1,
                   TImages.promoBanner2,
                   TImages.promoBanner3
                 ]),
-                SizedBox(
+                const SizedBox(
                   height: TSizes.spaceBtwSections,
                 ),
 
                 /// -- Heading
-                TSectionHeading(title: "Popular Products", onPressed: (){}),
+                TSectionHeading(title: "Popular Products", onPressed: () {}),
                 const SizedBox(height: TSizes.spaceBtwItems),
 
                 TGridLayout(
                   itemCount: 4,
-                  itemBuilder: (_, index) => TProductCardVertical(),
+                  itemBuilder: (_, index) => const TProductCardVertical(),
                 )
               ],
             ),

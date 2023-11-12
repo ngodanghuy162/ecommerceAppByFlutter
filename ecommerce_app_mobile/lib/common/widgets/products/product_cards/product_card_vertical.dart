@@ -10,7 +10,6 @@ import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TProductCardVertical extends StatelessWidget {
@@ -66,19 +65,20 @@ class TProductCardVertical extends StatelessWidget {
               ),
             ]),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(left: TSizes.sm),
             child: Column(children: [
-              const TProductTitleText(
+              TProductTitleText(
                 title: 'Green Nike Air Shoes',
                 smallSize: true,
               ),
-              const SizedBox(height: TSizes.spaceBtwItems / 2),
-             TBrandTitleWithVerifiedIcon(title: 'Nike'),
+              SizedBox(height: TSizes.spaceBtwItems / 2),
+              TBrandTitleWithVerifiedIcon(title: 'Nike'),
             ]),
           ),
 
           const Spacer(),
+
           /// Price Row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,8 +95,7 @@ class TProductCardVertical extends StatelessWidget {
                     color: TColors.dark,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(TSizes.cardRadiusMd),
-                      bottomRight:
-                      Radius.circular(TSizes.productImageRadius),
+                      bottomRight: Radius.circular(TSizes.productImageRadius),
                     )),
                 child: const SizedBox(
                   width: TSizes.iconLg * 1.2,
