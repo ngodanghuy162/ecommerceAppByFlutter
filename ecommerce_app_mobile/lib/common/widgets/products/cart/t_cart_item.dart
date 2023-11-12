@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 class TCartItem extends StatelessWidget {
   const TCartItem({
     super.key,
+
   });
 
   @override
@@ -17,7 +18,7 @@ class TCartItem extends StatelessWidget {
     return Row(
       children: [
         //Image
-        TRoundImage(
+        TRoundedImage(
           imageUrl: TImages.productImage1,
           width: 60,
           height: 60,
