@@ -20,6 +20,7 @@ class TBrandCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final isDark = THelperFunctions.isDarkMode(context);
     return GestureDetector(
       onTap: onTap,
@@ -54,7 +55,7 @@ class TBrandCard extends StatelessWidget {
                   crossAxisAlignment:
                   CrossAxisAlignment.start,
                   children: [
-                    TBrandTitleWithVerifiedIcon(
+                    const TBrandTitleWithVerifiedIcon(
                       title: 'Nike',
                       brandTextSize: TextSizes.large,
                     ),
