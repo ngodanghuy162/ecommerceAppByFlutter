@@ -31,28 +31,36 @@ class CheckoutScreen extends StatelessWidget {
               children: [
                 const TCartItems(showAddRemoveButton: false),
                 const SizedBox(height: TSizes.spaceBtwSections),
-                TCouponCode(),
+                const TCouponCode(),
                 const SizedBox(
                   height: TSizes.spaceBtwSections,
                 ),
                 TRoundedContainer(
                   showBorder: true,
                   backgroundColor: dark ? TColors.black : TColors.white,
-                  child: Column(
-                    children: [
-                      TBillingPaymentSection(),
-                      const SizedBox(
-                        height: TSizes.spaceBtwItems,
-                      ),
-                      const Divider(),
-                      const SizedBox(
-                        height: TSizes.spaceBtwSections,
-                      ),
-                      TBillingAddressSection(),
-                      const SizedBox(
-                        height: TSizes.spaceBtwItems,
-                      ),
-                    ],
+                  child: const Padding(
+                    padding: EdgeInsets.only(
+                      top: TSizes.sm,
+                      bottom: TSizes.sm,
+                      right: TSizes.sm,
+                      left: TSizes.md,
+                    ),
+                    child: Column(
+                      children: [
+                        TBillingPaymentSection(),
+                        SizedBox(
+                          height: TSizes.spaceBtwItems,
+                        ),
+                        Divider(),
+                        SizedBox(
+                          height: TSizes.spaceBtwSections,
+                        ),
+                        TBillingAddressSection(),
+                        SizedBox(
+                          height: TSizes.spaceBtwItems,
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],

@@ -28,10 +28,10 @@ class TCartItems extends StatelessWidget {
                 if (showAddRemoveButton)
                 const SizedBox(height: TSizes.spaceBtwItems),
                 if (showAddRemoveButton)
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(width: 70),
+                    SizedBox(width: 70),
                     TProductQuantityWithAddAndRemove(),
                     TProductPriceText(price: '256'),
                   ],
