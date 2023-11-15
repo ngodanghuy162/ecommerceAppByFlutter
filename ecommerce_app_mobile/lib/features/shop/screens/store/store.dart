@@ -1,6 +1,6 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/tabbar.dart';
-import 'package:ecommerce_app_mobile/common/widgets/brand_cards/brand_card.dart';
+import 'package:ecommerce_app_mobile/common/widgets/brands/brand_card.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart_menu_icon.dart';
