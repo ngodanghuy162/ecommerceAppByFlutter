@@ -5,6 +5,7 @@ import 'package:ecommerce_app_mobile/common/widgets/list_tiles/settings_menu_til
 import 'package:ecommerce_app_mobile/common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/order/order.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -65,10 +66,11 @@ class SettingsScreen extends StatelessWidget {
                     subTitle: 'Add, remove products and move to checkout',
                     onTap: () => Get.to(const CartScreen()),
                   ),
-                  const TSettingsMenuTile(
+                  TSettingsMenuTile(
                     icon: Iconsax.bag_tick,
                     title: 'My Orders',
                     subTitle: 'In-progress and Completed Orders',
+                    onTap: () => Get.to(const OrderScreen()),
                   ),
                   const TSettingsMenuTile(
                     icon: Iconsax.bank,
