@@ -5,6 +5,7 @@ import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/sear
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart_menu_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/brand/all_brands.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/store/widgets/category_tab.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
@@ -63,7 +64,7 @@ class StoreScreen extends StatelessWidget {
                       /// Featured Brands
                       TSectionHeading(
                         title: 'Featured Brands',
-                        onPressed: () {},
+                        onPressed: () => Get.to(() => const AllBrandsScreen()),
                       ),
                       const SizedBox(height: TSizes.spaceBtwItems / 1.5),
 

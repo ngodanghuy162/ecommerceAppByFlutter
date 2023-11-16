@@ -22,8 +22,6 @@ class WishlistScreen extends StatelessWidget {
             TCircularIcon(
               icon: Iconsax.add,
               onPressed: () => Get.to(const UserAddressScreen()),
-
-              // onPressed: () => Get.to(const UserAddressScreen()),
             ),
           ],
         ),
