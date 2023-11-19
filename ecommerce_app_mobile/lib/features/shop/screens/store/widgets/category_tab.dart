@@ -1,4 +1,4 @@
-import 'package:ecommerce_app_mobile/common/widgets/brand_cards/brand_show_case.dart';
+import 'package:ecommerce_app_mobile/common/widgets/brands/brand_show_case.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
