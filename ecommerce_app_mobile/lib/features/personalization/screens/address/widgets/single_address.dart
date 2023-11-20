@@ -41,7 +41,7 @@ class TSingleAddress extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Johm Doe',
+                'Tran Van A',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleLarge,
@@ -54,7 +54,7 @@ class TSingleAddress extends StatelessWidget {
               ),
               const SizedBox(height: TSizes.sm / 2),
               const Text(
-                '82356 Timmys Coves, South Liana, Maine, 87665, USA',
+                '44 Tran Thai Tong, Dich Vong Hau, Cau Giay, Ha Noi',
                 softWrap: true,
               )
             ],

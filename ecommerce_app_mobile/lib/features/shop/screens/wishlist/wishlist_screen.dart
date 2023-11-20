@@ -2,7 +2,7 @@ import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
-import 'package:ecommerce_app_mobile/features/shop/screens/home/home.dart';
+import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,11 +15,14 @@ class WishlistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: TAppBar(
+          showBackArrow: false,
           title: Text("Wishlist",
               style: Theme.of(context).textTheme.headlineMedium),
           actions: [
             TCircularIcon(
-                icon: Iconsax.add, onPressed: () => Get.to(const HomeScreen())),
+              icon: Iconsax.add,
+              onPressed: () => Get.to(const UserAddressScreen()),
+            ),
           ],
         ),
         body: SingleChildScrollView(
@@ -28,8 +31,9 @@ class WishlistScreen extends StatelessWidget {
             child: Column(
               children: [
                 TGridLayout(
-                    itemCount: 4,
-                    itemBuilder: (_, index) => const TProductCardVertical())
+                  itemCount: 4,
+                  itemBuilder: (_, index) => const TProductCardVertical(),
+                )
               ],
             ),
           ),

@@ -52,6 +52,7 @@ dependencies:
   capped_progress_indicator: ^0.0.2
   intl: ^0.18.1
   carousel_slider: ^4.2.1
+  firebase_core: ^2.22.0
 
 dev_dependencies:
   flutter_test:
@@ -82,8 +83,10 @@ flutter:
     - assets/icons/brands/
     - assets/images/banners/
     - assets/images/products/
+    - assets/images/reviews/
     - assets/images/animations/
     - assets/icons/categories/
+    - assets/icons/payment_methods/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
