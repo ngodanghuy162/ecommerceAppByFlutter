@@ -1,5 +1,8 @@
+import 'package:ecommerce_app_mobile/Controller/log_in_controller.dart';
+import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/password_configuration/forget_password.dart';
-import 'package:ecommerce_app_mobile/features/authentication/screens/signup/signup.dart';
+import 'package:ecommerce_app_mobile/features/authentication/screens/signup/sign_up_screen.dart';
+import 'package:ecommerce_app_mobile/features/authentication/screens/signup/verify_email.dart';
 import 'package:ecommerce_app_mobile/navigation_menu.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/constants/text_strings.dart';
@@ -14,6 +17,7 @@ class TLoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(LoginController());
     return Form(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwSections),
@@ -21,6 +25,7 @@ class TLoginForm extends StatelessWidget {
           children: [
             //Email
             TextFormField(
+              controller: LoginController.instance.email,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Iconsax.direct_right),
                 labelText: TTexts.email,
@@ -32,6 +37,7 @@ class TLoginForm extends StatelessWidget {
 
             //Password
             TextFormField(
+              controller: LoginController.instance.password,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Iconsax.password_check),
                 suffixIcon: Icon(Iconsax.eye_slash),
@@ -64,11 +70,29 @@ class TLoginForm extends StatelessWidget {
 
             const SizedBox(height: TSizes.spaceBtwSections),
 
-            //Sign in
+            //Sign in, log in
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => const NavigationMenu()),
+                onPressed: () async {
+                  var currentAuthUser = await LoginController.instance.logIn();
+                  if (currentAuthUser.emailVerified) {
+                    Get.snackbar(
+                        "Login sucess", "Now you can begin your adventure ");
+                    Future.delayed(const Duration(seconds: 1), () {
+                      Get.to(() => const NavigationMenu());
+                    });
+                  } else {
+                    await showDialogOnScreen(
+                      context: context,
+                      title: "Haven't verify email",
+                      description: "You need to verify your email first",
+                      onOkPressed: () {
+                        Get.to(() => const VerifyEmailScreen());
+                      },
+                    );
+                  }
+                },
                 child: const Text(TTexts.signIn),
               ),
             ),

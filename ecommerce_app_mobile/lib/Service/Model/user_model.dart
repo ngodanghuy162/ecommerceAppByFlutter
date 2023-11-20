@@ -2,33 +2,89 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CloudUserModel {
- final String userId;
- final  String email;
- final String password;
- final String phoneNumber;
- final List<Map<String, dynamic>> address;
-  final List<DocumentReference> wishlist;
- final Map<String, List<String>> voucher;
- final List<Map<String, dynamic>> cart;
-  final double totalIncome;
- final String bankAccount;
- final  double totalConsumption;
+  String userId;
+  String firstName;
+  String lastName;
+  String userName;
+  String email;
+  String password;
+  String phoneNumber;
+  List<Map<String, dynamic>> address;
+  List<DocumentReference> wishlist;
+  Map<String, List<String>> voucher;
+  List<Map<String, dynamic>> cart;
+  double totalIncome;
+  String bankAccount;
+  double totalConsumption;
 
-  CloudUserModel({required this.userId, required this.email, required this.password, required this.phoneNumber, required this.address, required this.wishlist, required this.voucher, required this.cart, required this.totalIncome, required this.bankAccount, required this.totalConsumption});
+  // Hàm khởi tạo
+  CloudUserModel({
+    required this.userId,
+    required this.firstName,
+    required this.lastName,
+    required this.userName,
+    required this.email,
+    required this.password,
+    required this.phoneNumber,
+    List<Map<String, dynamic>>? address,
+    List<DocumentReference>? wishlist,
+    Map<String, List<String>>? voucher,
+    List<Map<String, dynamic>>? cart,
+    double? totalIncome,
+    String? bankAccount,
+    double? totalConsumption,
+  })  : address = address ?? [],
+        wishlist = wishlist ?? [],
+        voucher = voucher ?? {},
+        cart = cart ?? [],
+        totalIncome = totalIncome ?? 0.0,
+        bankAccount = bankAccount ?? '',
+        totalConsumption = totalConsumption ?? 0.0;
 
-  factory CloudUserModel.fromSnapshot(DocumentSnapshot snapshot) {
+  // ham khoi tao cho qua trinh dang ky
+
+  CloudUserModel.register({
+    required this.userId,
+    required this.firstName,
+    required this.lastName,
+    required this.userName,
+    required this.email,
+    required this.password,
+    required this.phoneNumber,
+    List<Map<String, dynamic>>? address,
+    List<DocumentReference>? wishlist,
+    Map<String, List<String>>? voucher,
+    List<Map<String, dynamic>>? cart,
+    double? totalIncome,
+    String? bankAccount,
+    double? totalConsumption,
+  })  : address = address ?? [],
+        wishlist = wishlist ?? [],
+        voucher = voucher ?? {},
+        cart = cart ?? [],
+        totalIncome = totalIncome ?? 0.0,
+        bankAccount = bankAccount ?? '',
+        totalConsumption = totalConsumption ?? 0.0;
+
+  // ham khoi tao cho qua trinh dang ky
+
+  factory CloudUserModel.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return CloudUserModel(
       userId: snapshot.id,
-      email: snapshot['email'],
-      password: snapshot['password'],
-      phoneNumber: snapshot['phone_number'],
-      address: List<Map<String, dynamic>>.from(snapshot['address']),
-      wishlist: List<DocumentReference>.from(snapshot['wishlist']),
-      voucher: Map<String, List<String>>.from(snapshot['voucher']),
-      cart: List<Map<String, dynamic>>.from(snapshot['cart']),
-      totalIncome: snapshot['totalIncome'],
-      bankAccount: snapshot['bankAccount'],
-      totalConsumption: snapshot['totalConsumption'],
+      email: snapshot.data()?['email'],
+      password: snapshot.data()?['password'],
+      phoneNumber: snapshot.data()?['phone_number'],
+      firstName: snapshot.data()?['first_name'],
+      lastName: snapshot.data()?['first_name'],
+      userName: snapshot.data()?['first_name'],
+      address: List<Map<String, dynamic>>.from(snapshot.data()?['address']),
+      wishlist: List<DocumentReference>.from(snapshot.data()?['wishlist']),
+      voucher: Map<String, List<String>>.from(snapshot.data()?['voucher']),
+      cart: List<Map<String, dynamic>>.from(snapshot.data()?['cart']),
+      totalIncome: snapshot.data()?['totalIncome'],
+      bankAccount: snapshot.data()?['bankAccount'],
+      totalConsumption: snapshot.data()?['totalConsumption'],
     );
   }
 

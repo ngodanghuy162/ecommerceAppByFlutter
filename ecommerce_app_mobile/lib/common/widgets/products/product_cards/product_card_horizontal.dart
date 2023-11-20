@@ -1,8 +1,6 @@
-import 'dart:js';
 
 import 'package:ecommerce_app_mobile/common/styles/product_price_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/product_title_text.dart';
-import 'package:ecommerce_app_mobile/common/styles/shadows.dart';
 import 'package:ecommerce_app_mobile/common/styles/t_brand_title_text_with_verified_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
