@@ -38,8 +38,9 @@ class FirebaseAuthProvider {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       final user = currentFirebaseUser;
-      UserRepository.userRepository.createUser(new CloudUserModel.register(
-          userId: user!.uid,
+      user!.sendEmailVerification();
+      UserRepository.userRepository.createUser(CloudUserModel.register(
+          userId: user.uid,
           firstName: firstName,
           lastName: lastName,
           userName: userName,

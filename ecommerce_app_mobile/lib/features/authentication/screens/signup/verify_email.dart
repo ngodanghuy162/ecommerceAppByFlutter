@@ -72,6 +72,9 @@ class VerifyEmailScreen extends StatelessWidget {
                           callback: () => Get.to(() => const LoginScreen()),
                         ),
                       );
+                    } else {
+                      print("Da an continue");
+                      Get.to(() => new VerifyEmailScreen());
                     }
                   },
                   child: const Text(TTexts.tContinue),
