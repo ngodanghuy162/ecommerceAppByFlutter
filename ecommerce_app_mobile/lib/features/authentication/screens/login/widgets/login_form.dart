@@ -1,4 +1,5 @@
 import 'package:ecommerce_app_mobile/Controller/log_in_controller.dart';
+import 'package:ecommerce_app_mobile/Service/Auth/auth_exception.dart';
 import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/password_configuration/forget_password.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/signup/sign_up_screen.dart';
@@ -75,18 +76,48 @@ class TLoginForm extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
-                  var currentAuthUser = await LoginController.instance.logIn();
-                  if (currentAuthUser.emailVerified) {
-                    Get.snackbar(
-                        "Login sucess", "Now you can begin your adventure ");
-                    Future.delayed(const Duration(seconds: 1), () {
-                      Get.to(() => const NavigationMenu());
-                    });
-                  } else {
+                  try {
+                    var currentAuthUser =
+                        await LoginController.instance.logIn();
+                    if (currentAuthUser.emailVerified) {
+                      Get.snackbar(
+                          "Login sucess", "Now you can begin your adventure ");
+                      Future.delayed(const Duration(seconds: 1), () {
+                        Get.to(() => const NavigationMenu());
+                      });
+                    } else {
+                      await showDialogOnScreen(
+                        context: context,
+                        title: "Haven't verify email",
+                        description: "You need to verify your email first",
+                        onOkPressed: () {
+                          Get.to(() => const VerifyEmailScreen());
+                        },
+                      );
+                    }
+                  } on WrongPasswordAuthException {
                     await showDialogOnScreen(
                       context: context,
-                      title: "Haven't verify email",
-                      description: "You need to verify your email first",
+                      title: "Wrong password.",
+                      description: "Try to remember your password",
+                      onOkPressed: () {
+                        Get.to(() => const VerifyEmailScreen());
+                      },
+                    );
+                  } on UserNotFoundAuthException {
+                    await showDialogOnScreen(
+                      context: context,
+                      title: "User not found",
+                      description: "You haven't registered your account",
+                      onOkPressed: () {
+                        Get.to(() => const VerifyEmailScreen());
+                      },
+                    );
+                  } on GenericAuthException {
+                    await showDialogOnScreen(
+                      context: context,
+                      title: "Something wrong",
+                      description: "Try again to login",
                       onOkPressed: () {
                         Get.to(() => const VerifyEmailScreen());
                       },

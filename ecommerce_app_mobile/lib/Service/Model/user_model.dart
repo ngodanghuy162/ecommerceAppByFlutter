@@ -41,8 +41,7 @@ class CloudUserModel {
         bankAccount = bankAccount ?? '',
         totalConsumption = totalConsumption ?? 0.0;
 
-  // ham khoi tao cho qua trinh dang ky
-
+  // ham khoi tao cho qua trinh dang ky bang gmail
   CloudUserModel.register({
     required this.userId,
     required this.firstName,
@@ -66,8 +65,31 @@ class CloudUserModel {
         bankAccount = bankAccount ?? '',
         totalConsumption = totalConsumption ?? 0.0;
 
-  // ham khoi tao cho qua trinh dang ky
+  // dki tk voi google
+  CloudUserModel.registerByGg({
+    required this.userId,
+    required this.userName,
+    required this.email,
+    required this.phoneNumber,
+    List<Map<String, dynamic>>? address,
+    List<DocumentReference>? wishlist,
+    Map<String, List<String>>? voucher,
+    List<Map<String, dynamic>>? cart,
+    double? totalIncome,
+    String? bankAccount,
+    double? totalConsumption,
+  })  : password = "",
+        firstName = "",
+        lastName = "",
+        address = address ?? [],
+        wishlist = wishlist ?? [],
+        voucher = voucher ?? {},
+        cart = cart ?? [],
+        totalIncome = totalIncome ?? 0.0,
+        bankAccount = bankAccount ?? '',
+        totalConsumption = totalConsumption ?? 0.0;
 
+  // ham khoi tao cho qua trinh dang ky
   factory CloudUserModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     return CloudUserModel(

@@ -1,4 +1,5 @@
 import 'package:ecommerce_app_mobile/Service/Auth/firebaseauth_provider.dart';
+import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/common/widgets/success_screen/success_screen.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/login/login_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
@@ -60,7 +61,10 @@ class VerifyEmailScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    await FirebaseAuthProvider
+                        .firebaseAuthProvider.currentFirebaseUser!
+                        .reload();
                     // go to success screen neu verify roi
                     if (FirebaseAuthProvider.firebaseAuthProvider
                         .currentFirebaseUser!.emailVerified) {
@@ -73,8 +77,10 @@ class VerifyEmailScreen extends StatelessWidget {
                         ),
                       );
                     } else {
-                      print("Da an continue");
-                      Get.to(() => new VerifyEmailScreen());
+                      await showDialogOnScreen(
+                          context: context,
+                          title: "Email isn't verified",
+                          description: "Pls try to verify your email again");
                     }
                   },
                   child: const Text(TTexts.tContinue),

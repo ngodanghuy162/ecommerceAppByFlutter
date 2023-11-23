@@ -36,8 +36,8 @@ class UserRepository {
     return userData;
   }
 
-  //get user
-  Future<CloudUserModel> getCurrentUser(String email) async {
+  //get user by email
+  Future<CloudUserModel?> getCloudUserByEmail(String email) async {
     final snapshot = await usersCollection
         .where(
           'email',
@@ -45,9 +45,15 @@ class UserRepository {
         )
         .get();
 
-    final userData =
-        snapshot.docs.map((e) => CloudUserModel.fromSnapshot(e)).single;
-    return userData;
+    if (snapshot.docs.isNotEmpty) {
+      // Nếu tìm thấy người dùng, trả về CloudUserModel
+      final userData =
+          snapshot.docs.map((e) => CloudUserModel.fromSnapshot(e)).single;
+      return userData;
+    } else {
+      // Nếu không tìm thấy người dùng, trả về null
+      return null;
+    }
   }
 
 //tao user

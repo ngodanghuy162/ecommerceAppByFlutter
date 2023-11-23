@@ -55,11 +55,13 @@ dependencies:
   firebase_core: ^2.22.0
   cloud_firestore: ^4.13.1
   firebase_auth: ^4.14.0
+  google_sign_in: ^6.1.6
+  ##google icon 
+  font_awesome_flutter: ^10.6.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
