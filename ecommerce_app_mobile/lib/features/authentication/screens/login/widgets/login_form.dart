@@ -78,12 +78,12 @@ class TLoginForm extends StatelessWidget {
                 onPressed: () async {
                   try {
                     var currentAuthUser =
-                        await LoginController.instance.logIn();
+                        await LoginController.instance.logInWithEmail();
                     if (currentAuthUser.emailVerified) {
                       Get.snackbar(
                           "Login sucess", "Now you can begin your adventure ");
                       Future.delayed(const Duration(seconds: 1), () {
-                        Get.to(() => const NavigationMenu());
+                        Get.offAll(() => const NavigationMenu());
                       });
                     } else {
                       await showDialogOnScreen(
@@ -100,27 +100,21 @@ class TLoginForm extends StatelessWidget {
                       context: context,
                       title: "Wrong password.",
                       description: "Try to remember your password",
-                      onOkPressed: () {
-                        Get.to(() => const VerifyEmailScreen());
-                      },
+                      onOkPressed: () {},
                     );
                   } on UserNotFoundAuthException {
                     await showDialogOnScreen(
                       context: context,
                       title: "User not found",
                       description: "You haven't registered your account",
-                      onOkPressed: () {
-                        Get.to(() => const VerifyEmailScreen());
-                      },
+                      onOkPressed: () {},
                     );
                   } on GenericAuthException {
                     await showDialogOnScreen(
                       context: context,
                       title: "Something wrong",
                       description: "Try again to login",
-                      onOkPressed: () {
-                        Get.to(() => const VerifyEmailScreen());
-                      },
+                      onOkPressed: () {},
                     );
                   }
                 },

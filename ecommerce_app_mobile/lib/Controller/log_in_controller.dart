@@ -7,6 +7,10 @@ import 'package:get/get.dart';
 class LoginController extends GetxController {
   static LoginController get instance => Get.find();
 
+  final isloginWithEmail = false.obs;
+  final isloginWithGg = false.obs;
+  final isloginWithFb = false.obs;
+
   final isLoading = false.obs;
   final isGoogleLoading = false.obs;
   final isFacebookLoading = false.obs;
@@ -15,7 +19,8 @@ class LoginController extends GetxController {
   final password = TextEditingController();
 
   //log in ưith email and password
-  Future<User> logIn() async {
+  Future<User> logInWithEmail() async {
+    isloginWithEmail.value = true;
     return FirebaseAuthProvider.firebaseAuthProvider.logIn(
       email: email.text,
       password: password.text,
@@ -24,18 +29,21 @@ class LoginController extends GetxController {
 
   //log in with gg
   Future<UserCredential?> logInWithGoogle() async {
-    try {
-      isGoogleLoading.value = true;
-      UserCredential? userCredential =
-          await GoogleProvider.ggProvider.signInWithGoogle();
-      isGoogleLoading.value = false;
-      return userCredential;
-    } catch (e) {
-      isGoogleLoading.value = false;
-      print("Error logging in with Google: $e"); // In ra thông tin lỗi
-      Get.snackbar("Failed to login with Google",
-          "An error occurred during login."); // Hoặc sử dụng thông báo mặc định
+    isloginWithGg.value = true;
+    isGoogleLoading.value = true;
+    UserCredential? userCredential =
+        await GoogleProvider.ggProvider.signInWithGoogle();
+    isGoogleLoading.value = false;
+    return userCredential;
+  }
+
+  Future<void> logOut() async {
+    if (isloginWithGg.value == true) {
+      await GoogleProvider.ggProvider.logOutGoogle();
+      isloginWithGg.value = false;
+    } else if (isloginWithEmail.value == true) {
+      isloginWithEmail.value = false;
+      await FirebaseAuthProvider.firebaseAuthProvider.logOut();
     }
-    return null;
   }
 }

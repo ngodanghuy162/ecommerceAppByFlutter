@@ -1,4 +1,3 @@
-
 import 'package:ecommerce_app_mobile/common/styles/product_price_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/product_title_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/t_brand_title_text_with_verified_icon.dart';
@@ -21,7 +20,7 @@ class TProductCardHorizontal extends StatelessWidget {
       width: 180,
       padding: const EdgeInsets.all(1),
       decoration: BoxDecoration(
-         // boxShadow: [TShadowStyle.verticalProductShadow],
+          // boxShadow: [TShadowStyle.verticalProductShadow],
           borderRadius: BorderRadius.circular(TSizes.productImageRadius),
           color: dark ? TColors.darkerGrey : TColors.softGrey),
       child: Row(
@@ -33,7 +32,7 @@ class TProductCardHorizontal extends StatelessWidget {
             backgroundColor: dark ? TColors.dark : TColors.light,
             child: Stack(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 120,
                   width: 120,
                   child: TRoundedImage(
@@ -74,7 +73,7 @@ class TProductCardHorizontal extends StatelessWidget {
               padding: const EdgeInsets.only(top: TSizes.sm, left: TSizes.sm),
               child: Column(
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(top: TSizes.sm),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

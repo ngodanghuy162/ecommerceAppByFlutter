@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/Service/Repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:developer' show log;
 
 class GoogleProvider {
@@ -20,68 +20,116 @@ class GoogleProvider {
 
   Future<UserCredential?> signInWithGoogle() async {
     try {
-      if (Platform.isIOS || Platform.isAndroid) {
-        log("Da goi ham sign in");
-        // Trigger the authentication flow
-        final GoogleSignInAccount? googleSignInAccount =
-            await GoogleSignIn().signIn();
-        log("Da goi ham sign in 1");
-        // Obtain the auth details from the request
-        final GoogleSignInAuthentication? googleSignInAuthentication =
-            await googleSignInAccount?.authentication;
-
-        log("Da goi ham authenticantion ");
-        // Create a new credential
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleSignInAuthentication?.accessToken,
-          idToken: googleSignInAuthentication?.idToken,
-        );
-        log("Da goi ham credential ");
-        // Thử đăng nhập
-
-        // Once signed in, return the UserCredential
-        UserCredential? userCredential =
-            await FirebaseAuth.instance.signInWithCredential(credential);
-        log("Da goi ham sign in creadeential ");
-        User? authUser = userCredential.user;
-        log("Da goi dong 39 gg auth - sau dong lay auth user");
-        if (await UserRepository.userRepository
-                .getCloudUserByEmail(userCredential.user!.email.toString()) ==
-            null) {
-          log("ko co user cloud o trong google_auth.dart");
-          await UserRepository.userRepository.createUser(
-              CloudUserModel.registerByGg(
-                  userId: authUser!.uid,
-                  userName: authUser.displayName.toString(),
-                  email: authUser.email.toString(),
-                  phoneNumber: authUser.phoneNumber.toString()));
-        }
-
-        return userCredential;
-      } else if (kIsWeb) {
-        log("Da goi ham sign in o phan else if ");
-        // Create a new provider
-        GoogleAuthProvider googleProvider = GoogleAuthProvider();
-
-        await googleProvider
-            .addScope('https://www.googleapis.com/auth/contacts.readonly');
-        googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
-
-        // Once signed in, return the UserCredential
-        return await FirebaseAuth.instance.signInWithPopup(googleProvider);
-
-        // Or use signInWithRedirect
-        // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+      //  if (Platform.isIOS || Platform.isAndroid) {
+      log("00000");
+      GoogleSignIn _googleSignIn;
+      log("0.555555");
+      // = GoogleSignIn(
+      //     clientId:
+      //         '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
+      if (kIsWeb) {
+        log("not android");
+        _googleSignIn = GoogleSignIn(
+            clientId:
+                '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
+        log("android");
       } else {
-        log("Da goi ham sign in o phan else");
+        log("android");
+        _googleSignIn = GoogleSignIn(
+            clientId:
+                '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
       }
+      // } else if (Platform.isIOS) {
+      //   _googleSignIn = GoogleSignIn(
+      //       clientId:
+      //           '1002703289584-or9ncnt9appnbdnbln95grg8ar5h0a2c.apps.googleusercontent.com');
+      // } else {
+      //   _googleSignIn = GoogleSignIn(
+      //       clientId:
+      //           '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
+      // }
+
+// ...
+
+      final GoogleSignInAccount? googleSignInAccount =
+          await _googleSignIn.signIn();
+
+      // Trigger the authentication flow
+      // final GoogleSignInAccount? googleSignInAccount =
+      //     await GoogleSignIn().signIn();
+      log("11111");
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleSignInAuthentication =
+          await googleSignInAccount?.authentication;
+
+      log("2222222");
+      // Create a new credential
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication?.accessToken,
+        idToken: googleSignInAuthentication?.idToken,
+      );
+      log("3333333");
+      // Thử đăng nhập
+
+      // Once signed in, return the UserCredential
+      UserCredential? userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      log("444444");
+      User? authUser = userCredential.user;
+      log("55555555");
+      if (await UserRepository.userRepository
+              .getCloudUserByEmail(userCredential.user!.email.toString()) ==
+          null) {
+        log("ko co user cloud o trong google_auth.dart");
+        await UserRepository.userRepository.createUser(
+            CloudUserModel.registerByGg(
+                userId: authUser!.uid,
+                userName: authUser.displayName.toString(),
+                email: authUser.email.toString(),
+                phoneNumber: authUser.phoneNumber.toString()));
+      }
+      log("6666666");
+      return userCredential;
+      // GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+      // // Once signed in, return the UserCredential
+      // return await FirebaseAuth.instance.signInWithPopup(googleProvider);
+      // } else {
+      //   log("Da goi ham sign in o phan else if ");
+      //   // Create a new provider
+      //   GoogleAuthProvider googleProvider = GoogleAuthProvider();
+      //   log("Da goi ham sign in o phan else if 2 ");
+      //   // Once signed in, return the UserCredential
+      //   return await FirebaseAuth.instance.signInWithProvider(googleProvider);
+
+      //   // Or use signInWithRedirect
+      //   // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+      // }
     } on FirebaseAuthException catch (e) {
       log("-----e.code here");
-      log(e.code);
+      log(e.code.toString());
       log("-----");
-    } catch (_) {
-      throw Exception();
+      throw Exception("Loi FirebaseAuthException");
     }
-    return null;
+  }
+
+  Future<void> logOutGoogle() async {
+    late final GoogleSignIn _googleSignIn;
+    // = GoogleSignIn(
+    //     clientId:
+    //         '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
+    if (kIsWeb) {
+      log("not android");
+      _googleSignIn = GoogleSignIn(
+          clientId:
+              '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
+      log("android");
+    } else {
+      log("android");
+      _googleSignIn = GoogleSignIn(
+          clientId:
+              '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
+    }
+    await _googleSignIn.signOut();
   }
 }

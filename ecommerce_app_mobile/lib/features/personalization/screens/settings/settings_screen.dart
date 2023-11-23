@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/Controller/log_in_controller.dart';
 import 'package:ecommerce_app_mobile/Service/Auth/firebaseauth_provider.dart';
 import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
@@ -20,6 +21,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LoginController());
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -143,8 +145,7 @@ class SettingsScreen extends StatelessWidget {
                           title: "Log out here",
                           description: "Are you sure to log out??",
                           onOkPressed: () async {
-                            await FirebaseAuthProvider.firebaseAuthProvider
-                                .logOut();
+                            await controller.logOut();
                             Get.snackbar(
                                 "Logout Sucess", "Pls login again to use app ");
                             Future.delayed(const Duration(seconds: 1), () {
