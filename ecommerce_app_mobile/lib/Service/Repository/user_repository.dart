@@ -38,6 +38,7 @@ class UserRepository {
 
   //get user by email
   Future<CloudUserModel?> getCloudUserByEmail(String email) async {
+    print("Hello $email");
     final snapshot = await usersCollection
         .where(
           'email',
@@ -46,11 +47,13 @@ class UserRepository {
         .get();
 
     if (snapshot.docs.isNotEmpty) {
+      print("Tim thay user");
       // Nếu tìm thấy người dùng, trả về CloudUserModel
-      final userData =
-          snapshot.docs.map((e) => CloudUserModel.fromSnapshot(e)).single;
+      final userData = CloudUserModel.fromSnapshot(snapshot.docs.first);
+      print(userData);
       return userData;
     } else {
+      print("Null user ko tim thay");
       // Nếu không tìm thấy người dùng, trả về null
       return null;
     }

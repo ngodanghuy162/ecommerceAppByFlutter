@@ -57,20 +57,19 @@ class CloudUserModel {
     double? totalIncome,
     String? bankAccount,
     double? totalConsumption,
-  })  : address = address ?? [],
-        wishlist = wishlist ?? [],
-        voucher = voucher ?? {},
-        cart = cart ?? [],
-        totalIncome = totalIncome ?? 0.0,
-        bankAccount = bankAccount ?? '',
-        totalConsumption = totalConsumption ?? 0.0;
+  })  : address = [],
+        wishlist = [],
+        voucher = {},
+        cart = [],
+        totalIncome = 0.0,
+        bankAccount = '',
+        totalConsumption = 0.0;
 
   // dki tk voi google
   CloudUserModel.registerByGg({
     required this.userId,
     required this.userName,
     required this.email,
-    required this.phoneNumber,
     List<Map<String, dynamic>>? address,
     List<DocumentReference>? wishlist,
     Map<String, List<String>>? voucher,
@@ -79,34 +78,37 @@ class CloudUserModel {
     String? bankAccount,
     double? totalConsumption,
   })  : password = "",
+        phoneNumber = "",
         firstName = "",
         lastName = "",
-        address = address ?? [],
-        wishlist = wishlist ?? [],
-        voucher = voucher ?? {},
-        cart = cart ?? [],
-        totalIncome = totalIncome ?? 0.0,
-        bankAccount = bankAccount ?? '',
-        totalConsumption = totalConsumption ?? 0.0;
+        address = [],
+        wishlist = [],
+        voucher = {},
+        cart = [],
+        totalIncome = 0.0,
+        bankAccount = '',
+        totalConsumption = 0.0;
 
   // ham khoi tao cho qua trinh dang ky
   factory CloudUserModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    Map<String, dynamic>? data = snapshot.data();
+
     return CloudUserModel(
       userId: snapshot.id,
-      email: snapshot.data()?['email'],
-      password: snapshot.data()?['password'],
-      phoneNumber: snapshot.data()?['phone_number'],
-      firstName: snapshot.data()?['first_name'],
-      lastName: snapshot.data()?['first_name'],
-      userName: snapshot.data()?['first_name'],
-      address: List<Map<String, dynamic>>.from(snapshot.data()?['address']),
-      wishlist: List<DocumentReference>.from(snapshot.data()?['wishlist']),
-      voucher: Map<String, List<String>>.from(snapshot.data()?['voucher']),
-      cart: List<Map<String, dynamic>>.from(snapshot.data()?['cart']),
-      totalIncome: snapshot.data()?['totalIncome'],
-      bankAccount: snapshot.data()?['bankAccount'],
-      totalConsumption: snapshot.data()?['totalConsumption'],
+      email: data?['email'] ?? '',
+      password: data?['password'] ?? '',
+      phoneNumber: data?['phone_number'] ?? '',
+      firstName: data?['first_name'] ?? '',
+      lastName: data?['first_name'] ?? '',
+      userName: data?['first_name'] ?? '',
+      address: List<Map<String, dynamic>>.from(data?['address'] ?? []),
+      wishlist: List<DocumentReference>.from(data?['wishlist'] ?? []),
+      voucher: Map<String, List<String>>.from(data?['voucher'] ?? {}),
+      cart: List<Map<String, dynamic>>.from(data?['cart'] ?? []),
+      totalIncome: data?['totalIncome'] ?? 0,
+      bankAccount: data?['bankAccount'] ?? '',
+      totalConsumption: data?['totalConsumption'] ?? 0,
     );
   }
 

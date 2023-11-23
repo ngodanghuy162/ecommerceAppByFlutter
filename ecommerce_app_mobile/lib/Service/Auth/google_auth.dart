@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/Service/Repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -76,17 +74,26 @@ class GoogleProvider {
           await FirebaseAuth.instance.signInWithCredential(credential);
       log("444444");
       User? authUser = userCredential.user;
-      log("55555555");
-      if (await UserRepository.userRepository
-              .getCloudUserByEmail(userCredential.user!.email.toString()) ==
-          null) {
+      String emailUser = authUser!.email.toString();
+      log(emailUser);
+      CloudUserModel? currentCloudUser =
+          await UserRepository.userRepository.getCloudUserByEmail(emailUser);
+      log("ko 111111");
+      log(currentCloudUser.toString());
+      if (currentCloudUser == null) {
         log("ko co user cloud o trong google_auth.dart");
+
+        // Kiểm tra và gán giá trị mặc định nếu là null
+        String userName = authUser?.displayName ?? 'Unknown';
+        String userEmail = authUser?.email ?? 'Unknown';
+
         await UserRepository.userRepository.createUser(
-            CloudUserModel.registerByGg(
-                userId: authUser!.uid,
-                userName: authUser.displayName.toString(),
-                email: authUser.email.toString(),
-                phoneNumber: authUser.phoneNumber.toString()));
+          CloudUserModel.registerByGg(
+            userId: authUser!.uid,
+            userName: userName,
+            email: userEmail,
+          ),
+        );
       }
       log("6666666");
       return userCredential;
