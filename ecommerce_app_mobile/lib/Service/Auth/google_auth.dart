@@ -35,7 +35,7 @@ class GoogleProvider {
         log("android");
         _googleSignIn = GoogleSignIn(
             clientId:
-                '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
+                '1002703289584-4ln574a6qi4mfb7fv95cmg0n1439e774.apps.googleusercontent.com');
       }
       // } else if (Platform.isIOS) {
       //   _googleSignIn = GoogleSignIn(
