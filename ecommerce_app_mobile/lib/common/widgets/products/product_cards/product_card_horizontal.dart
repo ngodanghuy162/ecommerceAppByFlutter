@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:ecommerce_app_mobile/common/styles/product_price_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/product_title_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/shadows.dart';
