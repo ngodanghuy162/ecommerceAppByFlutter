@@ -30,7 +30,6 @@ class GoogleProvider {
         _googleSignIn = GoogleSignIn(
             clientId:
                 '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
-        log("android");
       } else {
         log("android");
         _googleSignIn = GoogleSignIn(
