@@ -20,22 +20,19 @@ class GoogleProvider {
     try {
       //  if (Platform.isIOS || Platform.isAndroid) {
       log("00000");
-      GoogleSignIn _googleSignIn;
-      log("0.555555");
+      // GoogleSignIn _googleSignIn = GoogleSignIn(
+      //     clientId:
+      //         '1002703289584-4ln574a6qi4mfb7fv95cmg0n1439e774.apps.googleusercontent.com');
+      final GoogleSignIn _googleSignIn = GoogleSignIn();
       // = GoogleSignIn(
       //     clientId:
       //         '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
-      if (kIsWeb) {
+      /* if (kIsWeb) {
         log("not android");
         _googleSignIn = GoogleSignIn(
             clientId:
                 '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
-      } else {
-        log("android");
-        _googleSignIn = GoogleSignIn(
-            clientId:
-                '1002703289584-4ln574a6qi4mfb7fv95cmg0n1439e774.apps.googleusercontent.com');
-      }
+      }*/
       // } else if (Platform.isIOS) {
       //   _googleSignIn = GoogleSignIn(
       //       clientId:
@@ -83,12 +80,12 @@ class GoogleProvider {
         log("ko co user cloud o trong google_auth.dart");
 
         // Kiểm tra và gán giá trị mặc định nếu là null
-        String userName = authUser?.displayName ?? 'Unknown';
-        String userEmail = authUser?.email ?? 'Unknown';
+        String userName = authUser.displayName ?? 'Unknown';
+        String userEmail = authUser.email ?? 'Unknown';
 
         await UserRepository.userRepository.createUser(
           CloudUserModel.registerByGg(
-            userId: authUser!.uid,
+            userId: authUser.uid,
             userName: userName,
             email: userEmail,
           ),
@@ -96,21 +93,6 @@ class GoogleProvider {
       }
       log("6666666");
       return userCredential;
-      // GoogleAuthProvider googleProvider = GoogleAuthProvider();
-
-      // // Once signed in, return the UserCredential
-      // return await FirebaseAuth.instance.signInWithPopup(googleProvider);
-      // } else {
-      //   log("Da goi ham sign in o phan else if ");
-      //   // Create a new provider
-      //   GoogleAuthProvider googleProvider = GoogleAuthProvider();
-      //   log("Da goi ham sign in o phan else if 2 ");
-      //   // Once signed in, return the UserCredential
-      //   return await FirebaseAuth.instance.signInWithProvider(googleProvider);
-
-      //   // Or use signInWithRedirect
-      //   // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
-      // }
     } on FirebaseAuthException catch (e) {
       log("-----e.code here");
       log(e.code.toString());
@@ -129,12 +111,11 @@ class GoogleProvider {
       _googleSignIn = GoogleSignIn(
           clientId:
               '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
-      log("android");
     } else {
       log("android");
       _googleSignIn = GoogleSignIn(
           clientId:
-              '1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com');
+              '1002703289584-4ln574a6qi4mfb7fv95cmg0n1439e774.apps.googleusercontent.com');
     }
     await _googleSignIn.signOut();
   }

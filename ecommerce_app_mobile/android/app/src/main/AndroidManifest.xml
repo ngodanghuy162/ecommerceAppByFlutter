@@ -29,5 +29,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.google.android.gms.auth.api.signin.1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com"
+             android:value="YOUR_WEB_APPLICATION_CLIENT_ID.apps.googleusercontent.com" />
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
     </application>
 </manifest>

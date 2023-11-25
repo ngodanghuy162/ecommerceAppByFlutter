@@ -1,5 +1,4 @@
 import 'package:ecommerce_app_mobile/Controller/log_in_controller.dart';
-import 'package:ecommerce_app_mobile/Service/Auth/firebaseauth_provider.dart';
 import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
