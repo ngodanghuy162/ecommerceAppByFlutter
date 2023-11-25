@@ -26,16 +26,16 @@ class ProductReviewsScreen extends StatelessWidget {
               ),
 
               /// Overall Product Ratings
-              TOverallProductRating(),
+              const TOverallProductRating(),
               TRatingBarIndicator(rating: 3.0),
               Text("12,611", style: Theme.of(context).textTheme.bodySmall),
               const SizedBox(height: TSizes.spaceBtwSections),
 
               /// User Reviews list
-              UserReviewCard(),
-              UserReviewCard(),
-              UserReviewCard(),
-              UserReviewCard(),
+              const UserReviewCard(),
+              const UserReviewCard(),
+              const UserReviewCard(),
+              const UserReviewCard(),
             ],
           ),
         ),

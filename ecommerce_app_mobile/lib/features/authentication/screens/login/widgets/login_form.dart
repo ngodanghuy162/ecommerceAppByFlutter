@@ -109,7 +109,7 @@ class TLoginForm extends StatelessWidget {
                       description: "You haven't registered your account",
                       onOkPressed: () {},
                     );
-                  } on GenericAuthException {
+                  } on GenericAuthException{
                     await showDialogOnScreen(
                       context: context,
                       title: "Something wrong",

@@ -1,3 +1,6 @@
+
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 typedef DialogOptionBuilder<T> = Map<String, T?> Function();

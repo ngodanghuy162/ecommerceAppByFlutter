@@ -35,7 +35,7 @@ class ProductWareHouseScreen extends StatelessWidget {
               const SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
-              Column(children: [
+              const Column(children: [
                 ProductWithVariant(),
                 ProductWithVariant(),
                 ProductWithVariant(),

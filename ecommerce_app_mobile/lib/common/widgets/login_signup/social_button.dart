@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:ecommerce_app_mobile/Controller/log_in_controller.dart';
 import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/navigation_menu.dart';
@@ -60,7 +62,24 @@ class TSocialButtons extends StatelessWidget {
             borderRadius: BorderRadius.circular(100),
           ),
           child: IconButton(
-              onPressed: () {},
+              onPressed: () async {
+                try {
+                  UserCredential? userCredential =
+                      await controller.logInWithFb();
+                  if (userCredential != null) {
+                    Get.snackbar(
+                        "Success", "You are login with Facebook success");
+                    Future.delayed(const Duration(seconds: 1), () {
+                      Get.offAll(() => const NavigationMenu());
+                    });
+                  }
+                } on Exception {
+                  await showDialogOnScreen(
+                      context: context,
+                      title: "Loi dn Fb",
+                      description: "Try again babi");
+                }
+              },
               icon: const Image(
                 height: TSizes.iconMd,
                 width: TSizes.iconMd,

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Auth/firebaseauth_provider.dart';
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class UserRepository {
   final usersCollection = FirebaseFirestore.instance.collection('Users');
@@ -21,9 +21,36 @@ class UserRepository {
 
   //get user by nothing
   Future<CloudUserModel> get currentCloudUser async {
-    String email = FirebaseAuthProvider
-        .firebaseAuthProvider.currentFirebaseUser!.email
-        .toString();
+    String? email =
+        FirebaseAuthProvider.firebaseAuthProvider.currentFirebaseUser!.email;
+    String? phoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber;
+    if (email != null) {
+      final snapshot = await usersCollection
+          .where(
+            'email',
+            isEqualTo: email,
+          )
+          .get();
+
+      final userData =
+          snapshot.docs.map((e) => CloudUserModel.fromSnapshot(e)).single;
+      return userData;
+    } else {
+      final snapshot = await usersCollection
+          .where(
+            'phone_number',
+            isEqualTo: phoneNumber,
+          )
+          .get();
+
+      final userData =
+          snapshot.docs.map((e) => CloudUserModel.fromSnapshot(e)).single;
+      return userData;
+    }
+  }
+
+  //get user by email
+  Future<CloudUserModel?> getCloudUserByEmail(String email) async {
     final snapshot = await usersCollection
         .where(
           'email',
@@ -31,18 +58,22 @@ class UserRepository {
         )
         .get();
 
-    final userData =
-        snapshot.docs.map((e) => CloudUserModel.fromSnapshot(e)).single;
-    return userData;
+    if (snapshot.docs.isNotEmpty) {
+      // Nếu tìm thấy người dùng, trả về CloudUserModel
+      final userData = CloudUserModel.fromSnapshot(snapshot.docs.first);
+      return userData;
+    } else {
+      // Nếu không tìm thấy người dùng, trả về null
+      return null;
+    }
   }
 
-  //get user by email
-  Future<CloudUserModel?> getCloudUserByEmail(String email) async {
-    print("Hello $email");
+  Future<CloudUserModel?> getCloudUserByPhoneNumber(String phoneNumber) async {
+    print("Hello ");
     final snapshot = await usersCollection
         .where(
-          'email',
-          isEqualTo: email,
+          'phone_number',
+          isEqualTo: phoneNumber,
         )
         .get();
 

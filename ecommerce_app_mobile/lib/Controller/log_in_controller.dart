@@ -1,5 +1,6 @@
+import 'package:ecommerce_app_mobile/Service/Auth/fb_auth_provider.dart';
 import 'package:ecommerce_app_mobile/Service/Auth/firebaseauth_provider.dart';
-import 'package:ecommerce_app_mobile/Service/Auth/google_auth.dart';
+import 'package:ecommerce_app_mobile/Service/Auth/gg_auth_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,7 @@ class LoginController extends GetxController {
 
   //log in ưith email and password
   Future<User> logInWithEmail() async {
+    isloginWithGg.value = false;
     isloginWithEmail.value = true;
     return FirebaseAuthProvider.firebaseAuthProvider.logIn(
       email: email.text,
@@ -32,18 +34,27 @@ class LoginController extends GetxController {
     isloginWithGg.value = true;
     isGoogleLoading.value = true;
     UserCredential? userCredential =
-        await GoogleProvider.ggProvider.signInWithGoogle();
+        await GgAuthProvider.ggProvider.signInWithGoogle();
     isGoogleLoading.value = false;
     return userCredential;
   }
 
+  Future<UserCredential?> logInWithFb() async {
+    isloginWithFb.value = true;
+    isloginWithGg.value = false;
+    return await FbAuthProvider.fbProvider.signInWithFacebook();
+  }
+
   Future<void> logOut() async {
     if (isloginWithGg.value == true) {
-      await GoogleProvider.ggProvider.logOutGoogle();
+      await GgAuthProvider.ggProvider.logOutGoogle();
       isloginWithGg.value = false;
     } else if (isloginWithEmail.value == true) {
       isloginWithEmail.value = false;
       await FirebaseAuthProvider.firebaseAuthProvider.logOut();
+    } else {
+      isloginWithFb.value = false;
+      await FbAuthProvider.fbProvider.logOutFb();
     }
   }
 }
