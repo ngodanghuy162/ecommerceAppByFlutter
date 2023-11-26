@@ -52,7 +52,8 @@ dependencies:
   capped_progress_indicator: ^0.0.2
   intl: ^0.18.1
   carousel_slider: ^4.2.1
-  fl_chart: ^0.64.0
+  firebase_core: ^2.22.0
+  fl_chart: ^0.65.0
 
 dev_dependencies:
   flutter_test:
