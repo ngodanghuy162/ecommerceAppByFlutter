@@ -1,6 +1,10 @@
 {
   "version": "0.2.0",
   "configurations": [
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 718428b1b2444728c2a1265dee626bee51fd5eff
     {
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
