@@ -1,3 +1,6 @@
+import 'package:ecommerce_app_mobile/Controller/sign_up_controller.dart';
+import 'package:ecommerce_app_mobile/Service/Auth/auth_exception.dart';
+import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/signup/verify_email.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/signup/widgets/terms_conditions_checkbox.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -13,6 +16,8 @@ class TSignupForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(SignUpController());
+    var signUpController = SignUpController.instance;
     return Form(
       child: Column(
         children: [
@@ -21,6 +26,7 @@ class TSignupForm extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
+                  controller: signUpController.firstName,
                   expands: false,
                   decoration: const InputDecoration(
                     labelText: TTexts.firstName,
@@ -31,6 +37,7 @@ class TSignupForm extends StatelessWidget {
               const SizedBox(width: TSizes.spaceBtwInputFields),
               Expanded(
                 child: TextFormField(
+                  controller: signUpController.lastName,
                   expands: false,
                   decoration: const InputDecoration(
                     labelText: TTexts.lastName,
@@ -44,6 +51,7 @@ class TSignupForm extends StatelessWidget {
 
           //Username
           TextFormField(
+            controller: signUpController.userName,
             expands: false,
             decoration: const InputDecoration(
               labelText: TTexts.username,
@@ -54,6 +62,7 @@ class TSignupForm extends StatelessWidget {
 
           //Email
           TextFormField(
+            controller: signUpController.email,
             expands: false,
             decoration: const InputDecoration(
               labelText: TTexts.email,
@@ -64,6 +73,7 @@ class TSignupForm extends StatelessWidget {
 
           //Phone number
           TextFormField(
+            controller: signUpController.phoneNumber,
             expands: false,
             decoration: const InputDecoration(
               labelText: TTexts.phoneNo,
@@ -74,6 +84,7 @@ class TSignupForm extends StatelessWidget {
 
           //Password
           TextFormField(
+            controller: signUpController.password,
             obscureText: true,
             expands: false,
             decoration: const InputDecoration(
@@ -91,7 +102,49 @@ class TSignupForm extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () => Get.to(() => const VerifyEmailScreen()),
+              onPressed: () async {
+                try {
+                  await signUpController.registerUser();
+                  await showDialogOnScreen(
+                      context: context,
+                      title: 'Create Acount Success',
+                      description:
+                          'Now you have to verify email to use your account',
+                      onOkPressed: () {
+                        Get.to(() => const VerifyEmailScreen());
+                      },
+                      showCancelButton: false);
+                } on EmailAlreadyInUseAuthException {
+                  // ignore: use_build_context_synchronously
+                  await showDialogOnScreen(
+                    context: context,
+                    title: 'Failed to register',
+                    description: 'Email has been used',
+                    onOkPressed: () {}, // Hàm trống
+                  );
+                } on WeakPasswordAuthException {
+                  await showDialogOnScreen(
+                    context: context,
+                    title: 'Failed to register',
+                    description: 'Weak Password',
+                    onOkPressed: () {}, // Hàm trống
+                  );
+                } on InvalidEmailException {
+                  await showDialogOnScreen(
+                    context: context,
+                    title: 'Failed to register',
+                    description: 'Invalid Email',
+                    onOkPressed: () {}, // Hàm trống
+                  );
+                } on GenericAuthException {
+                  await showDialogOnScreen(
+                    context: context,
+                    title: 'Failed to register',
+                    description: 'Somthing went wrong',
+                    onOkPressed: () {}, // Hàm trống
+                  );
+                }
+              },
               child: const Text(TTexts.createAccount),
             ),
           ),

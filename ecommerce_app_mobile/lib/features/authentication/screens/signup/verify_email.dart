@@ -1,3 +1,5 @@
+import 'package:ecommerce_app_mobile/Service/Auth/firebaseauth_provider.dart';
+import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/common/widgets/success_screen/success_screen.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/login/login_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
@@ -59,14 +61,28 @@ class VerifyEmailScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => Get.to(
-                    () => SuccessScreen(
-                      image: TImages.staticSuccessIllustration,
-                      title: TTexts.yourAccountCreatedTitle,
-                      subtitle: TTexts.yourAccountCreatedSubTitle,
-                      callback: () => Get.to(() => const LoginScreen()),
-                    ),
-                  ),
+                  onPressed: () async {
+                    await FirebaseAuthProvider
+                        .firebaseAuthProvider.currentFirebaseUser!
+                        .reload();
+                    // go to success screen neu verify roi
+                    if (FirebaseAuthProvider.firebaseAuthProvider
+                        .currentFirebaseUser!.emailVerified) {
+                      Get.to(
+                        () => SuccessScreen(
+                          image: TImages.staticSuccessIllustration,
+                          title: TTexts.yourAccountCreatedTitle,
+                          subtitle: TTexts.yourAccountCreatedSubTitle,
+                          callback: () => Get.offAll(() => const LoginScreen()),
+                        ),
+                      );
+                    } else {
+                      await showDialogOnScreen(
+                          context: context,
+                          title: "Email isn't verified",
+                          description: "Pls try to verify your email again");
+                    }
+                  },
                   child: const Text(TTexts.tContinue),
                 ),
               ),
@@ -75,7 +91,10 @@ class VerifyEmailScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await FirebaseAuthProvider.firebaseAuthProvider
+                        .sendEmailVerify();
+                  },
                   child: const Text(TTexts.resendEmail),
                 ),
               ),
