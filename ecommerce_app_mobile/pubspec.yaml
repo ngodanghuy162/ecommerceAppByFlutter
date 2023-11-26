@@ -31,6 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Image picker
+  image_picker: ^1.0.4
+
   # Icon
   iconsax: ^0.0.8
   cupertino_icons: ^1.0.2
