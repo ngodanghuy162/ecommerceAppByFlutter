@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:ecommerce_app_mobile/app.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  await WidgetsFlutterBinding.ensureInitialized();
 
-  FirebaseAuthProvider.firebaseAuthProvider.initalize();
+  await FirebaseAuthProvider.firebaseAuthProvider.initalize();
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
