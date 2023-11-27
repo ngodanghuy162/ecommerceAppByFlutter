@@ -31,6 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Image picker
+  image_picker: ^1.0.4
+
   # Icon
   iconsax: ^0.0.8
   cupertino_icons: ^1.0.2
@@ -54,6 +57,8 @@ dependencies:
   carousel_slider: ^4.2.1
   firebase_core: ^2.22.0
   fl_chart: ^0.65.0
+  cloud_firestore: ^4.13.1
+  firebase_storage: ^11.5.2
 
 dev_dependencies:
   flutter_test:
