@@ -4,11 +4,13 @@ class ProductVariantModel {
   late String size;
   late String color;
   late double price;
+  late String imageURL;
 
   ProductVariantModel({
     required this.size,
     required this.color,
-    required this.price
+    required this.price,
+    required this.imageURL,
   });
 
   toJson() {
@@ -16,6 +18,7 @@ class ProductVariantModel {
       'size': size,
       'color': color,
       'price': price,
+      'imageURL': imageURL,
     };
   }
 
@@ -25,7 +28,8 @@ class ProductVariantModel {
     return ProductVariantModel(
       size: data['size'],
       color: data['color'],
-      price: data['price']
+      price: data['price'],
+      imageURL: data['imageURL'],
     );
   }
 
