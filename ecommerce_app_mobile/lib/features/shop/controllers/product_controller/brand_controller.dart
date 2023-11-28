@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 
 class BrandController extends GetxController {
   static BrandController get instance => Get.find();
-  final _productVariantRepo = Get.put(BrandRepository());
+  final _brandRepo = Get.put(BrandRepository());
 
   Future<String> createBrand(BrandModel brandModel) async{
-    return await _productVariantRepo.createBrand(brandModel);
+    return await _brandRepo.createBrand(brandModel);
   }
 }

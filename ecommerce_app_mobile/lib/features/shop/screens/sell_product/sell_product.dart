@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_category_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
@@ -139,7 +140,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
   Widget build(BuildContext context) {
     Get.put(ProductController());
     Get.put(ProductVariantController());
-    Get.put(ProductCategoryRepository());
+    Get.put(ProductCategoryController());
     Get.put(BrandController());
 
     return Scaffold(
@@ -382,7 +383,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   print('Discount: $discount_id');
                   print('Variants: ${variants}');
 
-                  final categoryResult = await ProductCategoryRepository
+                  final categoryResult = await ProductCategoryController
                       .instance
                       .getCategoryDocumentIdByName(selectedCategory);
 

@@ -2,15 +2,15 @@
 import 'package:ecommerce_app_mobile/repository/product_repository/product_category_repository.dart';
 import 'package:get/get.dart';
 
-class ProductController extends GetxController {
-  static ProductController get instance => Get.find();
-  final _productRepo = Get.put(ProductCategoryRepository());
+class ProductCategoryController extends GetxController {
+  static ProductCategoryController get instance => Get.find();
+  final _productCategoryRepo = Get.put(ProductCategoryRepository());
 
   getAllProduct() {
-    _productRepo.getAllProduct();
+    _productCategoryRepo.getAllProduct();
   }
 
   getCategoryDocumentIdByName(String name) async {
-    return await _productRepo.getCategoryDocumentIdByName(name);
+    return await _productCategoryRepo.getCategoryDocumentIdByName(name);
   }
 }
