@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="ecommerce_app_mobile"
         android:name="${applicationName}"
@@ -29,5 +30,13 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.google.android.gms.auth.api.signin.1002703289584-sufgt9jpo1geh923j0svgrnctrk2ud6d.apps.googleusercontent.com"
+             android:value="YOUR_WEB_APPLICATION_CLIENT_ID.apps.googleusercontent.com" />
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
+       <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+   	<meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
     </application>
 </manifest>

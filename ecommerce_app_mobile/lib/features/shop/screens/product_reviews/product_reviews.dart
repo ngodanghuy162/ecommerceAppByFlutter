@@ -1,15 +1,9 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/ratings/rating_indicator.dart';
-import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/widgets/progress_indicator_and_rating.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/widgets/rating_progress_indicator.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/widgets/user_review_card.dart';
-import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
-import 'package:ecommerce_app_mobile/utils/device/device_utility.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
 class ProductReviewsScreen extends StatelessWidget {
   const ProductReviewsScreen({super.key});
@@ -32,16 +26,16 @@ class ProductReviewsScreen extends StatelessWidget {
               ),
 
               /// Overall Product Ratings
-              TOverallProductRating(),
+              const TOverallProductRating(),
               TRatingBarIndicator(rating: 3.0),
               Text("12,611", style: Theme.of(context).textTheme.bodySmall),
               const SizedBox(height: TSizes.spaceBtwSections),
 
               /// User Reviews list
-              UserReviewCard(),
-              UserReviewCard(),
-              UserReviewCard(),
-              UserReviewCard(),
+              const UserReviewCard(),
+              const UserReviewCard(),
+              const UserReviewCard(),
+              const UserReviewCard(),
             ],
           ),
         ),
