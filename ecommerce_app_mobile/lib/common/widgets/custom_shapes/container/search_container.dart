@@ -1,9 +1,12 @@
+import 'package:ecommerce_app_mobile/Controller/search_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/search/search_sugges_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/device/device_utility.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:get/get.dart';
 
 class TSearchContainer extends StatelessWidget {
   const TSearchContainer({
@@ -24,10 +27,15 @@ class TSearchContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final searchController = Get.put(SearchControllerX());
     final dark = THelperFunctions.isDarkMode(context);
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        if (searchController.keySearch.value.toString().isNotEmpty) {
+          Get.to(() => SearchingScreen());
+        }
+      },
       child: Padding(
         padding: padding,
         child: Container(
@@ -48,6 +56,7 @@ class TSearchContainer extends StatelessWidget {
               const SizedBox(width: TSizes.spaceBtwItems),
               Expanded(
                 child: TextField(
+                  controller: searchController.keySearch,
                   decoration: InputDecoration(
                     hintText: 'Search in Store',
                     hintStyle: Theme.of(context).textTheme.bodySmall,
