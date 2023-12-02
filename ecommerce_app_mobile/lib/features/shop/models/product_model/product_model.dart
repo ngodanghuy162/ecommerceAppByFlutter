@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
 
@@ -9,8 +8,8 @@ class ProductModel {
   final String image_url;
   final String name;
   final String product_category_id;
-  final List<String>? rating;
-  final List<String> variants_path;
+  final List<dynamic>? rating;
+  final List<String>? variants_path;
 
   ProductModel({
     required this.brand_id,

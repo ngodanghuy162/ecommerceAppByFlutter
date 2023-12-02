@@ -56,6 +56,7 @@ dependencies:
   intl: ^0.18.1
   carousel_slider: ^4.2.1
   firebase_core: ^2.22.0
+  fl_chart: ^0.65.0
   cloud_firestore: ^4.13.1
   firebase_auth: ^4.14.0
   google_sign_in: ^6.1.6

@@ -5,6 +5,7 @@ import 'package:ecommerce_app_mobile/common/widgets/images/t_rounded_image.dart'
 import 'package:ecommerce_app_mobile/common/widgets/texts/product_price_text.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/product_title_text.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/product_detail.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
@@ -15,13 +16,20 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TProductCardVertical extends StatelessWidget {
-  const TProductCardVertical({super.key});
+  const TProductCardVertical({
+    super.key,
+    required this.product,
+  });
+
+  final ProductModel product;
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     return GestureDetector(
-      onTap: () => Get.to(() => const ProductDetailScreen()),
+      onTap: () => Get.to(() => ProductDetailScreen(
+            product: product,
+          )),
       child: Container(
         width: 180,
         padding: const EdgeInsets.all(1),
@@ -75,7 +83,8 @@ class TProductCardVertical extends StatelessWidget {
                 smallSize: true,
               ),
               SizedBox(height: TSizes.spaceBtwItems / 2),
-              TBrandTitleWithVerifiedIcon(title: 'Nike'),
+              TBrandTitleWithVerifiedIcon(
+                  title: 'Nike', showVerify: false), // TODO
             ]),
           ),
 
