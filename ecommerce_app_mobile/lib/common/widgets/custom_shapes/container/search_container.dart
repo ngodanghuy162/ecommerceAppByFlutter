@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:ecommerce_app_mobile/Controller/search_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/search/search_result_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/search/search_sugges_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -31,11 +34,7 @@ class TSearchContainer extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     return GestureDetector(
-      onTap: () {
-        if (searchController.keySearch.value.toString().isNotEmpty) {
-          Get.to(() => SearchingScreen());
-        }
-      },
+      onTap: () {},
       child: Padding(
         padding: padding,
         child: Container(
@@ -52,7 +51,20 @@ class TSearchContainer extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(icon, color: TColors.darkerGrey),
+              IconButton(
+                icon: Icon(icon, color: TColors.darkerGrey),
+                onPressed: () {
+                  if (searchController.keySearch.value.toString().length > 0) {
+                    if (Get.currentRoute != SearchResultScreen) {
+                      print("Go to search RS");
+                      log("keySearch o container: ${searchController.keySearch.text}");
+                      Get.to(() => SearchResultScreen(
+                            keySearch: searchController.keySearch.text,
+                          ));
+                    }
+                  }
+                },
+              ),
               const SizedBox(width: TSizes.spaceBtwItems),
               Expanded(
                 child: TextField(
@@ -61,6 +73,13 @@ class TSearchContainer extends StatelessWidget {
                     hintText: 'Search in Store',
                     hintStyle: Theme.of(context).textTheme.bodySmall,
                   ),
+                  onTap: () {
+                    if (Get.currentRoute != SearchingScreen ||
+                        Get.currentRoute != SearchResultScreen) {
+                      print("Go to searching");
+                      Get.to(() => SearchingScreen());
+                    }
+                  },
                 ),
               ),
             ],

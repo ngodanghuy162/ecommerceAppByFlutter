@@ -1,8 +1,10 @@
+import 'package:ecommerce_app_mobile/Controller/search_controller.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SearchingScreen extends StatelessWidget {
-  TextEditingController _searchController = TextEditingController();
+  final _searchControllerX = Get.put(SearchControllerX());
 
   @override
   Widget build(BuildContext context) {
@@ -12,27 +14,22 @@ class SearchingScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TSearchContainer(text: "Con tiep o day")),
+          TSearchContainer(text: _searchControllerX.keySearch.text),
           Expanded(
-            child: ListView(
-              children: [
-                // Hiển thị các dòng chữ gợi ý từ khóa
-                ListTile(
-                  title: Text('Gợi ý 1'),
-                  onTap: () {
-                    // Xử lý khi người dùng chọn từ khóa gợi ý
-                  },
-                ),
-                ListTile(
-                  title: Text('Gợi ý 2'),
-                  onTap: () {
-                    // Xử lý khi người dùng chọn từ khóa gợi ý
-                  },
-                ),
-                // Thêm các ListTile khác tương tự cho các từ khóa khác
-              ],
+            child: Obx(
+              () => ListView.builder(
+                itemCount: _searchControllerX.suggestedKeywords.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(_searchControllerX.suggestedKeywords[index]),
+                    onTap: () {
+                      // Xử lý khi người dùng chọn từ khóa gợi ý
+                      _searchControllerX.handleKeywordSelection(
+                          _searchControllerX.suggestedKeywords[index]);
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ],

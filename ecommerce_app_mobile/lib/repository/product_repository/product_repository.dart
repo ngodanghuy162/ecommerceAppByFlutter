@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/brands_controller/brands_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
@@ -42,6 +44,18 @@ class ProductRepository extends GetxController {
         .collection('Product')
         .where('brand_id', isEqualTo: brandId)
         .get();
+    final productData =
+        snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
+    return productData;
+  }
+
+  Future<List<ProductModel>> queryAllProductByName(String keySearch) async {
+    final snapshot = await _db
+        .collection('Product')
+        .where('name', isGreaterThanOrEqualTo: keySearch)
+        .where('name', isLessThan: keySearch + 'z')
+        .get();
+    log("key: $keySearch :::" + snapshot.toString());
     final productData =
         snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
     return productData;
