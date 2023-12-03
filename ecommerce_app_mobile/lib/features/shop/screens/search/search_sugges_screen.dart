@@ -14,7 +14,7 @@ class SearchingScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          TSearchContainer(text: _searchControllerX.keySearch.text),
+          TSearchContainer(text: SearchControllerX.instance.keySearch.text),
           Expanded(
             child: Obx(
               () => ListView.builder(

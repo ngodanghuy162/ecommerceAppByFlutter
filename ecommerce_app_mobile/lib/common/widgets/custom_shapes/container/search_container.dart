@@ -54,10 +54,12 @@ class TSearchContainer extends StatelessWidget {
               IconButton(
                 icon: Icon(icon, color: TColors.darkerGrey),
                 onPressed: () {
-                  if (searchController.keySearch.value.toString().length > 0) {
+                  log("An an nnut tim kiem");
+                  if (searchController.keySearch.text.length > 0) {
                     if (Get.currentRoute != SearchResultScreen) {
-                      print("Go to search RS");
+                      log("Go to search RS");
                       log("keySearch o container: ${searchController.keySearch.text}");
+                      searchController.isSearching = true;
                       Get.to(() => SearchResultScreen(
                             keySearch: searchController.keySearch.text,
                           ));
@@ -76,8 +78,11 @@ class TSearchContainer extends StatelessWidget {
                   onTap: () {
                     if (Get.currentRoute != SearchingScreen ||
                         Get.currentRoute != SearchResultScreen) {
-                      print("Go to searching");
-                      Get.to(() => SearchingScreen());
+                      if (searchController.isSearching == false) {
+                        searchController.isSearching == true;
+                        print("Go to searching");
+                        Get.to(() => SearchingScreen());
+                      }
                     }
                   },
                 ),

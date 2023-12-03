@@ -9,7 +9,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 
 class SearchResultScreen extends StatelessWidget {
-  String keySearch;
+  final String keySearch;
   SearchResultScreen({super.key, required this.keySearch});
 
   @override
@@ -21,7 +21,7 @@ class SearchResultScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          TSearchContainer(text: keySearch),
+          TSearchContainer(text: "Testtt TSEARCH TEXT"),
 
           /// Drop down
           DropdownButtonFormField(
@@ -45,7 +45,7 @@ class SearchResultScreen extends StatelessWidget {
 
           /// Product
           FutureBuilder(
-              future: productController.getAllProductByName(this.keySearch),
+              future: productController.getAllProductByName(keySearch),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {

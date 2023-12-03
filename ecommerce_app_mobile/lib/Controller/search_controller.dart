@@ -6,8 +6,9 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 
 class SearchControllerX extends GetxController {
   static SearchControllerX get instance => Get.find();
-  RxBool isSearching = false.obs;
-  final keySearch = TextEditingController();
+  bool isSearching = false;
+  final TextEditingController keySearch = TextEditingController();
+
   RxList<String> suggestedKeywords = <String>[].obs;
 
   // Hàm cập nhật danh sách từ khóa gợi ý
