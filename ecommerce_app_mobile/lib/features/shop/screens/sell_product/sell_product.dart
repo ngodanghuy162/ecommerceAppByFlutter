@@ -4,9 +4,7 @@ import 'package:ecommerce_app_mobile/features/shop/controllers/product_controlle
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_category_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
-import 'package:ecommerce_app_mobile/repository/product_repository/product_category_repository.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +26,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
   String image_url = '';
   List<String> imageList_url = [];
   String description = '';
-  String discount_id = '';
+  int discount = 0;
   String name = '';
   List<ProductVariantModel> variants = [];
   List<String> variants_path = [];
@@ -70,9 +68,8 @@ class _SellProductScreenState extends State<SellProductScreen> {
             referenceDirImages.child(uniqueFileName);
 
         try {
-
-            await referenceImageToUpload.putFile(File(_image!.path));
-            image_url = await referenceImageToUpload.getDownloadURL();
+          await referenceImageToUpload.putFile(File(_image!.path));
+          image_url = await referenceImageToUpload.getDownloadURL();
           setState(() {
             imageList_url.add(image_url);
           });
@@ -120,8 +117,10 @@ class _SellProductScreenState extends State<SellProductScreen> {
             TextButton(
               onPressed: () {
                 setState(() {
-                  variants[variantIndex].color =
-                      selectedColor.value.toRadixString(16).substring(2).toUpperCase(); // Lưu mã màu dưới dạng HEX
+                  variants[variantIndex].color = selectedColor.value
+                      .toRadixString(16)
+                      .substring(2)
+                      .toUpperCase(); // Lưu mã màu dưới dạng HEX
                   print(variantIndex);
                   print(variants[variantIndex].color);
                 });
@@ -144,7 +143,6 @@ class _SellProductScreenState extends State<SellProductScreen> {
 
     return Scaffold(
       appBar: const TAppBar(
-      appBar: const TAppBar(
         title: Text('Đăng Sản Phẩm'),
         showBackArrow: true,
       ),
@@ -156,7 +154,6 @@ class _SellProductScreenState extends State<SellProductScreen> {
             children: [
               DropdownMenu<String>(
                 hintText: 'Category',
-                textStyle: const TextStyle(
                 textStyle: const TextStyle(
                   fontSize: 16,
                 ),
@@ -178,7 +175,6 @@ class _SellProductScreenState extends State<SellProductScreen> {
               const SizedBox(height: 16),
               TextField(
                 decoration: const InputDecoration(
-                decoration: const InputDecoration(
                   labelText: 'Brand',
                   border: OutlineInputBorder(),
                 ),
@@ -191,7 +187,6 @@ class _SellProductScreenState extends State<SellProductScreen> {
               const SizedBox(height: 16),
               const SizedBox(height: 16),
               TextField(
-                decoration: const InputDecoration(
                 decoration: const InputDecoration(
                   labelText: 'Name',
                   border: OutlineInputBorder(),
@@ -244,7 +239,6 @@ class _SellProductScreenState extends State<SellProductScreen> {
               const SizedBox(height: 16),
               TextField(
                 decoration: const InputDecoration(
-                decoration: const InputDecoration(
                   labelText: 'Description',
                   border: OutlineInputBorder(),
                 ),
@@ -256,20 +250,17 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 maxLines: 3,
               ),
               const SizedBox(height: 16),
-              const SizedBox(height: 16),
               TextField(
                 decoration: const InputDecoration(
-                decoration: const InputDecoration(
-                  labelText: 'Discount_code',
+                  labelText: 'Discount',
                   border: OutlineInputBorder(),
                 ),
                 onChanged: (value) {
                   setState(() {
-                    discount_id = value;
+                    discount = value as int;
                   });
                 },
               ),
-              const SizedBox(height: 16),
               const SizedBox(height: 16),
               const Text(
                 'Product variants',
@@ -287,10 +278,13 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('Variant ${index + 1}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                      Text(
+                        'Variant ${index + 1}',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                       const SizedBox(height: 8),
                       TextField(
-                        decoration: const InputDecoration(
                         decoration: const InputDecoration(
                           labelText: 'Size',
                           border: OutlineInputBorder(),
@@ -301,6 +295,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           });
                         },
                       ),
+
                       const SizedBox(height: 8),
                       InkWell(
                         onTap: () {
@@ -314,17 +309,24 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           // ),
                           child: Row(
                             children: [
-                              const Text('Pick Color', style: TextStyle(color: Colors.black, fontSize: 16,fontWeight: FontWeight.w500 )),
+                              const Text('Pick Color',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500)),
                               const SizedBox(width: 16),
                               Container(
                                 width: 30,
                                 height: 30,
                                 decoration: BoxDecoration(
                                   color: _isValidHexColor(variants[index].color)
-                                      ? Color(int.parse('0xff${variants[index].color}'))
+                                      ? Color(int.parse(
+                                          '0xff${variants[index].color}'))
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(color: Colors.black), // Add this line for border
+                                  border: Border.all(
+                                      color: Colors
+                                          .black), // Add this line for border
                                 ),
                               ),
                             ],
@@ -345,7 +347,6 @@ class _SellProductScreenState extends State<SellProductScreen> {
                       const SizedBox(height: 8),
                       TextField(
                         decoration: const InputDecoration(
-                        decoration: const InputDecoration(
                           labelText: 'Price',
                           border: OutlineInputBorder(),
                         ),
@@ -365,7 +366,8 @@ class _SellProductScreenState extends State<SellProductScreen> {
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: _imageList.length > index && _imageList[index] == null
+                            child: _imageList.length > index &&
+                                    _imageList[index] == null
                                 ? const Center(
                                     child: Icon(Icons.camera_alt,
                                         size: 40, color: Colors.grey),
@@ -385,28 +387,28 @@ class _SellProductScreenState extends State<SellProductScreen> {
               ),
               ElevatedButton(
                 style: const ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll<Color>(Colors.blue),
-                  minimumSize: MaterialStatePropertyAll<Size>(Size(double.infinity, 50)),
+                  backgroundColor: MaterialStatePropertyAll<Color>(Colors.blue),
+                  minimumSize:
+                      MaterialStatePropertyAll<Size>(Size(double.infinity, 50)),
                 ),
                 onPressed: () {
                   setState(() {
                     // Add an empty variant when the button is pressed
                     variants.add(ProductVariantModel(
-                        size: '', color: '', price: 0.0, imageURL: ''));
+                        size: '', color: '', price: 0.0, imageURL: '', id: ''));
                     _imageList.add(null);
                   });
                 },
-                child: const Text('Add Variant'),
                 child: const Text('Add Variant'),
               ),
 
               const SizedBox(height: 16),
               ElevatedButton(
                 style: const ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll<Color>(Colors.orange),
-                  minimumSize: MaterialStatePropertyAll<Size>(Size(double.infinity, 50)),
+                  backgroundColor:
+                      MaterialStatePropertyAll<Color>(Colors.orange),
+                  minimumSize:
+                      MaterialStatePropertyAll<Size>(Size(double.infinity, 50)),
                 ),
                 onPressed: () async {
                   // Handle product submission logic here
@@ -415,7 +417,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   print('Name: $name');
                   //print('Image: $image_url');
                   print('Description: $description');
-                  print('Discount: $discount_id');
+                  print('Discount: $discount');
                   print('Variants: ${variants}');
 
                   final categoryResult = await ProductCategoryController
@@ -429,15 +431,14 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   }
 
                   ProductController.instance.createProduct(
-                    brand_id: brand_id,
+                    brand_id: brandName,
                     description: description,
-                    discount_id: discount_id,
+                    discount: discount,
                     name: name,
                     product_category_id: selectedCategory,
                     variants_path: variants_path,
                   );
                 },
-                child: const Text('Đăng Sản Phẩm'),
                 child: const Text('Đăng Sản Phẩm'),
               ),
             ],

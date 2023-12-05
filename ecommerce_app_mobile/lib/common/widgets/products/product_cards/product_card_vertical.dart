@@ -22,11 +22,11 @@ class TProductCardVertical extends StatelessWidget {
   TProductCardVertical({
     super.key,
     required this.product,
-    required this.brand,
+    this.brand,
   });
 
   final ProductModel product;
-  final BrandModel brand;
+  final BrandModel? brand;
   final variantController = Get.put(ProductVariantController());
 
   @override
@@ -93,7 +93,7 @@ class TProductCardVertical extends StatelessWidget {
               ),
               const SizedBox(height: TSizes.spaceBtwItems / 2),
               TBrandTitleWithVerifiedIcon(
-                  title: brand.name, showVerify: brand.isVerified),
+                  title: brand!.name, showVerify: brand!.isVerified),
             ]),
           ),
 
@@ -105,7 +105,7 @@ class TProductCardVertical extends StatelessWidget {
             children: [
               /// Price
               FutureBuilder(
-                  future: variantController.getAllProductVariants(product.id),
+                  future: variantController.getAllProductVariants(product.id!),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasData) {

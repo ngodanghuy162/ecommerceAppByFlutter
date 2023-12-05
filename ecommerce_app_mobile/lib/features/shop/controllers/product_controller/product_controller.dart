@@ -13,8 +13,7 @@ class ProductController extends GetxController {
   Future<ProductModel> createProduct({
     required String brand_id,
     required String description,
-    String? discount_id,
-    required String image_url,
+    int? discount,
     required String name,
     required String product_category_id,
     List<dynamic>? rating,
@@ -23,8 +22,7 @@ class ProductController extends GetxController {
     return await _productRepo.createProduct(
         brand_id: brand_id,
         description: description,
-        discount_id: discount_id,
-        image_url: image_url,
+        discount: discount,
         name: name,
         product_category_id: product_category_id,
         rating: rating,
