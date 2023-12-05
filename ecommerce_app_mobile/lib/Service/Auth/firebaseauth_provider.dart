@@ -35,12 +35,12 @@ class FirebaseAuthProvider {
       required String password,
       required String phoneNumber}) async {
     try {
-      await FirebaseAuth.instance
+      final crtUserCredentical = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       final user = currentFirebaseUser;
       user!.sendEmailVerification();
       UserRepository.userRepository.createUser(CloudUserModel.register(
-          userId: user.uid,
+          userId: crtUserCredentical.user!.uid,
           firstName: firstName,
           lastName: lastName,
           userName: userName,
