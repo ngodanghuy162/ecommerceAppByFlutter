@@ -21,7 +21,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       // initialBinding: GeneralBindings(),
       home: const OnBoardingScreen(),
-      // home: const SellProductScreen(),
+      //home: const SellProductScreen(),
     );
   }
 }
