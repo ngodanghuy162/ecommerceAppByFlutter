@@ -1,4 +1,3 @@
-
 import 'package:ecommerce_app_mobile/Service/Auth/firebaseauth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/get_core.dart';

@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/Service/Repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/styles/shadows.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
@@ -6,7 +7,7 @@ import 'package:ecommerce_app_mobile/common/widgets/texts/product_price_text.dar
 import 'package:ecommerce_app_mobile/common/widgets/texts/product_title_text.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
-import 'package:ecommerce_app_mobile/features/shop/screens/product_details/product_detail.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_details/product_detail_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -65,13 +66,16 @@ class TProductCardVertical extends StatelessWidget {
                 ),
               ),
               // -- Favourite Button
-              const Positioned(
+              Positioned(
                 top: 0,
                 right: 0,
                 child: TCircularIcon(
-                  icon: Iconsax.heart5,
-                  color: Colors.red,
-                ),
+                    icon: Iconsax.heart5,
+                    color: Colors.red,
+                    onPressed: () async {
+                      bool isOk = await UserRepository.userRepository
+                          .addOrRemoveProductToWishlist(product);
+                    }),
               ),
             ]),
           ),

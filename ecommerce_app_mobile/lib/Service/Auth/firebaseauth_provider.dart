@@ -45,9 +45,7 @@ class FirebaseAuthProvider {
           lastName: lastName,
           userName: userName,
           email: email,
-          password: password,
           phoneNumber: phoneNumber));
-      // ignore: unnecessary_null_comparison
       if (user != null) {
         return user;
       } else {

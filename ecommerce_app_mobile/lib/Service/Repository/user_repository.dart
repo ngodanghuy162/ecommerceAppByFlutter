@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Auth/firebaseauth_provider.dart';
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import './user_model_field.dart';
 
 class UserRepository {
   final usersCollection = FirebaseFirestore.instance.collection('Users');
@@ -38,7 +41,7 @@ class UserRepository {
     } else {
       final snapshot = await usersCollection
           .where(
-            'phone_number',
+            phoneNumberFieldName,
             isEqualTo: phoneNumber,
           )
           .get();
@@ -69,10 +72,9 @@ class UserRepository {
   }
 
   Future<CloudUserModel?> getCloudUserByPhoneNumber(String phoneNumber) async {
-    print("Hello ");
     final snapshot = await usersCollection
         .where(
-          'phone_number',
+          phoneNumberFieldName,
           isEqualTo: phoneNumber,
         )
         .get();
@@ -114,5 +116,113 @@ class UserRepository {
           );
       print(error.toString());
     });
+  }
+
+  Future<void> addProductToCart(ProductModel productModel) async {
+    try {
+      /*  String currentUserId =
+          await currentCloudUser.then((value) => value.userId);*/
+      final snapshot = await usersCollection
+          .where(
+            userIdFieldName,
+            isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+          )
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        var firstDocument = snapshot.docs[0];
+        var documentId = firstDocument.id;
+        if (productModel.id!.isNotEmpty) {
+          bool isProductInCart =
+              firstDocument[cartFieldName].contains(productModel.id);
+          if (!isProductInCart) {
+            await usersCollection.doc(documentId).update({
+              cartFieldName: FieldValue.arrayUnion([productModel.id]),
+            });
+            Get.snackbar('Ok', "Them vao cart ok");
+          } else {
+            Get.snackbar('Error', "Product is already in cart");
+            return;
+          }
+        } else {
+          String? productId = await ProductRepository.instance
+              .getDocumentIdForProduct(productModel);
+          bool isProductInCart =
+              firstDocument[cartFieldName].contains(productId);
+          if (!isProductInCart) {
+            await usersCollection.doc(documentId).update({
+              cartFieldName: FieldValue.arrayUnion([productId]),
+            });
+            Get.snackbar('Ok', "Them vao cart ok");
+          } else {
+            Get.snackbar('Error', "Product is already in cart");
+            return;
+          }
+        }
+      } else {
+        print('Không tìm thấy ng dùng phù hợp.');
+      }
+      print('Đã thêm sản phẩm vào cart thành công.');
+    } catch (e) {
+      print('Lỗi khi thêm sản phẩm vào cart: $e');
+    }
+  }
+
+  Future<bool> addOrRemoveProductToWishlist(ProductModel productModel) async {
+    try {
+      Get.put(ProductRepository());
+      /*String currentUserId =
+          await currentCloudUser.then((value) => value.userId);*/
+      final snapshot = await usersCollection
+          .where(
+            userIdFieldName,
+            isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+          )
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        var firstDocument = snapshot.docs[0];
+        var documentId = firstDocument.id;
+        if (productModel.id!.isNotEmpty) {
+          bool isProductInWishlist =
+              firstDocument[wishlistFieldName].contains(productModel.id);
+          if (!isProductInWishlist) {
+            await usersCollection.doc(documentId).update({
+              wishlistFieldName: FieldValue.arrayUnion([productModel.id]),
+            });
+            print('Them vao wishlist ok**1');
+            return true;
+          } else {
+            await usersCollection.doc(documentId).update({
+              wishlistFieldName: FieldValue.arrayRemove([productModel.id]),
+            });
+            print('Xoa khoi wishlist ok**1');
+            return true;
+          }
+        } else {
+          String? productId = await ProductRepository.instance
+              .getDocumentIdForProduct(productModel);
+          bool isProductInWishlist =
+              firstDocument[wishlistFieldName].contains(productId);
+          if (!isProductInWishlist) {
+            await usersCollection.doc(documentId).update({
+              wishlistFieldName: FieldValue.arrayUnion([productId]),
+            });
+            print('Them vao wishlist2 ok**2');
+            return true;
+          } else {
+            await usersCollection.doc(documentId).update({
+              wishlistFieldName: FieldValue.arrayRemove([productId]),
+            });
+            print('Xoa khoi wishlist ok**2');
+            return true;
+          }
+        }
+      } else {
+        print('Không tìm thấy ng dùng phù hợp.');
+        return false;
+      }
+    } catch (e) {
+      e.printError();
+      return false;
+    }
   }
 }

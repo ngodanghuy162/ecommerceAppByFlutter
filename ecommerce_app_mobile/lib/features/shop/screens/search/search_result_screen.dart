@@ -21,6 +21,7 @@ class SearchResultScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
+          Text("KeySearch la:" + keySearch),
           TSearchContainer(text: "Testtt TSEARCH TEXT"),
 
           /// Drop down

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -58,12 +57,14 @@ class _SellProductScreenState extends State<SellProductScreen> {
     if (pickedFile != null) {
       setState(() async {
         _image = pickedFile;
-        String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+        String uniqueFileName =
+            DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
 
         Reference referenceRoot = FirebaseStorage.instance.ref();
         Reference referenceDirImages = referenceRoot.child('images');
 
-        Reference referenceImageToUpload = referenceDirImages.child(uniqueFileName);
+        Reference referenceImageToUpload =
+            referenceDirImages.child(uniqueFileName);
 
         try {
           await referenceImageToUpload.putFile(File(_image!.path));
@@ -139,18 +140,22 @@ class _SellProductScreenState extends State<SellProductScreen> {
               GestureDetector(
                 onTap: _pickImage,
                 child: Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: _image == null
-                      ? Center(
-                          child: Icon(Icons.camera_alt,
-                              size: 40, color: Colors.grey),
-                        )
-                      : (_image!.path.contains('http') ? Image.network(_image!.path, fit: BoxFit.contain) : Image.file(File(_image!.path), fit: BoxFit.contain,))
-                ),
+                    height: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: _image == null
+                        ? Center(
+                            child: Icon(Icons.camera_alt,
+                                size: 40, color: Colors.grey),
+                          )
+                        : (_image!.path.contains('http')
+                            ? Image.network(_image!.path, fit: BoxFit.contain)
+                            : Image.file(
+                                File(_image!.path),
+                                fit: BoxFit.contain,
+                              ))),
               ),
               SizedBox(height: 16),
               TextField(
@@ -237,20 +242,24 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 },
               ),
               ElevatedButton(
-                style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.blue)),
+                style: const ButtonStyle(
+                    backgroundColor:
+                        MaterialStatePropertyAll<Color>(Colors.blue)),
                 onPressed: () {
                   setState(() {
                     // Add an empty variant when the button is pressed
-                    variants.add(ProductVariantModel(size: '', color: '', price: 0.0));
+                    variants.add(
+                        ProductVariantModel(size: '', color: '', price: 0.0));
                   });
                 },
                 child: Text('Add Variant'),
               ),
-
               SizedBox(height: 16),
               SizedBox(height: 16),
               ElevatedButton(
-                style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange)),
+                style: const ButtonStyle(
+                    backgroundColor:
+                        MaterialStatePropertyAll<Color>(Colors.orange)),
                 onPressed: () async {
                   // Handle product submission logic here
                   print('Category: $selectedCategory');
@@ -261,23 +270,20 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   print('Discount: $discount_id');
                   print('Variants: ${variants}');
 
-                  for(int i = 0; i < variants.length; i++) {
-                    variants_path.add(await ProductVariantController.instance.createProductVariant(variants[i]));
+                  for (int i = 0; i < variants.length; i++) {
+                    variants_path.add(await ProductVariantController.instance
+                        .createProductVariant(variants[i]));
                   }
-                  
-                  ProductModel productModel = ProductModel(
-                    product_category_id: selectedCategory,
-                    brand_id: brand_id, 
+
+                  ProductController.instance.createProduct(
+                    brand_id: brand_id,
                     description: description,
                     discount_id: discount_id,
-                    image_url: image_url, 
+                    image_url: image_url,
                     name: name,
+                    product_category_id: selectedCategory,
                     variants_path: variants_path,
-
                   );
-                  
-                  ProductController.instance.createProduct(productModel);
-
                 },
                 child: Text('Đăng Sản Phẩm'),
               ),
