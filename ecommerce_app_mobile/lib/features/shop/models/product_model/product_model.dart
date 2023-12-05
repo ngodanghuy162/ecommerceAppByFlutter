@@ -1,6 +1,5 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
 
 class ProductModel {
   final String brand_id;

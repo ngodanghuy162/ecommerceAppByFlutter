@@ -1,13 +1,13 @@
 // ignore: depend_on_referenced_packages
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CloudUserModel {
-  String userId;
+class UserModel {
+  String? id;
   String firstName;
   String lastName;
-  String userName;
+  String? userName;
   String email;
-  String password;
+  String? password;
   String phoneNumber;
   List<Map<String, dynamic>> address;
   List<DocumentReference> wishlist;
@@ -16,16 +16,19 @@ class CloudUserModel {
   double totalIncome;
   String bankAccount;
   double totalConsumption;
+  final String avatar_imgURL;
 
   // Hàm khởi tạo
-  CloudUserModel({
-    required this.userId,
+  UserModel({
+    this.id,
     required this.firstName,
     required this.lastName,
-    required this.userName,
+    this.userName,
     required this.email,
-    required this.password,
+    this.password,
     required this.phoneNumber,
+    this.avatar_imgURL =
+        "https://i.pinimg.com/564x/d7/fe/2f/d7fe2f9979320bb57a1e4676eeb3e91a.jpg",
     List<Map<String, dynamic>>? address,
     List<DocumentReference>? wishlist,
     Map<String, List<String>>? voucher,
@@ -41,80 +44,33 @@ class CloudUserModel {
         bankAccount = bankAccount ?? '',
         totalConsumption = totalConsumption ?? 0.0;
 
-  // ham khoi tao cho qua trinh dang ky bang gmail
-  CloudUserModel.register({
-    required this.userId,
-    required this.firstName,
-    required this.lastName,
-    required this.userName,
-    required this.email,
-    required this.password,
-    required this.phoneNumber,
-    List<Map<String, dynamic>>? address,
-    List<DocumentReference>? wishlist,
-    Map<String, List<String>>? voucher,
-    List<Map<String, dynamic>>? cart,
-    double? totalIncome,
-    String? bankAccount,
-    double? totalConsumption,
-  })  : address = [],
-        wishlist = [],
-        voucher = {},
-        cart = [],
-        totalIncome = 0.0,
-        bankAccount = '',
-        totalConsumption = 0.0;
-
-  // dki tk voi google
-  CloudUserModel.registerByGg({
-    required this.userId,
-    required this.userName,
-    required this.email,
-    List<Map<String, dynamic>>? address,
-    List<DocumentReference>? wishlist,
-    Map<String, List<String>>? voucher,
-    List<Map<String, dynamic>>? cart,
-    double? totalIncome,
-    String? bankAccount,
-    double? totalConsumption,
-  })  : password = "",
-        phoneNumber = "",
-        firstName = "",
-        lastName = "",
-        address = [],
-        wishlist = [],
-        voucher = {},
-        cart = [],
-        totalIncome = 0.0,
-        bankAccount = '',
-        totalConsumption = 0.0;
-
   // ham khoi tao cho qua trinh dang ky
-  factory CloudUserModel.fromSnapshot(
+  factory UserModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> snapshot) {
     Map<String, dynamic>? data = snapshot.data();
 
-    return CloudUserModel(
-      userId: snapshot.id,
-      email: data?['email'] ?? '',
-      password: data?['password'] ?? '',
-      phoneNumber: data?['phone_number'] ?? '',
-      firstName: data?['first_name'] ?? '',
-      lastName: data?['first_name'] ?? '',
-      userName: data?['first_name'] ?? '',
-      address: List<Map<String, dynamic>>.from(data?['address'] ?? []),
-      wishlist: List<DocumentReference>.from(data?['wishlist'] ?? []),
-      voucher: Map<String, List<String>>.from(data?['voucher'] ?? {}),
-      cart: List<Map<String, dynamic>>.from(data?['cart'] ?? []),
-      totalIncome: data?['totalIncome'] ?? 0,
-      bankAccount: data?['bankAccount'] ?? '',
-      totalConsumption: data?['totalConsumption'] ?? 0,
-    );
+    return UserModel(
+        id: snapshot.id,
+        email: data?['email'] ?? '',
+        password: data?['password'] ?? '',
+        phoneNumber: data?['phone_number'] ?? '',
+        firstName: data?['first_name'] ?? '',
+        lastName: data?['last_name'] ?? '',
+        address: List<Map<String, dynamic>>.from(data?['address'] ?? []),
+        wishlist: List<DocumentReference>.from(data?['wishlist'] ?? []),
+        voucher: Map<String, List<String>>.from(data?['voucher'] ?? {}),
+        cart: List<Map<String, dynamic>>.from(data?['cart'] ?? []),
+        totalIncome: data?['totalIncome'] ?? 0,
+        bankAccount: data?['bankAccount'] ?? '',
+        totalConsumption: data?['totalConsumption'] ?? 0,
+        avatar_imgURL: data?['avatar_imgURL']);
   }
 
   Map<String, dynamic> toMap() {
     return {
       'email': email,
+      'first_name': firstName,
+      'last_name': lastName,
       'password': password,
       'phone_number': phoneNumber,
       'address': address,
@@ -124,6 +80,7 @@ class CloudUserModel {
       'totalIncome': totalIncome,
       'bankAccount': bankAccount,
       'totalConsumption': totalConsumption,
+      'avatar_imgURL': avatar_imgURL,
     };
   }
 }

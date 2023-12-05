@@ -1,24 +1,29 @@
 import 'package:ecommerce_app_mobile/Controller/sign_up_controller.dart';
-import 'package:ecommerce_app_mobile/Service/Auth/auth_exception.dart';
-import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
-import 'package:ecommerce_app_mobile/features/authentication/screens/signup/verify_email.dart';
+import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/signup/widgets/terms_conditions_checkbox.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/constants/text_strings.dart';
+import 'package:ecommerce_app_mobile/utils/validators/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class TSignupForm extends StatelessWidget {
+class TSignupForm extends StatefulWidget {
   const TSignupForm({
     super.key,
   });
 
   @override
+  State<TSignupForm> createState() => _TSignupFormState();
+}
+
+class _TSignupFormState extends State<TSignupForm> {
+  final controller = Get.put(SignUpController());
+  final formKey = GlobalKey<FormState>();
+  @override
   Widget build(BuildContext context) {
-    Get.put(SignUpController());
-    var signUpController = SignUpController.instance;
     return Form(
+      key: formKey,
       child: Column(
         children: [
           //FirstName and LastName
@@ -26,7 +31,9 @@ class TSignupForm extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
-                  controller: signUpController.firstName,
+                  controller: controller.firstName,
+                  validator: TValidator.validateName,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   expands: false,
                   decoration: const InputDecoration(
                     labelText: TTexts.firstName,
@@ -37,7 +44,9 @@ class TSignupForm extends StatelessWidget {
               const SizedBox(width: TSizes.spaceBtwInputFields),
               Expanded(
                 child: TextFormField(
-                  controller: signUpController.lastName,
+                  controller: controller.lastName,
+                  validator: TValidator.validateName,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   expands: false,
                   decoration: const InputDecoration(
                     labelText: TTexts.lastName,
@@ -49,20 +58,21 @@ class TSignupForm extends StatelessWidget {
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
 
-          //Username
-          TextFormField(
-            controller: signUpController.userName,
-            expands: false,
-            decoration: const InputDecoration(
-              labelText: TTexts.username,
-              prefixIcon: Icon(Iconsax.user_edit),
-            ),
-          ),
-          const SizedBox(height: TSizes.spaceBtwInputFields),
+          // //,Username
+          // TextFormField(
+          //   expands: false,
+          //   decoration: const InputDecoration(
+          //     labelText: TTexts.username,
+          //     prefixIcon: Icon(Iconsax.user_edit),
+          //   ),
+          // ),
+          // const SizedBox(height: TSizes.spaceBtwInputFields),
 
           //Email
           TextFormField(
-            controller: signUpController.email,
+            controller: controller.email,
+            validator: TValidator.validateEmail,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             expands: false,
             decoration: const InputDecoration(
               labelText: TTexts.email,
@@ -73,7 +83,9 @@ class TSignupForm extends StatelessWidget {
 
           //Phone number
           TextFormField(
-            controller: signUpController.phoneNumber,
+            controller: controller.phoneNumber,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: TValidator.validatePhoneNumber,
             expands: false,
             decoration: const InputDecoration(
               labelText: TTexts.phoneNo,
@@ -84,18 +96,29 @@ class TSignupForm extends StatelessWidget {
 
           //Password
           TextFormField(
-            controller: signUpController.password,
-            obscureText: true,
-            expands: false,
-            decoration: const InputDecoration(
+            controller: controller.password,
+            obscureText: controller.isPasswordObscure.value,
+            validator: TValidator.validatePassword,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Iconsax.password_check),
+              suffixIcon: IconButton(
+                icon: controller.isPasswordObscure.value
+                    ? const Icon(Iconsax.eye)
+                    : const Icon(Iconsax.eye_slash),
+                onPressed: () {
+                  setState(() {
+                    controller.isPasswordObscure.value =
+                        !controller.isPasswordObscure.value;
+                  });
+                },
+              ),
               labelText: TTexts.password,
-              prefixIcon: Icon(Iconsax.password_check),
-              suffixIcon: Icon(Iconsax.eye_slash),
             ),
           ),
           const SizedBox(height: TSizes.spaceBtwSections),
 
-          //Terms and Conditions checkbox
+          //Terms, and Conditions checkbox
           const TTermsAndConditionsCheckbox(),
           //Sign up button
           const SizedBox(height: TSizes.spaceBtwSections),
@@ -103,46 +126,16 @@ class TSignupForm extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () async {
-                try {
-                  await signUpController.registerUser();
-                  await showDialogOnScreen(
-                      context: context,
-                      title: 'Create Acount Success',
-                      description:
-                          'Now you have to verify email to use your account',
-                      onOkPressed: () {
-                        Get.to(() => const VerifyEmailScreen());
-                      },
-                      showCancelButton: false);
-                } on EmailAlreadyInUseAuthException {
-                  // ignore: use_build_context_synchronously
-                  await showDialogOnScreen(
-                    context: context,
-                    title: 'Failed to register',
-                    description: 'Email has been used',
-                    onOkPressed: () {}, // Hàm trống
+                if (formKey.currentState!.validate()) {
+                  UserModel userModel = UserModel(
+                    firstName: controller.firstName.text,
+                    lastName: controller.lastName.text,
+                    email: controller.email.text,
+                    phoneNumber: controller.phoneNumber.text,
+                    password: controller.password.text,
                   );
-                } on WeakPasswordAuthException {
-                  await showDialogOnScreen(
-                    context: context,
-                    title: 'Failed to register',
-                    description: 'Weak Password',
-                    onOkPressed: () {}, // Hàm trống
-                  );
-                } on InvalidEmailException {
-                  await showDialogOnScreen(
-                    context: context,
-                    title: 'Failed to register',
-                    description: 'Invalid Email',
-                    onOkPressed: () {}, // Hàm trống
-                  );
-                } on GenericAuthException {
-                  await showDialogOnScreen(
-                    context: context,
-                    title: 'Failed to register',
-                    description: 'Somthing went wrong',
-                    onOkPressed: () {}, // Hàm trống
-                  );
+
+                  SignUpController.instance.createUser(userModel);
                 }
               },
               child: const Text(TTexts.createAccount),
