@@ -8,6 +8,7 @@ class ProductVariantModel {
   late String imageURL;
 
   ProductVariantModel({
+    required this.id,
     required this.size,
     required this.color,
     required this.price,
@@ -27,6 +28,7 @@ class ProductVariantModel {
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return ProductVariantModel(
+      id: document.id,
       size: data['size'],
       color: data['color'],
       price: data['price'],
