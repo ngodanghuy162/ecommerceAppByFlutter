@@ -1,6 +1,5 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
-import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';

@@ -5,7 +5,6 @@ import 'package:ecommerce_app_mobile/features/shop/controllers/product_controlle
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_category_repository.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
@@ -68,7 +67,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
         Reference referenceDirImages = referenceRoot.child('images');
 
         Reference referenceImageToUpload =
-        referenceDirImages.child(uniqueFileName);
+            referenceDirImages.child(uniqueFileName);
 
         try {
 
@@ -429,21 +428,14 @@ class _SellProductScreenState extends State<SellProductScreen> {
                         .createProductVariant(variants[i]));
                   }
 
-                  BrandModel brandModel = BrandModel(name: brandName);
-
-                  final brandId = await BrandController.instance.createBrand(brandModel);
-
-                  ProductModel productModel = ProductModel(
-                    product_category_id: categoryResult,
-                    brand_id: brandId,
+                  ProductController.instance.createProduct(
+                    brand_id: brand_id,
                     description: description,
                     discount_id: discount_id,
                     name: name,
+                    product_category_id: selectedCategory,
                     variants_path: variants_path,
                   );
-
-
-                  ProductController.instance.createProduct(productModel);
                 },
                 child: const Text('Đăng Sản Phẩm'),
                 child: const Text('Đăng Sản Phẩm'),

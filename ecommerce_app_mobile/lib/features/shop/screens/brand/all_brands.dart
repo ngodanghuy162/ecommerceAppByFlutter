@@ -3,7 +3,6 @@ import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/brands/brand_card.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/brands_controller/brands_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/brands/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/brand/brand_products.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';

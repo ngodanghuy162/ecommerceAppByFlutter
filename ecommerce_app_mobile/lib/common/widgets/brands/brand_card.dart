@@ -9,7 +9,7 @@ import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class TBrandCard extends StatelessWidget {
-  TBrandCard({
+  const TBrandCard({
     super.key,
     required this.showBorder,
     this.onTap,

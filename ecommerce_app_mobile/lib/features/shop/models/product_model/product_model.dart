@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
 
 class ProductModel {
+  final String? id;
   final String brand_id;
   final String description;
   final String? discount_id;
@@ -11,6 +12,7 @@ class ProductModel {
   final List<String>? variants_path;
 
   ProductModel({
+    this.id,
     required this.brand_id,
     required this.description,
     this.discount_id,
@@ -22,6 +24,7 @@ class ProductModel {
 
   toJson() {
     return {
+      'id': id,
       'brand_id': brand_id,
       'description': description,
       'discount_id': discount_id,
@@ -36,12 +39,13 @@ class ProductModel {
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return ProductModel(
+      id: document.id,
       brand_id: data['brand_id'],
       description: data['description'],
       discount_id: data['discount_id'],
       name: data['name'],
       product_category_id: data['product_category_id'],
-      rating: data['rating'],
+      rating: data['rating'] ?? null,
       variants_path: data['variants_path'],
     );
   }

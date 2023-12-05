@@ -1,5 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../Repository/user_model_field.dart';
 
 class CloudUserModel {
   String userId;
@@ -7,7 +8,6 @@ class CloudUserModel {
   String lastName;
   String userName;
   String email;
-  String password;
   String phoneNumber;
   List<Map<String, dynamic>> address;
   List<DocumentReference> wishlist;
@@ -24,7 +24,6 @@ class CloudUserModel {
     required this.lastName,
     required this.userName,
     required this.email,
-    required this.password,
     required this.phoneNumber,
     List<Map<String, dynamic>>? address,
     List<DocumentReference>? wishlist,
@@ -48,7 +47,6 @@ class CloudUserModel {
     required this.lastName,
     required this.userName,
     required this.email,
-    required this.password,
     required this.phoneNumber,
     List<Map<String, dynamic>>? address,
     List<DocumentReference>? wishlist,
@@ -77,8 +75,7 @@ class CloudUserModel {
     double? totalIncome,
     String? bankAccount,
     double? totalConsumption,
-  })  : password = "",
-        phoneNumber = "",
+  })  : phoneNumber = "",
         firstName = "",
         lastName = "",
         address = [],
@@ -95,13 +92,12 @@ class CloudUserModel {
     Map<String, dynamic>? data = snapshot.data();
 
     return CloudUserModel(
-      userId: snapshot.id,
+      userId: data?['userId'],
       email: data?['email'] ?? '',
-      password: data?['password'] ?? '',
       phoneNumber: data?['phone_number'] ?? '',
       firstName: data?['first_name'] ?? '',
-      lastName: data?['first_name'] ?? '',
-      userName: data?['first_name'] ?? '',
+      lastName: data?['last_name'] ?? '',
+      userName: data?['user_name'] ?? '',
       address: List<Map<String, dynamic>>.from(data?['address'] ?? []),
       wishlist: List<DocumentReference>.from(data?['wishlist'] ?? []),
       voucher: Map<String, List<String>>.from(data?['voucher'] ?? {}),
@@ -114,9 +110,12 @@ class CloudUserModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': userId,
       'email': email,
-      'password': password,
       'phone_number': phoneNumber,
+      'first_name': firstName,
+      'last_name': lastName,
+      'user_name': userName,
       'address': address,
       'wishlist': wishlist.map((ref) => ref).toList(),
       'voucher': voucher,
