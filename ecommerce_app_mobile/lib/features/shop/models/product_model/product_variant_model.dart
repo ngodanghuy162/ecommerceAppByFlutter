@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductVariantModel {
+  final String id;
   late String size;
   late String color;
   late double price;
@@ -32,5 +33,4 @@ class ProductVariantModel {
       imageURL: data['imageURL'],
     );
   }
-
 }

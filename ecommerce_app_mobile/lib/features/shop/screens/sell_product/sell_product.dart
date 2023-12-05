@@ -145,6 +145,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
 
     return Scaffold(
       appBar: const TAppBar(
+      appBar: const TAppBar(
         title: Text('Đăng Sản Phẩm'),
         showBackArrow: true,
       ),
@@ -156,6 +157,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
             children: [
               DropdownMenu<String>(
                 hintText: 'Category',
+                textStyle: const TextStyle(
                 textStyle: const TextStyle(
                   fontSize: 16,
                 ),
@@ -174,7 +176,9 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 }).toList(),
               ),
               const SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
+                decoration: const InputDecoration(
                 decoration: const InputDecoration(
                   labelText: 'Brand',
                   border: OutlineInputBorder(),
@@ -186,7 +190,9 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 },
               ),
               const SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
+                decoration: const InputDecoration(
                 decoration: const InputDecoration(
                   labelText: 'Name',
                   border: OutlineInputBorder(),
@@ -197,6 +203,28 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   });
                 },
               ),
+              const SizedBox(height: 16),
+              GestureDetector(
+                onTap: _pickImage,
+                child: Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: _image == null
+                        ? const Center(
+                            child: Icon(Icons.camera_alt,
+                                size: 40, color: Colors.grey),
+                          )
+                        : (_image!.path.contains('http')
+                            ? Image.network(_image!.path, fit: BoxFit.contain)
+                            : Image.file(
+                                File(_image!.path),
+                                fit: BoxFit.contain,
+                              ))),
+              ),
+              const SizedBox(height: 16),
               const SizedBox(height: 16),
               // GestureDetector(
               //   onTap: _pickImage,
@@ -217,6 +245,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
               const SizedBox(height: 16),
               TextField(
                 decoration: const InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Description',
                   border: OutlineInputBorder(),
                 ),
@@ -228,7 +257,9 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 maxLines: 3,
               ),
               const SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
+                decoration: const InputDecoration(
                 decoration: const InputDecoration(
                   labelText: 'Discount_code',
                   border: OutlineInputBorder(),
@@ -240,6 +271,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 },
               ),
               const SizedBox(height: 16),
+              const SizedBox(height: 16),
               const Text(
                 'Product variants',
                 style: TextStyle(
@@ -247,6 +279,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   color: TColors.black,
                 ),
               ),
+              const SizedBox(height: 8),
               const SizedBox(height: 8),
               ListView.builder(
                 shrinkWrap: true,
@@ -258,6 +291,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                       Text('Variant ${index + 1}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                       const SizedBox(height: 8),
                       TextField(
+                        decoration: const InputDecoration(
                         decoration: const InputDecoration(
                           labelText: 'Size',
                           border: OutlineInputBorder(),
@@ -312,6 +346,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                       const SizedBox(height: 8),
                       TextField(
                         decoration: const InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Price',
                           border: OutlineInputBorder(),
                         ),
@@ -364,6 +399,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   });
                 },
                 child: const Text('Add Variant'),
+                child: const Text('Add Variant'),
               ),
 
               const SizedBox(height: 16),
@@ -406,8 +442,10 @@ class _SellProductScreenState extends State<SellProductScreen> {
                     variants_path: variants_path,
                   );
 
+
                   ProductController.instance.createProduct(productModel);
                 },
+                child: const Text('Đăng Sản Phẩm'),
                 child: const Text('Đăng Sản Phẩm'),
               ),
             ],
