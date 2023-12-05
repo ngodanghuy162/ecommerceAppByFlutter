@@ -82,7 +82,7 @@ class StoreScreen extends StatelessWidget {
                                   itemBuilder: (_, index) {
                                     return TBrandCard(
                                       showVerify:
-                                          snapshot.data![index].is_verified,
+                                          snapshot.data![index].isVerified,
                                       showBorder: false,
                                       nameBrand: snapshot.data![index].name,
                                     );

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductVariantModel {
+  final String id;
   late String size;
   late String color;
   late double price;
@@ -8,7 +9,8 @@ class ProductVariantModel {
   ProductVariantModel({
     required this.size,
     required this.color,
-    required this.price
+    required this.price,
+    required this.id,
   });
 
   toJson() {
@@ -23,10 +25,9 @@ class ProductVariantModel {
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return ProductVariantModel(
-      size: data['size'],
-      color: data['color'],
-      price: data['price']
-    );
+        size: data['size'],
+        color: data['color'],
+        price: data['price'],
+        id: document.id);
   }
-
 }

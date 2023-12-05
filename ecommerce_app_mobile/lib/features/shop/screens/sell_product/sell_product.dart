@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
@@ -59,12 +58,14 @@ class _SellProductScreenState extends State<SellProductScreen> {
     if (pickedFile != null) {
       setState(() async {
         _image = pickedFile;
-        String uniqueFileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+        String uniqueFileName =
+            DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
 
         Reference referenceRoot = FirebaseStorage.instance.ref();
         Reference referenceDirImages = referenceRoot.child('images');
 
-        Reference referenceImageToUpload = referenceDirImages.child(uniqueFileName);
+        Reference referenceImageToUpload =
+            referenceDirImages.child(uniqueFileName);
 
         try {
           await referenceImageToUpload.putFile(File(_image!.path));
@@ -83,7 +84,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
     Get.put(ProductVariantController());
 
     return Scaffold(
-      appBar: TAppBar(
+      appBar: const TAppBar(
         title: Text('Đăng Sản Phẩm'),
         showBackArrow: true,
       ),
@@ -95,7 +96,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
             children: [
               DropdownMenu<String>(
                 hintText: 'Category',
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   fontSize: 16,
                 ),
                 width: 200,
@@ -112,9 +113,9 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   return DropdownMenuEntry<String>(value: value, label: value);
                 }).toList(),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Brand',
                   border: OutlineInputBorder(),
                 ),
@@ -124,9 +125,9 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   });
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Name',
                   border: OutlineInputBorder(),
                 ),
@@ -136,26 +137,30 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   });
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               GestureDetector(
                 onTap: _pickImage,
                 child: Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: _image == null
-                      ? Center(
-                          child: Icon(Icons.camera_alt,
-                              size: 40, color: Colors.grey),
-                        )
-                      : (_image!.path.contains('http') ? Image.network(_image!.path, fit: BoxFit.contain) : Image.file(File(_image!.path), fit: BoxFit.contain,))
-                ),
+                    height: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: _image == null
+                        ? const Center(
+                            child: Icon(Icons.camera_alt,
+                                size: 40, color: Colors.grey),
+                          )
+                        : (_image!.path.contains('http')
+                            ? Image.network(_image!.path, fit: BoxFit.contain)
+                            : Image.file(
+                                File(_image!.path),
+                                fit: BoxFit.contain,
+                              ))),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Description',
                   border: OutlineInputBorder(),
                 ),
@@ -166,9 +171,9 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 },
                 maxLines: 3,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Discount_code',
                   border: OutlineInputBorder(),
                 ),
@@ -178,7 +183,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   });
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               const Text(
                 'Product variants',
                 style: TextStyle(
@@ -186,7 +191,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   color: TColors.black,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               ListView.builder(
                 shrinkWrap: true,
                 itemCount: variants.length,
@@ -195,9 +200,9 @@ class _SellProductScreenState extends State<SellProductScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text('Variant ${index + 1}'),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Size',
                           border: OutlineInputBorder(),
                         ),
@@ -207,9 +212,9 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           });
                         },
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Color',
                           border: OutlineInputBorder(),
                         ),
@@ -219,9 +224,9 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           });
                         },
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Price',
                           border: OutlineInputBorder(),
                         ),
@@ -232,26 +237,30 @@ class _SellProductScreenState extends State<SellProductScreen> {
                         },
                         keyboardType: TextInputType.number,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                     ],
                   );
                 },
               ),
               ElevatedButton(
-                style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.blue)),
+                style: const ButtonStyle(
+                    backgroundColor:
+                        MaterialStatePropertyAll<Color>(Colors.blue)),
                 onPressed: () {
                   setState(() {
                     // Add an empty variant when the button is pressed
-                    variants.add(ProductVariantModel(size: '', color: '', price: 0.0));
+                    variants.add(ProductVariantModel(
+                        size: '', color: '', price: 0.0, id: ''));
                   });
                 },
-                child: Text('Add Variant'),
+                child: const Text('Add Variant'),
               ),
-
-              SizedBox(height: 16),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
-                style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange)),
+                style: const ButtonStyle(
+                    backgroundColor:
+                        MaterialStatePropertyAll<Color>(Colors.orange)),
                 onPressed: () async {
                   // Handle product submission logic here
                   print('Category: $selectedCategory');
@@ -262,25 +271,26 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   print('Discount: $discount_id');
                   print('Variants: ${variants}');
 
-                  for(int i = 0; i < variants.length; i++) {
-                    variants_path.add(await ProductVariantController.instance.createProductVariant(variants[i]));
+                  for (int i = 0; i < variants.length; i++) {
+                    variants_path.add(await ProductVariantController.instance
+                        .createProductVariant(variants[i]));
                   }
-                  
+
                   ProductModel productModel = ProductModel(
-                    product_category_id: selectedCategory,
-                    brand_id: brand_id, 
+                    productCategoryId: selectedCategory,
+                    brandId: brand_id,
                     description: description,
-                    discount_id: discount_id,
-                    image_url: image_url, 
+                    discountId: discount_id,
+                    imageUrl: image_url,
                     name: name,
-                    variants_path: variants_path,
-
+                    variantsPath: variants_path,
+                    discount: 0,
+                    id: '',
                   );
-                  
-                  ProductController.instance.createProduct(productModel);
 
+                  ProductController.instance.createProduct(productModel);
                 },
-                child: Text('Đăng Sản Phẩm'),
+                child: const Text('Đăng Sản Phẩm'),
               ),
             ],
           ),

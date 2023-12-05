@@ -12,12 +12,11 @@ import '../product_cards/product_card_vertical.dart';
 class TSortableProducts extends StatelessWidget {
   TSortableProducts({
     super.key,
-    this.brand,
+    required this.brand,
   });
-  final BrandModel? brand;
+  final BrandModel brand;
 
   final productController = Get.put(ProductController());
-  final brandController = Get.put(BrandsController());
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +44,7 @@ class TSortableProducts extends StatelessWidget {
 
         /// Product
         FutureBuilder(
-            future:
-                productController.getAllProductbyBrand("rVewCcyITz4zDedQROrQ"),
+            future: productController.getAllProductbyBrand("Brand/${brand.id}"),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
@@ -54,11 +52,12 @@ class TSortableProducts extends StatelessWidget {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (_, index) => TProductCardVertical(
                             product: snapshot.data![index],
+                            brand: brand,
                           ));
                 } else if (snapshot.hasError) {
                   return Center(child: Text(snapshot.error.toString()));
                 } else {
-                  return Center(child: Text("smt went wrong"));
+                  return const Center(child: Text("smt went wrong"));
                 }
               } else {
                 return const CircularProgressIndicator();

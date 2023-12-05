@@ -1,37 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
 
 class ProductModel {
-  final String brand_id;
+  final String id;
+  final String brandId;
   final String description;
-  final String? discount_id;
-  final String image_url;
+  final String? discountId;
+  final String imageUrl;
   final String name;
-  final String product_category_id;
+  final String productCategoryId;
   final List<dynamic>? rating;
-  final List<String>? variants_path;
+  final List<String>? variantsPath;
+  final int discount;
 
   ProductModel({
-    required this.brand_id,
+    required this.id,
+    required this.brandId,
     required this.description,
-    this.discount_id,
-    required this.image_url,
+    this.discountId,
+    required this.imageUrl,
     required this.name,
-    required this.product_category_id,
+    required this.productCategoryId,
     this.rating,
-    required this.variants_path,
+    required this.variantsPath,
+    required this.discount,
   });
 
   toJson() {
     return {
-      'brand_id': brand_id,
+      'brand_id': brandId,
       'description': description,
-      'discount_id': discount_id,
-      'image_url': image_url,
+      'discount_id': discountId,
+      'image_url': imageUrl,
       'name': name,
-      'product_category_id': product_category_id,
+      'product_category_id': productCategoryId,
       'rating': rating,
-      'variants': variants_path,
+      'variants': variantsPath,
+      'discount': discount
     };
   }
 
@@ -39,14 +43,16 @@ class ProductModel {
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return ProductModel(
-      brand_id: data['brand_id'],
+      id: document.id,
+      brandId: data['brand_id'],
+      discount: data['discount'],
       description: data['description'],
-      discount_id: data['discount_id'],
-      image_url: data['image_url'],
+      discountId: data['discount_id'],
+      imageUrl: data['image_url'],
       name: data['name'],
-      product_category_id: data['product_category_id'],
+      productCategoryId: data['product_category_id'],
       rating: data['rating'],
-      variants_path: data['variants_path'],
+      variantsPath: data['variants_path'],
     );
   }
 }

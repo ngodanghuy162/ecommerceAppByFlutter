@@ -15,11 +15,11 @@ class AllProductsScreen extends StatelessWidget {
         showBackArrow: true,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(TSizes.defaultSpace),
-          child: TSortableProducts(),
-        ),
-      ),
+          // child: Padding(
+          //   padding: const EdgeInsets.all(TSizes.defaultSpace),
+          //   child: TSortableProducts(), //TODO
+          // ),
+          ),
     );
   }
 }

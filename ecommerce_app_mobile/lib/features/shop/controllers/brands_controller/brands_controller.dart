@@ -11,7 +11,7 @@ class BrandsController extends GetxController {
     return await _brandRepo.queryAllBrands();
   }
 
-  // Future<BrandModel> getNameofBrand(String brandID) async {
-  //   return await _brandRepo.queryBrandNamebyId(brandID);
-  // }
+  Future<BrandModel> getBrandById(String brandID) async {
+    return await _brandRepo.queryBrandById(brandID);
+  }
 }
