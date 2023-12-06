@@ -78,7 +78,7 @@ class TProductCardVertical extends StatelessWidget {
                     icon: Iconsax.heart5,
                     color: Colors.red,
                     onPressed: () async {
-                      bool isOk = await UserRepository.userRepository
+                      bool isOk = await UserRepository.instance
                           .addOrRemoveProductToWishlist(product);
                     }),
               ),
