@@ -1,7 +1,5 @@
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/primary_header_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
-import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
-import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/all_products/all_products.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_appbar.dart';
@@ -82,10 +80,10 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: TSizes.spaceBtwItems),
 
-                TGridLayout(
-                  itemCount: 4,
-                  itemBuilder: (_, index) => const TProductCardVertical(),
-                )
+                // TGridLayout(
+                //   itemCount: 4,
+                //   itemBuilder: (_, index) => TProductCardVertical(), 
+                // )
               ],
             ),
           ),

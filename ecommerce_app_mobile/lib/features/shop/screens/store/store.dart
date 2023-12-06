@@ -5,6 +5,7 @@ import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/sear
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart_menu_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/brands_controller/brands_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/brand/all_brands.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/store/widgets/category_tab.dart';
@@ -15,7 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class StoreScreen extends StatelessWidget {
-  const StoreScreen({super.key});
+  StoreScreen({super.key});
+
+  final controllerBrand = Get.put(BrandsController());
 
   @override
   Widget build(BuildContext context) {
@@ -64,17 +67,37 @@ class StoreScreen extends StatelessWidget {
                       /// Featured Brands
                       TSectionHeading(
                         title: 'Featured Brands',
-                        onPressed: () => Get.to(() => const AllBrandsScreen()),
+                        onPressed: () => Get.to(() => AllBrandsScreen()),
                       ),
                       const SizedBox(height: TSizes.spaceBtwItems / 1.5),
-
-                      TGridLayout(
-                        itemCount: 4,
-                        mainAxisExtent: 80,
-                        itemBuilder: (_, index) {
-                          return const TBrandCard(showBorder: false);
-                        },
-                      ),
+                      FutureBuilder(
+                          future: controllerBrand.getAllBrandsData(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.hasData) {
+                                return TGridLayout(
+                                  itemCount: snapshot.data!.length,
+                                  mainAxisExtent: 80,
+                                  itemBuilder: (_, index) {
+                                    return TBrandCard(
+                                      showVerify:
+                                          snapshot.data![index].isVerified,
+                                      showBorder: false,
+                                      nameBrand: snapshot.data![index].name,
+                                    );
+                                  },
+                                );
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                    child: Text(snapshot.error.toString()));
+                              } else {
+                                return const Center(child: Text("Smt wrong!"));
+                              }
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          })
                     ],
                   ),
                 ),

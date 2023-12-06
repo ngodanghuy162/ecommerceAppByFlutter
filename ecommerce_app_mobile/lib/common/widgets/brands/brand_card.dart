@@ -13,10 +13,14 @@ class TBrandCard extends StatelessWidget {
     super.key,
     required this.showBorder,
     this.onTap,
+    required this.nameBrand,
+    required this.showVerify,
   });
 
   final bool showBorder;
   final void Function()? onTap;
+  final String nameBrand;
+  final bool showVerify;
 
   @override
   Widget build(BuildContext context) {
@@ -55,12 +59,13 @@ class TBrandCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const TBrandTitleWithVerifiedIcon(
-                      title: 'Nike',
+                    TBrandTitleWithVerifiedIcon(
+                      showVerify: showVerify,
+                      title: nameBrand,
                       brandTextSize: TextSizes.large,
                     ),
                     Text(
-                      '256 products',
+                      'TODO :256 products',
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.labelMedium,
                     )

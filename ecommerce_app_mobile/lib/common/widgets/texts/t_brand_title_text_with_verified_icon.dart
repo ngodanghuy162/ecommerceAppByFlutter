@@ -14,6 +14,7 @@ class TBrandTitleWithVerifiedIcon extends StatelessWidget {
     this.iconColor = TColors.primary,
     this.textAlign = TextAlign.center,
     this.brandTextSize = TextSizes.small,
+    required this.showVerify,
   });
 
   final String title;
@@ -21,6 +22,7 @@ class TBrandTitleWithVerifiedIcon extends StatelessWidget {
   final Color? textColor, iconColor;
   final TextAlign? textAlign;
   final TextSizes brandTextSize;
+  final bool showVerify;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +38,14 @@ class TBrandTitleWithVerifiedIcon extends StatelessWidget {
             brandTextSize: brandTextSize,
           ),
         ),
-        const SizedBox(width: TSizes.xs,),
-        Icon(Iconsax.verify5, color: iconColor, size: TSizes.iconXs,),
+        const SizedBox(
+          width: TSizes.xs,
+        ),
+        Icon(
+          showVerify ? Iconsax.verify5 : null,
+          color: iconColor,
+          size: TSizes.iconXs,
+        ),
       ],
     );
   }

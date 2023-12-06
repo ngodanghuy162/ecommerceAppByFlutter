@@ -1,5 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../Repository/user_model_field.dart';
 
 class UserModel {
   String? id;
@@ -68,11 +69,13 @@ class UserModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'userId': id,
       'email': email,
       'first_name': firstName,
       'last_name': lastName,
       'password': password,
       'phone_number': phoneNumber,
+      'user_name': userName,
       'address': address,
       'wishlist': wishlist.map((ref) => ref).toList(),
       'voucher': voucher,

@@ -56,6 +56,7 @@ dependencies:
   intl: ^0.18.1
   carousel_slider: ^4.2.1
   firebase_core: ^2.22.0
+  fl_chart: ^0.65.0
   flutter_paypal: ^0.2.0
   cloud_firestore: ^4.13.1
   firebase_auth: ^4.14.0
@@ -67,6 +68,7 @@ dependencies:
   firebase_storage: ^11.5.2
   rounded_loading_button: ^2.1.0
   flutter_smart_dialog: ^4.9.5+1
+  flutter_colorpicker: ^1.0.3
 
 dev_dependencies:
   flutter_test:
