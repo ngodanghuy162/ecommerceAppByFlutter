@@ -68,7 +68,7 @@ class ProductRepository extends GetxController {
       print(stacktrace);
 
       // Nếu có lỗi, bạn có thể trả về một giá trị mặc định hoặc throw exception tùy thuộc vào yêu cầu của bạn.
-      throw error;
+      rethrow;
     }
   }
 
@@ -83,9 +83,9 @@ class ProductRepository extends GetxController {
   Future<List<ProductModel>> queryAllProductByName(String keySearch) async {
     final snapshot = await productCollection
         .where('name', isGreaterThanOrEqualTo: keySearch)
-        .where('name', isLessThan: keySearch + 'z')
+        .where('name', isLessThan: '${keySearch}z')
         .get();
-    log("key: $keySearch :::" + snapshot.toString());
+    log("key: $keySearch :::$snapshot");
     final productData =
         snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
     return productData;

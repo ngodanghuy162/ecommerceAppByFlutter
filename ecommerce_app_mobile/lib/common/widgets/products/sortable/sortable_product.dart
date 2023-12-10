@@ -1,4 +1,3 @@
-import 'package:ecommerce_app_mobile/features/shop/controllers/brands_controller/brands_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/brands/brand_model.dart';
 import 'package:flutter/material.dart';

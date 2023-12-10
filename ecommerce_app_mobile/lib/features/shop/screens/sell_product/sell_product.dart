@@ -46,7 +46,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
 
   String dropdownValue = categoryList.first;
 
-  List<XFile?> _imageList = [];
+  final List<XFile?> _imageList = [];
 
   XFile? _image;
 
@@ -59,7 +59,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
         _imageList.last = _image;
         //_imageList.add(_image);
         String uniqueFileName =
-            DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+            '${DateTime.now().millisecondsSinceEpoch}.jpg';
 
         Reference referenceRoot = FirebaseStorage.instance.ref();
         Reference referenceDirImages = referenceRoot.child('images');
@@ -280,7 +280,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                     children: [
                       Text(
                         'Variant ${index + 1}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
@@ -418,7 +418,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   //print('Image: $image_url');
                   print('Description: $description');
                   print('Discount: $discount');
-                  print('Variants: ${variants}');
+                  print('Variants: $variants');
 
                   final categoryResult = await ProductCategoryController
                       .instance

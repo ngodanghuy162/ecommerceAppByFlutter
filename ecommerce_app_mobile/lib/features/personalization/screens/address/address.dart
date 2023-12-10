@@ -1,42 +1,105 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
+import 'package:ecommerce_app_mobile/features/personalization/controllers/address_controller.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/new_address.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/single_address.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class UserAddressScreen extends StatelessWidget {
+class UserAddressScreen extends StatefulWidget {
   const UserAddressScreen({Key? key}) : super(key: key);
+
+  @override
+  State<UserAddressScreen> createState() => _UserAddressScreenState();
+}
+
+class _UserAddressScreenState extends State<UserAddressScreen> {
+  final controller = Get.put(AddressController());
+  void didPop() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.to(() => const NewAddressScreen()),
-        backgroundColor: TColors.primary,
-        child: const Icon(
-          Iconsax.add,
-          color: TColors.white,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Get.to(() => NewAddressScreen(
+                didPop: didPop,
+              )),
+          // onPressed: () async {
+          //   print(await controller.getAllUserAddress());
+          // },
+          backgroundColor: TColors.primary,
+          child: const Icon(
+            Iconsax.add,
+            color: TColors.white,
+          ),
         ),
-      ),
-      appBar: TAppBar(
-        showBackArrow: true,
-        title: Text(
-          'Address',
-          style: Theme.of(context).textTheme.headlineSmall,
+        appBar: TAppBar(
+          showBackArrow: true,
+          title: Text(
+            'Address',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
         ),
-      ),
-      body: const SingleChildScrollView(
-        padding: EdgeInsets.all(TSizes.defaultSpace),
-        child: Column(
-          children: [
-            TSingleAddress(isSelectedAddress: false),
-            TSingleAddress(isSelectedAddress: true),
-          ],
-        ),
-      ),
-    );
+        body: FutureBuilder(
+          future: controller.getAllUserAddress(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                final data = snapshot.data;
+
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(TSizes.defaultSpace),
+                  child: Column(
+                    children: [
+                      ...data!
+                          .map(
+                            (e) => GestureDetector(
+                              onTap: () async {
+                                SmartDialog.showLoading();
+                                await controller.setDefaultAddress(e['id']);
+                                setState(() {});
+                                SmartDialog.dismiss();
+                              },
+                              child: TSingleAddress(
+                                  id: e['id'],
+                                  isSelectedAddress: e['isDefault'],
+                                  province: e['province'],
+                                  district: e['district'],
+                                  name: e['name'],
+                                  phoneNumber: e['phoneNumber'],
+                                  street: e['street'],
+                                  ward: e['ward']),
+                            ),
+                          )
+                          .toList(),
+                    ],
+                  ),
+                );
+              }
+            }
+            return const SizedBox(
+              height: 65,
+              child: Center(
+                child: Center(child: CustomLoading()),
+              ),
+            );
+          },
+        )
+        // body: const SingleChildScrollView(
+        //   padding: EdgeInsets.all(TSizes.defaultSpace),
+        //   child: Column(
+        //     children: [
+        //       TSingleAddress(isSelectedAddress: false),
+        //       TSingleAddress(isSelectedAddress: true),
+        //     ],
+        //   ),
+        // ),
+        );
   }
 }

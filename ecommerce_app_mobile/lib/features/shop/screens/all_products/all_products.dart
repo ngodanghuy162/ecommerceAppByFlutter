@@ -1,6 +1,4 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
-import 'package:ecommerce_app_mobile/common/widgets/products/sortable/sortable_product.dart';
-import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class AllProductsScreen extends StatelessWidget {
@@ -8,9 +6,9 @@ class AllProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       /// AppBar
-      appBar: const TAppBar(
+      appBar: TAppBar(
         title: Text('Popular Products'),
         showBackArrow: true,
       ),

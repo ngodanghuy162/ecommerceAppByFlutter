@@ -1,6 +1,5 @@
 // ignore: depend_on_referenced_packages
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Repository/user_model_field.dart';
 
 class UserModel {
   String? id;

@@ -1,6 +1,5 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
-import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -24,9 +23,9 @@ class WishlistScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: SingleChildScrollView(
+        body: const SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(TSizes.defaultSpace),
+            padding: EdgeInsets.all(TSizes.defaultSpace),
             child: Column(
               children: [
                 // TGridLayout(

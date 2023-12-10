@@ -44,7 +44,7 @@ class ProductModel {
       discount: data['discount'],
       name: data['name'],
       product_category_id: data['product_category_id'],
-      rating: data['rating'] ?? null,
+      rating: data['rating'],
       variants_path: data['variants_path'],
     );
   }
