@@ -10,11 +10,14 @@ class AllProductsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       /// AppBar
-      appBar: TAppBar(title: Text('Popular Products'), showBackArrow: true,),
+      appBar: TAppBar(
+        title: Text('Popular Products'),
+        showBackArrow: true,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(TSizes.defaultSpace),
-          child: TSortableProducts(),
+          // child: TSortableProducts(), //TODO query and add
         ),
       ),
     );

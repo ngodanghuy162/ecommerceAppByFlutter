@@ -30,10 +30,11 @@ class WishlistScreen extends StatelessWidget {
             padding: const EdgeInsets.all(TSizes.defaultSpace),
             child: Column(
               children: [
-                TGridLayout(
-                  itemCount: 4,
-                  itemBuilder: (_, index) => const TProductCardVertical(),
-                )
+                // TGridLayout(
+                //   itemCount: 4,
+                //   itemBuilder: (_, index) =>
+                //       TProductCardVertical(), //TODO - query and add
+                // )
               ],
             ),
           ),

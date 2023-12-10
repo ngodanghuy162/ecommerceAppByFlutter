@@ -1,4 +1,6 @@
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/widgets/bottom_add_to_cart_widget.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/widgets/product_attributes.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/widgets/product_detail_image_slider.dart';
@@ -12,7 +14,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
 
 class ProductDetailScreen extends StatelessWidget {
-  const ProductDetailScreen({super.key});
+  ProductDetailScreen({super.key, required this.product});
+  final ProductModel product;
+
+  final brandController = Get.put(BrandController());
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,11 @@ class ProductDetailScreen extends StatelessWidget {
                   const TRatingAndShare(),
 
                   /// Price, Title, Stack & Brand
-                  const TProductMetaData(),
+                  // TProductMetaData(
+                  //   nameBrand: "prdoduct.brand", //TODO query
+                  //   title: product.name,
+                  //   inStock: true, //TODO create func changing follow quantities
+                  // ),
 
                   /// Attributes
                   const TProductAttributes(),

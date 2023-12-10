@@ -5,6 +5,9 @@ import 'package:ecommerce_app_mobile/common/widgets/images/t_rounded_image.dart'
 import 'package:ecommerce_app_mobile/common/widgets/texts/product_price_text.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/product_title_text.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/product_detail.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
@@ -15,13 +18,23 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TProductCardVertical extends StatelessWidget {
-  const TProductCardVertical({super.key});
+  TProductCardVertical({
+    super.key,
+    required this.product,
+    required this.brand,
+  });
+
+  final ProductModel product;
+  final BrandModel brand;
+  final variantController = Get.put(ProductVariantController());
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     return GestureDetector(
-      onTap: () => Get.to(() => const ProductDetailScreen()),
+      onTap: () => Get.to(() => ProductDetailScreen(
+            product: product,
+          )),
       child: Container(
         width: 180,
         padding: const EdgeInsets.all(1),
@@ -50,7 +63,7 @@ class TProductCardVertical extends StatelessWidget {
                   backgroundColor: TColors.secondary.withOpacity(0.8),
                   padding: const EdgeInsets.symmetric(
                       horizontal: TSizes.sm, vertical: TSizes.xs),
-                  child: Text('25%',
+                  child: Text('27%', //TODO query and add
                       style: Theme.of(context).textTheme.labelLarge!.apply(
                             color: TColors.black,
                           )),
@@ -67,15 +80,16 @@ class TProductCardVertical extends StatelessWidget {
               ),
             ]),
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: TSizes.sm),
+          Padding(
+            padding: const EdgeInsets.only(left: TSizes.sm),
             child: Column(children: [
               TProductTitleText(
-                title: 'Green Nike Air Shoes',
+                title: product.name,
                 smallSize: true,
               ),
-              SizedBox(height: TSizes.spaceBtwItems / 2),
-              TBrandTitleWithVerifiedIcon(title: 'Nike'),
+              const SizedBox(height: TSizes.spaceBtwItems / 2),
+              TBrandTitleWithVerifiedIcon(
+                  title: brand.name, showVerify: brand.isVerified),
             ]),
           ),
 
@@ -86,12 +100,26 @@ class TProductCardVertical extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               /// Price
-              const Padding(
-                padding: EdgeInsets.only(left: TSizes.sm),
-                child: TProductPriceText(
-                  price: "35.0",
-                ),
-              ),
+              FutureBuilder(
+                  future: variantController.getAllProductVariants(product.id!),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: TSizes.sm),
+                          child: TProductPriceText(
+                            price: snapshot.data![0].price.toString(),
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text(snapshot.error.toString()));
+                      } else {
+                        return const Center(child: Text("smt went wrong"));
+                      }
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  }),
               //add to cart button
               Container(
                 decoration: const BoxDecoration(

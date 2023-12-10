@@ -1,23 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BrandModel {
-  final String? user_id;
+  final String? id;
+  final String? userId;
   final String name;
-  final bool? is_verified;
+  final bool? isVerified;
   final String? imageURL;
 
   BrandModel({
-    this.user_id,
+    this.id,
+    this.userId,
     required this.name,
-    this.is_verified,
+    this.isVerified,
     this.imageURL,
   });
 
   toJson() {
     return {
-      'user_id': user_id,
+      'user_id': userId,
       'name': name,
-      'is_verified': is_verified,
+      'is_verified': isVerified,
       'imageURL': imageURL,
     };
   }
@@ -26,11 +28,11 @@ class BrandModel {
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return BrandModel(
-      user_id: data['user_id'],
+      id: document.id,
+      userId: data['user_id'],
       name: data['name'],
-      is_verified: data['is_verified'],
+      isVerified: data['is_verified'],
       imageURL: data['imageURL'],
     );
   }
-
 }
