@@ -112,6 +112,13 @@ class UserRepository extends GetxController {
     });
   }
 
+  Future<Map<String, dynamic>> getDefaultAddress() async {
+    final userData =
+        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    return userData.address
+        .singleWhere((element) => element['isDefault'] == true);
+  }
+
   Future<void> addUserAddress(AddressModel addressModel) async {
     final userData =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);

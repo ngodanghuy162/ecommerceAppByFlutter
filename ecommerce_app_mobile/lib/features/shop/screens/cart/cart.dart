@@ -22,7 +22,7 @@ class CartScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: ElevatedButton(
-            onPressed: () => Get.to(() => const CheckoutScreen()),
+            onPressed: () => Get.to(() => CheckoutScreen()),
             child: const Text('Checkout \$256')),
       ),
     );

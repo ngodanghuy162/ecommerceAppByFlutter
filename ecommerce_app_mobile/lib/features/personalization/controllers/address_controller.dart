@@ -37,6 +37,10 @@ class AddressController extends GetxController {
     return await _userRepo.getAllUserAddress();
   }
 
+  Future<Map<String, dynamic>> getDefaultAddress() async {
+    return await _userRepo.getDefaultAddress();
+  }
+
   Future<void> setDefaultAddress(addressId) async {
     await _userRepo.setDefaultAddress(addressId);
   }

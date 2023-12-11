@@ -57,7 +57,6 @@ dependencies:
   carousel_slider: ^4.2.1
   firebase_core: ^2.22.0
   fl_chart: ^0.65.0
-  flutter_paypal: ^0.2.0
   cloud_firestore: ^4.13.1
   firebase_auth: ^4.14.0
   google_sign_in: ^6.1.6
@@ -71,6 +70,7 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   searchfield: ^0.9.0
   uuid: ^4.2.1
+  flutter_paypal: ^0.2.0
 
 dev_dependencies:
   flutter_test:
