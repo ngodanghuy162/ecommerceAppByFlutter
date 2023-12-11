@@ -78,7 +78,11 @@ class UserRepository extends GetxController {
             district: e['district'],
             street: e['street'],
             ward: e['ward'],
-            isDefault: false);
+            isDefault: false,
+            districtId: e['districtId'],
+            provinceId: e['provinceId'],
+            wardCode: e['wardCode']);
+
         if (addressModel.id == addressId) {
           addressModel.isDefault = true;
         }

@@ -1,15 +1,27 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/address_controller.dart';
+import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/address_bottom_sheet.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class NewAddressScreen extends StatelessWidget {
-  NewAddressScreen({Key? key, required this.didPop}) : super(key: key);
+class NewAddressScreen extends StatefulWidget {
+  const NewAddressScreen({Key? key, required this.didPop}) : super(key: key);
+  final void Function() didPop;
+
+  @override
+  State<NewAddressScreen> createState() => _NewAddressScreenState();
+}
+
+class _NewAddressScreenState extends State<NewAddressScreen> {
   final controller = Get.put(AddressController());
 
-  final void Function() didPop;
+  @override
+  void initState() {
+    super.initState();
+    // controller.address.text = 'Province/District/Ward';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +31,7 @@ class NewAddressScreen extends StatelessWidget {
         title: const Text('Add new address'),
         backOnPress: () {
           Get.back();
-          didPop();
+          widget.didPop();
         },
       ),
       body: SingleChildScrollView(
@@ -45,27 +57,20 @@ class NewAddressScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
                 TextFormField(
-                  controller: controller.province,
+                  controller: controller.address,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Iconsax.building),
-                    labelText: 'Province',
+                    labelText: 'Province/District/Ward',
                   ),
-                ),
-                const SizedBox(height: TSizes.spaceBtwInputFields),
-                TextFormField(
-                  controller: controller.district,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.activity),
-                    labelText: 'District',
-                  ),
-                ),
-                const SizedBox(height: TSizes.spaceBtwInputFields),
-                TextFormField(
-                  controller: controller.ward,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.activity),
-                    labelText: 'Ward',
-                  ),
+                  readOnly: true,
+                  onTap: () async {
+                    await Get.bottomSheet(
+                      const AddressBottomSheet(),
+                      backgroundColor: Colors.white,
+                    );
+                  },
+                  minLines: 1,
+                  maxLines: 3,
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
                 TextFormField(

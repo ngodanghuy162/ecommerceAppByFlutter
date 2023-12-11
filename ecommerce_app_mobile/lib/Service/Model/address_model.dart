@@ -1,24 +1,31 @@
 // ignore: depend_on_referenced_packages
 
 class AddressModel {
-  String id;
-  String province;
-  String district;
-  String ward;
-  String name;
-  String street;
-  String phoneNumber;
+  final String id;
+  final String province;
+  final String district;
+  final String ward;
+  final String provinceId;
+  final String districtId;
+  final String wardCode;
+  final String name;
+  final String street;
+  final String phoneNumber;
   bool isDefault;
 
-  AddressModel(
-      {required this.id,
-      required this.phoneNumber,
-      required this.name,
-      required this.province,
-      required this.district,
-      required this.street,
-      required this.ward,
-      required this.isDefault});
+  AddressModel({
+    required this.id,
+    required this.phoneNumber,
+    required this.name,
+    required this.province,
+    required this.district,
+    required this.street,
+    required this.ward,
+    required this.isDefault,
+    required this.provinceId,
+    required this.districtId,
+    required this.wardCode,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -30,6 +37,9 @@ class AddressModel {
       'phoneNumber': phoneNumber,
       'name': name,
       'isDefault': isDefault,
+      'provinceId': provinceId,
+      'districtId': districtId,
+      'wardCode': wardCode,
     };
   }
 }
