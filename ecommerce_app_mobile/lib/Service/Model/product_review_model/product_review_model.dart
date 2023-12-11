@@ -17,7 +17,7 @@ class ProductReviewModel {
 
   toJson() {
     return {
-      'id': id,
+      //'id': id,
       'userEmail': userEmail,
       'rating': rating,
       'date': date,
