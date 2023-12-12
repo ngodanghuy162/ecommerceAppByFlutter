@@ -1,4 +1,3 @@
-
 class TValidator {
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -53,6 +52,41 @@ class TValidator {
 
     if (!phoneRegExp.hasMatch(value)) {
       return 'Invalid phone number format (10 digits required).';
+    }
+
+    return null;
+  }
+
+  static String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Name is required.';
+    }
+
+    // // Regular expression for name validation (no special characters)
+    // final nameRegExp = RegExp(r'^[a-zA-Z_0-9]+$');
+
+    // if (!nameRegExp.hasMatch(value)) {
+    //   return 'Tên không được chứa kí tự đặc biệt.';
+    // }
+
+    return null;
+  }
+
+  static String? validateRetypePassword(String? value, String? newPassword) {
+    if (value == null || value.isEmpty) {
+      return 'Repeat password.';
+    } else if (value != newPassword) {
+      return 'Password doesn\'t match.';
+    }
+
+    return null;
+  }
+
+  static String? validateOldPassword(String? value, String? oldPassword) {
+    if (value == null || value.isEmpty) {
+      return 'Insert password.';
+    } else if (value != oldPassword) {
+      return 'Password is incorrect.';
     }
 
     return null;

@@ -1,5 +1,8 @@
 import 'package:ecommerce_app_mobile/features/personalization/screens/settings/settings_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/home.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/create_product_review.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/product_reviews.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/store/store.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/wishlist/wishlist_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
@@ -9,7 +12,9 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class NavigationMenu extends StatelessWidget {
-  const NavigationMenu({super.key});
+  const NavigationMenu({super.key, this.initialIndex});
+
+  final int? initialIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +47,20 @@ class NavigationMenu extends StatelessWidget {
 }
 
 class NavigationController extends GetxController {
-  final Rx<int> selectedIndex = 0.obs;
+  late Rx<int> selectedIndex = 0.obs;
+
+  NavigationController({int? initialIndex}) {
+    if (initialIndex != null) {
+      selectedIndex = initialIndex.obs;
+    } else {
+      selectedIndex = 0.obs;
+    }
+  }
 
   final screens = [
     HomeScreen(),
     StoreScreen(),
     const WishlistScreen(),
-    const SettingsScreen()
+    SettingsScreen()
   ];
 }

@@ -1,13 +1,12 @@
 import 'dart:io';
+import 'package:ecommerce_app_mobile/Service/Repository/authentication_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_category_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
-import 'package:ecommerce_app_mobile/repository/product_repository/product_category_repository.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
   String image_url = '';
   List<String> imageList_url = [];
   String description = '';
-  String discount_id = '';
+  int discount = 0;
   String name = '';
   List<ProductVariantModel> variants = [];
   List<String> variants_path = [];
@@ -57,34 +56,29 @@ class _SellProductScreenState extends State<SellProductScreen> {
     var pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      setState(() async {
-        _image = pickedFile;
+      _image = pickedFile;
+      setState(() {
         _imageList.last = _image;
-        //_imageList.add(_image);
-        String uniqueFileName =
-            DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
-
-        Reference referenceRoot = FirebaseStorage.instance.ref();
-        Reference referenceDirImages = referenceRoot.child('images');
-
-        Reference referenceImageToUpload =
-            referenceDirImages.child(uniqueFileName);
-
-        try {
-          await referenceImageToUpload.putFile(File(_image!.path));
-          image_url = await referenceImageToUpload.getDownloadURL();
-          setState(() {
-            imageList_url.add(image_url);
-          });
-
-          // setState(() {
-          //   imageList_url.add(image_url);
-          // });
-          // setState(() {
-          //   url = cloud_image_url;
-          // });
-        } catch (error) {}
       });
+      String uniqueFileName =
+          DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+
+      Reference referenceRoot = FirebaseStorage.instance.ref();
+      Reference referenceDirImages = referenceRoot.child('images');
+
+      Reference referenceImageToUpload =
+          referenceDirImages.child(uniqueFileName);
+
+      try {
+        await referenceImageToUpload.putFile(File(_image!.path));
+        image_url = await referenceImageToUpload.getDownloadURL();
+        setState(() {
+          imageList_url.add(image_url);
+        });
+        //print(imageList_url.length);
+      } catch (error) {
+        print(error);
+      }
     }
   }
 
@@ -143,6 +137,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
     Get.put(ProductVariantController());
     Get.put(ProductCategoryController());
     Get.put(BrandController());
+    final _authRepo = Get.put(AuthenticationRepository());
 
     return Scaffold(
       appBar: const TAppBar(
@@ -175,6 +170,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 }).toList(),
               ),
               const SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextField(
                 decoration: const InputDecoration(
                   labelText: 'Brand',
@@ -186,6 +182,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   });
                 },
               ),
+              const SizedBox(height: 16),
               const SizedBox(height: 16),
               TextField(
                 decoration: const InputDecoration(
@@ -202,19 +199,25 @@ class _SellProductScreenState extends State<SellProductScreen> {
               // GestureDetector(
               //   onTap: _pickImage,
               //   child: Container(
-              //     height: 200,
-              //     decoration: BoxDecoration(
-              //       color: Colors.grey[200],
-              //       borderRadius: BorderRadius.circular(10),
-              //     ),
-              //     child: _image == null
-              //         ? Center(
-              //             child: Icon(Icons.camera_alt,
-              //                 size: 40, color: Colors.grey),
-              //           )
-              //         : (_image!.path.contains('http') ? Image.network(_image!.path, fit: BoxFit.contain) : Image.file(File(_image!.path), fit: BoxFit.contain,))
-              //   ),
+              //       height: 200,
+              //       decoration: BoxDecoration(
+              //         color: Colors.grey[200],
+              //         borderRadius: BorderRadius.circular(10),
+              //       ),
+              //       child: _image == null
+              //           ? const Center(
+              //               child: Icon(Icons.camera_alt,
+              //                   size: 40, color: Colors.grey),
+              //             )
+              //           : (_image!.path.contains('http')
+              //               ? Image.network(_image!.path, fit: BoxFit.contain)
+              //               : Image.file(
+              //                   File(_image!.path),
+              //                   fit: BoxFit.contain,
+              //                 ))),
               // ),
+              // const SizedBox(height: 16),
+
               const SizedBox(height: 16),
               TextField(
                 decoration: const InputDecoration(
@@ -231,12 +234,12 @@ class _SellProductScreenState extends State<SellProductScreen> {
               const SizedBox(height: 16),
               TextField(
                 decoration: const InputDecoration(
-                  labelText: 'Discount_code',
+                  labelText: 'Discount',
                   border: OutlineInputBorder(),
                 ),
                 onChanged: (value) {
                   setState(() {
-                    discount_id = value;
+                    discount = int.parse(value);
                   });
                 },
               ),
@@ -248,6 +251,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   color: TColors.black,
                 ),
               ),
+              const SizedBox(height: 8),
               const SizedBox(height: 8),
               ListView.builder(
                 shrinkWrap: true,
@@ -310,17 +314,6 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           ),
                         ),
                       ),
-                      // TextField(
-                      //   decoration: const InputDecoration(
-                      //     labelText: 'Color',
-                      //     border: OutlineInputBorder(),
-                      //   ),
-                      //   onChanged: (value) {
-                      //     setState(() {
-                      //       variants[index].color = value;
-                      //     });
-                      //   },
-                      // ),
                       const SizedBox(height: 8),
                       TextField(
                         decoration: const InputDecoration(
@@ -372,7 +365,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   setState(() {
                     // Add an empty variant when the button is pressed
                     variants.add(ProductVariantModel(
-                        size: '', color: '', price: 0.0, imageURL: ''));
+                        size: '', color: '', price: 0.0, imageURL: '', id: ''));
                     _imageList.add(null);
                   });
                 },
@@ -394,34 +387,45 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   print('Name: $name');
                   //print('Image: $image_url');
                   print('Description: $description');
-                  print('Discount: $discount_id');
+                  print('Discount: $discount');
                   print('Variants: ${variants}');
 
+                  /// Liên kết với category
                   final categoryResult = await ProductCategoryController
                       .instance
                       .getCategoryDocumentIdByName(selectedCategory);
 
+                  /// Tao bien the va cap nhat anh
                   for (int i = 0; i < variants.length; i++) {
                     variants[i].imageURL = imageList_url[i];
                     variants_path.add(await ProductVariantController.instance
                         .createProductVariant(variants[i]));
                   }
 
-                  BrandModel brandModel = BrandModel(name: brandName);
+                  /// Check brand trung lap hoac tao brand moi
+                  String brandId;
+                  brandId = await BrandController.instance
+                      .checkDuplicatedBrand(brandName);
 
-                  final brandId =
-                      await BrandController.instance.createBrand(brandModel);
+                  if (brandId == 'false') {
+                    BrandModel brandModel = BrandModel(
+                      name: brandName,
+                      imageUrl: '',
+                      userId: _authRepo.firebaseUser.value!.uid,
+                    );
+                    brandId =
+                        await BrandController.instance.createBrand(brandModel);
+                  }
 
-                  ProductModel productModel = ProductModel(
-                    product_category_id: categoryResult,
+                  /// Tao san pham
+                  ProductController.instance.createProduct(
                     brand_id: brandId,
                     description: description,
-                    discount_id: discount_id,
+                    discount: discount,
                     name: name,
+                    product_category_id: categoryResult,
                     variants_path: variants_path,
                   );
-
-                  ProductController.instance.createProduct(productModel);
                 },
                 child: const Text('Đăng Sản Phẩm'),
               ),

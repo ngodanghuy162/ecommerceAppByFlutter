@@ -11,6 +11,10 @@ class BrandController extends GetxController {
     return await _brandRepo.createBrand(brandModel);
   }
 
+  Future<String> checkDuplicatedBrand(String name) async {
+    return await _brandRepo.checkDuplicatedBrand(name);
+  }
+
   Future<List<BrandModel>> getAllBrandsData() async {
     return await _brandRepo.queryAllBrands();
   }

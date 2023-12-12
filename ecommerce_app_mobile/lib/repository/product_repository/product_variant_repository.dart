@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,9 +22,16 @@ class ProductVariantRepository extends GetxController {
             backgroundColor: Colors.redAccent.withOpacity(0.1),
             colorText: Colors.red,
           );
+      () => Get.snackbar(
+            'Lỗi',
+            'Có gì đó không đúng, thử lại?',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.redAccent.withOpacity(0.1),
+            colorText: Colors.red,
+          );
       print(error.toString());
     });
-    return id.path;
+    return id.id;
   }
 
   Future<List<ProductVariantModel>> queryAllProductVariants(

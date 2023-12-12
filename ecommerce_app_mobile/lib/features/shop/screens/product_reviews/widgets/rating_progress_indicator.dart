@@ -4,7 +4,20 @@ import 'package:flutter/material.dart';
 class TOverallProductRating extends StatelessWidget {
   const TOverallProductRating({
     super.key,
+    required this.fiveStarRate,
+    required this.fourStarRate,
+    required this.threeStarRate,
+    required this.twoStarRate,
+    required this.oneStarRate,
+    required this.overall
   });
+
+  final double fiveStarRate;
+  final double fourStarRate;
+  final double threeStarRate;
+  final double twoStarRate;
+  final double oneStarRate;
+  final double overall;
 
   @override
   Widget build(BuildContext context) {
@@ -13,15 +26,15 @@ class TOverallProductRating extends StatelessWidget {
         Expanded(
             flex: 3,
             child:
-                Text("4.8", style: Theme.of(context).textTheme.displayLarge)),
-        const Expanded(
+                Text(overall.toStringAsFixed(2), style: Theme.of(context).textTheme.displayLarge)),
+        Expanded(
           flex: 7,
           child: Column(children: [
-            TRatingProgressIndicator(text: "5", value: 1),
-            TRatingProgressIndicator(text: "4", value: 0.8),
-            TRatingProgressIndicator(text: "3", value: 0.6),
-            TRatingProgressIndicator(text: "2", value: 0.4),
-            TRatingProgressIndicator(text: "1", value: 0.2)
+            TRatingProgressIndicator(text: "5", value: fiveStarRate),
+            TRatingProgressIndicator(text: "4", value: fourStarRate),
+            TRatingProgressIndicator(text: "3", value: threeStarRate),
+            TRatingProgressIndicator(text: "2", value: twoStarRate),
+            TRatingProgressIndicator(text: "1", value: oneStarRate)
           ]),
         )
       ],

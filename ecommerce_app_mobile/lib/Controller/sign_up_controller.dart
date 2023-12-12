@@ -1,27 +1,42 @@
-
-import 'package:ecommerce_app_mobile/Service/Auth/firebaseauth_provider.dart';
+import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
+import 'package:ecommerce_app_mobile/Service/Repository/authentication_repository.dart';
+import 'package:ecommerce_app_mobile/Service/Repository/user_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/get_core.dart';
-import 'package:get/get_instance/get_instance.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 
 class SignUpController extends GetxController {
   static SignUpController get instance => Get.find();
+  var controller = Get.put(AuthenticationRepository());
 
-  final firstName = TextEditingController();
-  final lastName = TextEditingController();
-  final userName = TextEditingController();
+  var userRepo = Get.put(UserRepository());
+
+  var isPasswordObscure = true.obs;
+  var isRememberMe = true.obs;
+
+  void showHiddenPassword() {}
+
+  Future<bool> isEmailExisted() async {
+    return await userRepo.isEmailExisted(email.text);
+  }
+
   final email = TextEditingController();
   final password = TextEditingController();
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
   final phoneNumber = TextEditingController();
 
-  Future<void> registerUser() async {
-    await FirebaseAuthProvider.firebaseAuthProvider.createUser(
-        firstName: firstName.text,
-        lastName: lastName.text,
-        userName: userName.text,
-        email: email.text,
-        password: password.text,
-        phoneNumber: phoneNumber.text);
+  Future<bool> registerUser(String email, String password) async {
+    return await AuthenticationRepository.instance
+        .createUserWithEmailAndPassword(email, password);
+  }
+
+  Future<bool> isDuplicateEmail() async {
+    return controller.isDuplicateEmail();
+  }
+
+  createUser(UserModel userModel) async {
+    if (await registerUser(userModel.email, userModel.password!)) {
+      userRepo.createUser(userModel);
+    }
   }
 }

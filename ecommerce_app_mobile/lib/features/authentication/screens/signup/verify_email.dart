@@ -1,6 +1,6 @@
-import 'package:ecommerce_app_mobile/Service/Auth/firebaseauth_provider.dart';
-import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
-import 'package:ecommerce_app_mobile/common/widgets/success_screen/success_screen.dart';
+import 'dart:async';
+
+import 'package:ecommerce_app_mobile/features/authentication/controllers/mail_verification/mail_verification_controller.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/login/login_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -10,11 +10,57 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class VerifyEmailScreen extends StatelessWidget {
-  const VerifyEmailScreen({super.key});
+// ignore: must_be_immutable
+class VerifyEmailScreen extends StatefulWidget {
+  VerifyEmailScreen({super.key});
+
+  Timer? timer;
+  int start = 60;
+
+  @override
+  State<VerifyEmailScreen> createState() => _VerifyEmailScreenState();
+}
+
+class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+  void restartCountDown() {
+    setState(() {
+      widget.start = 60;
+    });
+  }
+
+  void startCountdown() {
+    const oneSec = Duration(seconds: 1);
+    widget.timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (widget.start == 0) {
+          setState(() {
+            timer.cancel();
+            widget.start = 0;
+          });
+        } else {
+          setState(() {
+            widget.start--;
+            // print(widget.start);
+          });
+        }
+      },
+    );
+  }
+
+  bool isCountdownDone() {
+    return widget.start <= 0;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startCountdown();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(MailVerificationController());
     return Scaffold(
       appBar: AppBar(
         //Hide back button
@@ -45,7 +91,7 @@ class VerifyEmailScreen extends StatelessWidget {
               ),
               const SizedBox(height: TSizes.spaceBtwItems),
               Text(
-                'support@shopapp.com',
+                'support@hcmmuseum.com',
                 style: Theme.of(context).textTheme.labelLarge,
                 textAlign: TextAlign.center,
               ),
@@ -61,27 +107,8 @@ class VerifyEmailScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    await FirebaseAuthProvider
-                        .firebaseAuthProvider.currentFirebaseUser!
-                        .reload();
-                    // go to success screen neu verify roi
-                    if (FirebaseAuthProvider.firebaseAuthProvider
-                        .currentFirebaseUser!.emailVerified) {
-                      Get.to(
-                        () => SuccessScreen(
-                          image: TImages.staticSuccessIllustration,
-                          title: TTexts.yourAccountCreatedTitle,
-                          subtitle: TTexts.yourAccountCreatedSubTitle,
-                          callback: () => Get.offAll(() => const LoginScreen()),
-                        ),
-                      );
-                    } else {
-                      await showDialogOnScreen(
-                          context: context,
-                          title: "Email isn't verified",
-                          description: "Pls try to verify your email again");
-                    }
+                  onPressed: () {
+                    controller.manuallyCheckEmailVerification();
                   },
                   child: const Text(TTexts.tContinue),
                 ),
@@ -91,11 +118,16 @@ class VerifyEmailScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: () async {
-                    await FirebaseAuthProvider.firebaseAuthProvider
-                        .sendEmailVerify();
+                  onPressed: () {
+                    if (isCountdownDone()) {
+                      controller.sendVerification();
+                      restartCountDown();
+                      startCountdown();
+                    }
                   },
-                  child: const Text(TTexts.resendEmail),
+                  child: isCountdownDone()
+                      ? const Text(TTexts.resendEmail)
+                      : Text('Gửi lại sau ${widget.start}'),
                 ),
               ),
             ],

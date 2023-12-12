@@ -1,32 +1,48 @@
 import 'package:ecommerce_app_mobile/Controller/log_in_controller.dart';
-import 'package:ecommerce_app_mobile/Service/Auth/auth_exception.dart';
-import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
+import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/password_configuration/forget_password.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/signup/sign_up_screen.dart';
-import 'package:ecommerce_app_mobile/features/authentication/screens/signup/verify_email.dart';
-import 'package:ecommerce_app_mobile/navigation_menu.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/constants/text_strings.dart';
-import 'package:flutter/material.dart';
+import 'package:ecommerce_app_mobile/utils/validators/validation.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
+
+import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class TLoginForm extends StatelessWidget {
+// ignore: must_be_immutable
+class TLoginForm extends StatefulWidget {
   const TLoginForm({
     super.key,
   });
 
   @override
+  State<TLoginForm> createState() => _TLoginFormState();
+}
+
+class _TLoginFormState extends State<TLoginForm> {
+  final controller = Get.put(SignInController());
+
+  final _formKey = GlobalKey<FormState>();
+
+  final btnController = RoundedLoadingButtonController();
+
+  @override
   Widget build(BuildContext context) {
-    Get.put(LoginController());
     return Form(
+      key: _formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwSections),
         child: Column(
           children: [
             //Email
             TextFormField(
-              controller: LoginController.instance.email,
+              controller: controller.email,
+              validator: TValidator.validateEmail,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Iconsax.direct_right),
                 labelText: TTexts.email,
@@ -38,10 +54,23 @@ class TLoginForm extends StatelessWidget {
 
             //Password
             TextFormField(
-              controller: LoginController.instance.password,
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Iconsax.password_check),
-                suffixIcon: Icon(Iconsax.eye_slash),
+              controller: controller.password,
+              obscureText: controller.isPasswordObscure.value,
+              validator: TValidator.validatePassword,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Iconsax.password_check),
+                suffixIcon: IconButton(
+                  icon: controller.isPasswordObscure.value
+                      ? const Icon(Iconsax.eye)
+                      : const Icon(Iconsax.eye_slash),
+                  onPressed: () {
+                    setState(() {
+                      controller.isPasswordObscure.value =
+                          !controller.isPasswordObscure.value;
+                    });
+                  },
+                ),
                 labelText: TTexts.password,
               ),
             ),
@@ -56,7 +85,15 @@ class TLoginForm extends StatelessWidget {
                 //Remember me
                 Row(
                   children: [
-                    Checkbox(value: true, onChanged: (value) {}),
+                    Checkbox(
+                      value: controller.isRememberMe.value,
+                      onChanged: (value) {
+                        setState(() {
+                          controller.isRememberMe.value =
+                              !controller.isRememberMe.value;
+                        });
+                      },
+                    ),
                     const Text(TTexts.rememberMe)
                   ],
                 ),
@@ -71,51 +108,26 @@ class TLoginForm extends StatelessWidget {
 
             const SizedBox(height: TSizes.spaceBtwSections),
 
-            //Sign in, log in
+            //Sign in
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
-                  try {
-                    var currentAuthUser =
-                        await LoginController.instance.logInWithEmail();
-                    if (currentAuthUser.emailVerified) {
-                      Get.snackbar(
-                          "Login sucess", "Now you can begin your adventure ");
-                      Future.delayed(const Duration(seconds: 1), () {
-                        Get.offAll(() => const NavigationMenu());
-                      });
-                    } else {
-                      await showDialogOnScreen(
-                        context: context,
-                        title: "Haven't verify email",
-                        description: "You need to verify your email first",
-                        onOkPressed: () {
-                          Get.to(() => const VerifyEmailScreen());
-                        },
-                      );
+                  if (_formKey.currentState!.validate()) {
+                    SmartDialog.showLoading(
+                      animationType: SmartAnimationType.scale,
+                      builder: (_) => const CustomLoading(),
+                    );
+                    try {
+                      await controller.signIn(
+                          controller.email.text, controller.password.text);
+                    } catch (error) {
+                      if (kDebugMode) {
+                        print(error);
+                      }
+                    } finally {
+                      await SmartDialog.dismiss();
                     }
-                  } on WrongPasswordAuthException {
-                    await showDialogOnScreen(
-                      context: context,
-                      title: "Wrong password.",
-                      description: "Try to remember your password",
-                      onOkPressed: () {},
-                    );
-                  } on UserNotFoundAuthException {
-                    await showDialogOnScreen(
-                      context: context,
-                      title: "User not found",
-                      description: "You haven't registered your account",
-                      onOkPressed: () {},
-                    );
-                  } on GenericAuthException{
-                    await showDialogOnScreen(
-                      context: context,
-                      title: "Something wrong",
-                      description: "Try again to login",
-                      onOkPressed: () {},
-                    );
                   }
                 },
                 child: const Text(TTexts.signIn),

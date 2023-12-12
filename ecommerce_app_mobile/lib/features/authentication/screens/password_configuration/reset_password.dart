@@ -2,12 +2,15 @@ import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/constants/text_strings.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ResetPassword extends StatelessWidget {
-  const ResetPassword({super.key});
+class ResetPasswordScreen extends StatelessWidget {
+  const ResetPasswordScreen({super.key, required this.resendResetPassword});
+
+  final VoidCallback resendResetPassword;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,9 @@ class ResetPassword extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    resendResetPassword();
+                  },
                   child: const Text(TTexts.resendEmail),
                 ),
               ),

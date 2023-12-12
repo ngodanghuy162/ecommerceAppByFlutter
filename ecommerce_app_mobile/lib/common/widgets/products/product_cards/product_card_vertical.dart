@@ -10,7 +10,6 @@ import 'package:ecommerce_app_mobile/features/shop/controllers/product_controlle
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
-import 'package:ecommerce_app_mobile/features/shop/screens/product_details/product_detail.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -50,11 +49,7 @@ class TProductCardVertical extends StatelessWidget {
                     maxPrice = e.price > maxPrice ? e.price : maxPrice;
                   }
                   return GestureDetector(
-                    onTap: () => Get.to(() => ProductDetailScreen(
-                          listVariants: listVariants,
-                          product: product!,
-                          brand: brand,
-                        )),
+                    onTap: () => Get.to(() => Pe),
                     child: Container(
                       width: 180,
                       padding: const EdgeInsets.all(1),

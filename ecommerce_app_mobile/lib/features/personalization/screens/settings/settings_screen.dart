@@ -1,11 +1,13 @@
-import 'package:ecommerce_app_mobile/Controller/log_in_controller.dart';
+import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
+import 'package:ecommerce_app_mobile/Service/Repository/authentication_repository.dart';
 import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/primary_header_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/list_tiles/settings_menu_tile.dart';
 import 'package:ecommerce_app_mobile/common/widgets/list_tiles/user_profile_tile.dart';
-import 'package:ecommerce_app_mobile/features/authentication/screens/login/login_screen.dart';
+import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
+import 'package:ecommerce_app_mobile/features/personalization/controllers/settings_controller.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/order/order.dart';
@@ -16,11 +18,12 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  SettingsScreen({super.key});
+
+  final settingsController = Get.put(SettingsController());
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LoginController());
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -38,8 +41,35 @@ class SettingsScreen extends StatelessWidget {
                             .headlineMedium!
                             .apply(color: TColors.white))),
 
-                /// User Profile Card
-                const TUserProfileTile(),
+                // User Profile Card
+                //Profile picture
+                FutureBuilder(
+                  future: settingsController.getUserData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        UserModel userModel = snapshot.data as UserModel;
+
+                        return SizedBox(
+                          height: 65,
+                          child: TUserProfileTitle(
+                            profileUrl: userModel.avatar_imgURL,
+                            email: userModel.email,
+                            firstName: userModel.firstName,
+                            lastName: userModel.lastName,
+                          ),
+                        );
+                      }
+                    }
+                    return const SizedBox(
+                      height: 65,
+                      child: Center(
+                        child: Center(child: CustomLoading()),
+                      ),
+                    );
+                  },
+                ),
+
                 const SizedBox(height: TSizes.spaceBtwSections),
               ],
             )),
@@ -144,12 +174,9 @@ class SettingsScreen extends StatelessWidget {
                           title: "Log out here",
                           description: "Are you sure to log out??",
                           onOkPressed: () async {
-                            await controller.logOut();
+                            await AuthenticationRepository.instance.logout();
                             Get.snackbar(
                                 "Logout Sucess", "Pls login again to use app ");
-                            Future.delayed(const Duration(seconds: 1), () {
-                              Get.to(() => const LoginScreen());
-                            });
                           },
                         );
                       },

@@ -12,22 +12,21 @@ class BrandProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TAppBar(
-        title: Text(brand.name),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: Column(
-          children: [
-            /// Brand Detail
-            TBrandCard(showBorder: true, brand: brand),
-            const SizedBox(
-              height: TSizes.spaceBtwSections,
-            ),
-            TSortableProducts(brand: brand),
-          ],
+        appBar: TAppBar(
+          title: Text(brand.name),
         ),
-      ),
-    );
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(TSizes.defaultSpace),
+          child: Column(
+            children: [
+              /// Brand Detail
+              TBrandCard(showBorder: true, brand: brand),
+              const SizedBox(
+                height: TSizes.spaceBtwSections,
+              ),
+              TSortableProducts(brand: brand),
+            ],
+          ),
+        ));
   }
 }

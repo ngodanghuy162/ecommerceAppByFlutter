@@ -31,11 +31,11 @@ class ProductVariantModel {
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return ProductVariantModel(
-        id: document.id,
-        size: data['size'],
-        color: data['color'],
-        price: data['price'] + 0.0,
-        imageURL: data['imageURL'],
-        productId: data['product_id']);
+      id: document.id,
+      size: data['size'],
+      color: data['color'],
+      price: data['price'],
+      imageURL: data['imageURL'],
+    );
   }
 }

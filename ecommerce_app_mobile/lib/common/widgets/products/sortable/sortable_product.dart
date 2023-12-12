@@ -2,6 +2,7 @@ import 'package:ecommerce_app_mobile/features/shop/controllers/product_controlle
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../utils/constants/sizes.dart';
@@ -13,6 +14,7 @@ class TSortableProducts extends StatelessWidget {
     super.key,
     required this.brand,
   });
+
   final BrandModel brand;
 
   final productController = Get.put(ProductController());
@@ -40,8 +42,31 @@ class TSortableProducts extends StatelessWidget {
         const SizedBox(
           height: TSizes.spaceBtwItems,
         ),
+        const SizedBox(
+          height: TSizes.spaceBtwItems,
+        ),
 
         /// Product
+        FutureBuilder(
+            future: productController.getAllProductbyBrand("Brand/${brand.id}"),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  return TGridLayout(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (_, index) => TProductCardVertical(
+                            product: snapshot.data![index],
+                            brand: brand,
+                          ));
+                } else if (snapshot.hasError) {
+                  return Center(child: Text(snapshot.error.toString()));
+                } else {
+                  return const Center(child: Text("smt went wrong"));
+                }
+              } else {
+                return const CircularProgressIndicator();
+              }
+            }),
         FutureBuilder(
             future: productController.getAllProductbyBrand("Brand/${brand.id}"),
             builder: (context, snapshot) {

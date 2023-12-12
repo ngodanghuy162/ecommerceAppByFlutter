@@ -58,6 +58,29 @@ class _TProductAttributesState extends State<TProductAttributes> {
                               title: 'Price : ',
                               smallSize: true,
                             ),
+            padding: const EdgeInsets.all(TSizes.md),
+            backgroundColor: dark ? TColors.darkerGrey : TColors.grey,
+            child: Column(
+              children: [
+                /// Title, Price Stack status
+                Row(
+                  children: [
+                    const TSectionHeading(
+                      title: 'Variation',
+                      showActionButton: false,
+                    ),
+                    const SizedBox(
+                      width: TSizes.spaceBtwItems,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const TProductTitleText(
+                              title: 'Price : ',
+                              smallSize: true,
+                            ),
 
                             /// Actual Price
                             Text(
@@ -76,7 +99,28 @@ class _TProductAttributesState extends State<TProductAttributes> {
                             const TProductPriceText(price: '20'),
                           ],
                         ),
+                            /// Sale Price
+                            const TProductPriceText(price: '20'),
+                          ],
+                        ),
 
+                        /// Stock
+                        Row(
+                          children: [
+                            const TProductTitleText(
+                              title: 'Stock : ',
+                              smallSize: true,
+                            ),
+                            Text(
+                              'In Stock',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
                         /// Stock
                         Row(
                           children: [
@@ -118,6 +162,13 @@ class _TProductAttributesState extends State<TProductAttributes> {
             const SizedBox(
               height: TSizes.spaceBtwItems / 2,
             ),
+            const TSectionHeading(
+              title: 'Colors',
+              showActionButton: false,
+            ),
+            const SizedBox(
+              height: TSizes.spaceBtwItems / 2,
+            ),
             Wrap(
               spacing: 8,
               children: [
@@ -137,9 +188,27 @@ class _TProductAttributesState extends State<TProductAttributes> {
             const SizedBox(
               height: TSizes.spaceBtwItems / 2,
             ),
+            const SizedBox(
+              height: TSizes.spaceBtwItems / 2,
+            ),
             Wrap(
               spacing: 8,
               children: [
+                TChoiceChip(
+                  text: 'EU 34',
+                  selected: true,
+                  onSelected: (value) {},
+                ),
+                TChoiceChip(
+                  text: 'EU 36',
+                  selected: false,
+                  onSelected: (value) {},
+                ),
+                TChoiceChip(
+                  text: 'EU 38',
+                  selected: false,
+                  onSelected: (value) {},
+                ),
                 TChoiceChip(
                   text: 'EU 34',
                   selected: true,
