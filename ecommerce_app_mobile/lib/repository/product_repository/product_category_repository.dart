@@ -19,7 +19,7 @@ class ProductCategoryRepository extends GetxController{
   Future<String> getCategoryDocumentIdByName(String name) async {
     final snapshot = await _db.collection('ProductCategory').where('name', isEqualTo: name).get();
 
-    return 'ProductCategory/${snapshot.docs.first.id}';
+    return snapshot.docs.first.id;
   }
 
 }

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerce_app_mobile/features/shop/controllers/brands_controller/brands_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +11,7 @@ class ProductRepository extends GetxController {
 
   final productCollection = FirebaseFirestore.instance.collection('Product');
 
-  final brandController = Get.put(BrandsController());
+  final brandController = Get.put(BrandController());
 
   Future<ProductModel> createProduct({
     required String brand_id,

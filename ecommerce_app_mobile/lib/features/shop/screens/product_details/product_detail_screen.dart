@@ -1,5 +1,5 @@
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
-import 'package:ecommerce_app_mobile/features/shop/controllers/brands_controller/brands_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/widgets/bottom_add_to_cart_widget.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/widgets/product_attributes.dart';
@@ -17,7 +17,7 @@ class ProductDetailScreen extends StatelessWidget {
   ProductDetailScreen({super.key, required this.product});
   final ProductModel product;
 
-  final brandController = Get.put(BrandsController());
+  final brandController = Get.put(BrandController());
 
   @override
   Widget build(BuildContext context) {

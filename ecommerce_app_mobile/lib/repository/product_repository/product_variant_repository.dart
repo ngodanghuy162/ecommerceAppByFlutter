@@ -24,7 +24,7 @@ class ProductVariantRepository extends GetxController {
           );
       print(error.toString());
     });
-    return id.path;
+    return id.id;
   }
 
   Future<List<ProductVariantModel>> queryAllProductVariants(
