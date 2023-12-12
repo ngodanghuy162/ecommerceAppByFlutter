@@ -51,6 +51,7 @@ class TVerticalImageText extends StatelessWidget {
                 width: 55,
                 child: Text(
                   title,
+                  textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
                       .labelMedium!

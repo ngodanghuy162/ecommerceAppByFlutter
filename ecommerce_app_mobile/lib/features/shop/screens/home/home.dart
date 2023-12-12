@@ -30,29 +30,29 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         children: [
           /// Header
-          const TPrimaryHeaderContainer(
+          TPrimaryHeaderContainer(
             child: Column(
               children: [
                 /// -- Appbar
-                THomeAppBar(),
-                SizedBox(height: TSizes.spaceBtwSections),
+                const THomeAppBar(),
+                const SizedBox(height: TSizes.spaceBtwSections),
 
                 /// -- SearchBar
-                TSearchContainer(text: 'Search in Store'),
-                SizedBox(height: TSizes.spaceBtwSections),
+                const TSearchContainer(text: 'Search in Store'),
+                const SizedBox(height: TSizes.spaceBtwSections),
 
                 /// -- Categories
                 Padding(
-                  padding: EdgeInsets.only(left: TSizes.defaultSpace),
+                  padding: const EdgeInsets.only(left: TSizes.defaultSpace),
                   child: Column(
                     children: [
                       /// -- Heading
-                      TSectionHeading(
+                      const TSectionHeading(
                         title: 'Popular Categories',
                         showActionButton: false,
                         textColor: TColors.white,
                       ),
-                      SizedBox(height: TSizes.spaceBtwItems),
+                      const SizedBox(height: TSizes.spaceBtwItems),
 
                       /// Categories
                       THomeCategories(),
@@ -60,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: TSizes.spaceBtwSections),
+                const SizedBox(height: TSizes.spaceBtwSections),
               ],
             ),
           ),
@@ -103,7 +103,7 @@ class HomeScreen extends StatelessWidget {
                         } else if (snapshot.hasError) {
                           return Center(child: Text(snapshot.error.toString()));
                         } else {
-                          return Center(child: Text("smt went wrong"));
+                          return const Center(child: Text("smt went wrong"));
                         }
                       } else {
                         return const CircularProgressIndicator();

@@ -3,7 +3,6 @@ import 'package:ecommerce_app_mobile/common/styles/product_title_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/common/widgets/chips/choice_chip.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
-import 'package:ecommerce_app_mobile/features/admin/screens/display_all_product.dart/widgets/product_variant.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
@@ -12,7 +11,7 @@ import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class TProductAttributes extends StatefulWidget {
-  TProductAttributes(
+  const TProductAttributes(
       {super.key,
       required this.listVariants,
       required this.index,
@@ -58,29 +57,6 @@ class _TProductAttributesState extends State<TProductAttributes> {
                               title: 'Price : ',
                               smallSize: true,
                             ),
-            padding: const EdgeInsets.all(TSizes.md),
-            backgroundColor: dark ? TColors.darkerGrey : TColors.grey,
-            child: Column(
-              children: [
-                /// Title, Price Stack status
-                Row(
-                  children: [
-                    const TSectionHeading(
-                      title: 'Variation',
-                      showActionButton: false,
-                    ),
-                    const SizedBox(
-                      width: TSizes.spaceBtwItems,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const TProductTitleText(
-                              title: 'Price : ',
-                              smallSize: true,
-                            ),
 
                             /// Actual Price
                             Text(
@@ -96,31 +72,12 @@ class _TProductAttributesState extends State<TProductAttributes> {
                             ),
 
                             /// Sale Price
-                            const TProductPriceText(price: '20'),
-                          ],
-                        ),
-                            /// Sale Price
-                            const TProductPriceText(price: '20'),
+                            TProductPriceText(
+                                price:
+                                    "${variant.price * ((100 - widget.product.discount!) / 100)}"),
                           ],
                         ),
 
-                        /// Stock
-                        Row(
-                          children: [
-                            const TProductTitleText(
-                              title: 'Stock : ',
-                              smallSize: true,
-                            ),
-                            Text(
-                              'In Stock',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
                         /// Stock
                         Row(
                           children: [
@@ -162,13 +119,6 @@ class _TProductAttributesState extends State<TProductAttributes> {
             const SizedBox(
               height: TSizes.spaceBtwItems / 2,
             ),
-            const TSectionHeading(
-              title: 'Colors',
-              showActionButton: false,
-            ),
-            const SizedBox(
-              height: TSizes.spaceBtwItems / 2,
-            ),
             Wrap(
               spacing: 8,
               children: [
@@ -188,27 +138,9 @@ class _TProductAttributesState extends State<TProductAttributes> {
             const SizedBox(
               height: TSizes.spaceBtwItems / 2,
             ),
-            const SizedBox(
-              height: TSizes.spaceBtwItems / 2,
-            ),
             Wrap(
               spacing: 8,
               children: [
-                TChoiceChip(
-                  text: 'EU 34',
-                  selected: true,
-                  onSelected: (value) {},
-                ),
-                TChoiceChip(
-                  text: 'EU 36',
-                  selected: false,
-                  onSelected: (value) {},
-                ),
-                TChoiceChip(
-                  text: 'EU 38',
-                  selected: false,
-                  onSelected: (value) {},
-                ),
                 TChoiceChip(
                   text: 'EU 34',
                   selected: true,

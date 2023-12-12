@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/common/widgets/brands/brand_card.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -23,7 +24,10 @@ class TBrandShowcase extends StatelessWidget {
       child: Column(
         children: [
           /// Brands with Products Count
-          // TBrandCard(showBorder: false), //TODO query and add
+          // TBrandCard(
+          //   showBorder: false,
+          //   brand: null,
+          // ), //TODO query and add
           const SizedBox(height: TSizes.spaceBtwItems),
 
           /// Brand Top 3 Product Images

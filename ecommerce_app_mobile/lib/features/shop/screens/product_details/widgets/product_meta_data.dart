@@ -19,13 +19,17 @@ class TProductMetaData extends StatelessWidget {
       required this.nameBrand,
       required this.product,
       required this.maxPrice,
-      required this.minPrice});
+      required this.minPrice,
+      required this.discount,
+      this.isVerified = false});
 
   final String nameBrand;
   final ProductModel product;
   final variantsController = Get.put(ProductVariantController());
   final double maxPrice;
   final double minPrice;
+  final int discount;
+  final bool isVerified;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +52,7 @@ class TProductMetaData extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: TSizes.sm, vertical: TSizes.xs),
                         child: Text(
-                          '25%',
+                          '${discount}%',
                           style: Theme.of(context)
                               .textTheme
                               .labelLarge!
@@ -61,7 +65,7 @@ class TProductMetaData extends StatelessWidget {
                       Text(
                         minPrice == maxPrice
                             ? '$minPrice'
-                            : "\$'$minPrice - $maxPrice",
+                            : "\$$minPrice - $maxPrice",
                         style: Theme.of(context)
                             .textTheme
                             .titleSmall!
@@ -70,8 +74,10 @@ class TProductMetaData extends StatelessWidget {
                       const SizedBox(
                         width: TSizes.spaceBtwItems,
                       ),
-                      const TProductPriceText(
-                        price: '175',
+                      TProductPriceText(
+                        price: minPrice == maxPrice
+                            ? priceAfterDis(minPrice, discount)
+                            : " ${priceAfterDis(minPrice, discount)} - ${priceAfterDis(maxPrice, discount)}",
                         isLarge: true,
                       ),
                     ],
@@ -92,7 +98,7 @@ class TProductMetaData extends StatelessWidget {
                       const TProductTitleText(title: 'Status: '),
                       const SizedBox(height: TSizes.spaceBtwItems),
                       Text(
-                        product.variants_path.isNotEmpty
+                        product.variants_path!.isNotEmpty
                             ? 'In stock'
                             : 'Out of stock',
                         style: Theme.of(context).textTheme.titleMedium,
@@ -113,6 +119,7 @@ class TProductMetaData extends StatelessWidget {
                         overlayColor: darkMode ? TColors.white : TColors.black,
                       ),
                       TBrandTitleWithVerifiedIcon(
+                        isVerified: isVerified,
                         title: nameBrand,
                         brandTextSize: TextSizes.medium,
                       ),
@@ -130,4 +137,9 @@ class TProductMetaData extends StatelessWidget {
           }
         });
   }
+}
+
+String priceAfterDis(double price, int discount) {
+  double res = price * ((100 - discount) / 100);
+  return res.toStringAsFixed(1);
 }

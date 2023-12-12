@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/common/styles/shadows.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
@@ -6,10 +5,12 @@ import 'package:ecommerce_app_mobile/common/widgets/images/t_rounded_image.dart'
 import 'package:ecommerce_app_mobile/common/widgets/texts/product_price_text.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/product_title_text.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_details/product_detail_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -26,19 +27,20 @@ class TProductCardVertical extends StatelessWidget {
       this.isProductVariant = true,
       this.listProduct});
 
+  final variantController = Get.put(ProductVariantController());
+  final productController = Get.put(ProductController());
+
   final ProductModel? product;
   final BrandModel? brand;
-  final variantController = Get.put(ProductVariantController());
   final bool isProductVariant;
   final List<dynamic>? listProduct;
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
-
     return isProductVariant
         ? FutureBuilder(
-            future: variantController.getAllProductVariants(product!.id!),
+            future: variantController.getVariantByIDs(product!.variants_path!),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
@@ -49,7 +51,11 @@ class TProductCardVertical extends StatelessWidget {
                     maxPrice = e.price > maxPrice ? e.price : maxPrice;
                   }
                   return GestureDetector(
-                    onTap: () => Get.to(() => Pe),
+                    onTap: () => Get.to(() => ProductDetailScreen(
+                          listVariants: listVariants,
+                          product: product!,
+                          brand: brand,
+                        )),
                     child: Container(
                       width: 180,
                       padding: const EdgeInsets.all(1),
@@ -80,7 +86,8 @@ class TProductCardVertical extends StatelessWidget {
                                     TColors.secondary.withOpacity(0.8),
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: TSizes.sm, vertical: TSizes.xs),
-                                child: Text('27%', //TODO query and add
+                                child: Text(
+                                    '${product!.discount!}%', //TODO query and add
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelLarge!
@@ -125,8 +132,9 @@ class TProductCardVertical extends StatelessWidget {
                               padding: const EdgeInsets.only(left: TSizes.sm),
                               child: TProductPriceText(
                                 price: minPrice == maxPrice
-                                    ? "$minPrice"
-                                    : "$minPrice - $maxPrice",
+                                    ? priceAfterDis(
+                                        minPrice, product!.discount!)
+                                    : " ${priceAfterDis(minPrice, product!.discount!)} - ${priceAfterDis(maxPrice, product!.discount!)}",
                               ),
                             ),
                             //add to cart button
@@ -256,8 +264,9 @@ class TProductCardVertical extends StatelessWidget {
                               padding: const EdgeInsets.only(left: TSizes.sm),
                               child: TProductPriceText(
                                 price: minPrice == maxPrice
-                                    ? "$minPrice"
-                                    : "$minPrice - $maxPrice",
+                                    ? priceAfterDis(
+                                        minPrice, product!.discount!)
+                                    : " ${priceAfterDis(minPrice, product!.discount!)} - ${priceAfterDis(maxPrice, product!.discount!)}",
                               ),
                             ),
                             //add to cart button
@@ -296,4 +305,9 @@ class TProductCardVertical extends StatelessWidget {
               }
             });
   }
+}
+
+String priceAfterDis(double price, int discount) {
+  double res = price * ((100 - discount) / 100);
+  return res.toStringAsFixed(1);
 }

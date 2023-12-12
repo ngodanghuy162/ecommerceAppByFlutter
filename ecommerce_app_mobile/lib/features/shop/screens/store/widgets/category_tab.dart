@@ -7,7 +7,8 @@ import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class TCategoryTab extends StatelessWidget {
-  const TCategoryTab({super.key});
+  TCategoryTab({super.key, required this.topic});
+  final String topic;
 
   @override
   Widget build(BuildContext context) {

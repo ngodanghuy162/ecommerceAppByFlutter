@@ -2,18 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BrandModel {
   final String? id;
-  final String imageUrl;
+  final String? imageUrl;
   final bool isVerified;
   final String name;
-  final String userId;
+  final String? userId;
 
   BrandModel({
     this.id,
-    required this.imageUrl,
+    this.imageUrl,
     this.isVerified = true,
     required this.name,
-    required this.userId,
+    this.userId,
   });
+
+  set value(BrandModel value) {}
 
   toJson() {
     return {
@@ -29,7 +31,7 @@ class BrandModel {
     final data = document.data()!;
     return BrandModel(
         id: document.id,
-        imageUrl: data['image_url'],
+        imageUrl: data['imageURL'],
         isVerified: data['is_verified'],
         name: data['name'],
         userId: data['user_id']);
