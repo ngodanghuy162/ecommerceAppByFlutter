@@ -8,8 +8,8 @@ class ProductModel {
   final String? discount_id;
   final String name;
   final String product_category_id;
-  final List<String>? rating;
-  final List<String> variants_path;
+  final List<dynamic>? rating;
+  final List<dynamic> variants_path;
 
   ProductModel({
     this.id,
@@ -45,7 +45,7 @@ class ProductModel {
       name: data['name'],
       product_category_id: data['product_category_id'],
       rating: data['rating'],
-      variants_path: data['variants_path'],
+      variants_path: data['variants'],
     );
   }
 }

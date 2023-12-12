@@ -27,8 +27,11 @@ class ProductVariantRepository extends GetxController {
   }
 
   Future<List<ProductVariantModel>> queryAllProductVariants(
-      String product) async {
-    final snapshot = await _db.collection('ProductVariant').get();
+      String productId) async {
+    final snapshot = await _db
+        .collection('ProductVariant')
+        .where('product_id', isEqualTo: productId)
+        .get();
     final productData =
         snapshot.docs.map((e) => ProductVariantModel.fromSnapShot(e)).toList();
     return productData;

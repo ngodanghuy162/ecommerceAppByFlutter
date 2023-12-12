@@ -39,8 +39,7 @@ class AllBrandsScreen extends StatelessWidget {
                           itemCount: snapshot.data!.length,
                           mainAxisExtent: 80,
                           itemBuilder: (context, index) => TBrandCard(
-                            showVerify: snapshot.data![index].isVerified,
-                            nameBrand: snapshot.data![index].name,
+                            brand: snapshot.data![index],
                             showBorder: true,
                             onTap: () => Get.to(() => BrandProducts(
                                   brand: snapshot.data![index],

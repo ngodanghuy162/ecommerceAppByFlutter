@@ -43,7 +43,7 @@ class ProductRepository extends GetxController {
     return productData;
   }
 
-  Future<List<ProductModel>> getAllProduct(String product) async {
+  Future<List<ProductModel>> getAllProduct() async {
     final snapshot = await _db.collection('Product').get();
     final productData =
         snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();

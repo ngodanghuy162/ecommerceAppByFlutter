@@ -1,6 +1,8 @@
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/widgets/bottom_add_to_cart_widget.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/widgets/product_attributes.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/widgets/product_detail_image_slider.dart';
@@ -13,15 +15,34 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
 
-class ProductDetailScreen extends StatelessWidget {
-  ProductDetailScreen({super.key, required this.product});
+class ProductDetailScreen extends StatefulWidget {
+  ProductDetailScreen(
+      {super.key,
+      required this.product,
+      this.brand,
+      required this.listVariants});
   final ProductModel product;
+  final BrandModel? brand;
+  final List<ProductVariantModel> listVariants;
 
+  @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final brandController = Get.put(BrandController());
+  late int indexCurrentVariant;
 
   @override
   Widget build(BuildContext context) {
     //final dark = THelperFunctions.isDarkMode(context);
+
+    var minPrice = double.infinity, maxPrice = 0.0;
+    for (var e in widget.listVariants) {
+      minPrice = e.price < minPrice ? e.price : minPrice;
+      maxPrice = e.price > maxPrice ? e.price : maxPrice;
+    }
+    indexCurrentVariant = 0;
     return Scaffold(
       bottomNavigationBar: const TBottomAddToCart(),
       body: SingleChildScrollView(
@@ -42,14 +63,19 @@ class ProductDetailScreen extends StatelessWidget {
                   const TRatingAndShare(),
 
                   /// Price, Title, Stack & Brand
-                  // TProductMetaData(
-                  //   nameBrand: "prdoduct.brand", //TODO query
-                  //   title: product.name,
-                  //   inStock: true, //TODO create func changing follow quantities
-                  // ),
+                  TProductMetaData(
+                    product: widget.product,
+                    nameBrand: widget.brand!.name,
+                    maxPrice: maxPrice,
+                    minPrice: minPrice,
+                  ),
 
                   /// Attributes
-                  const TProductAttributes(),
+                  TProductAttributes(
+                    index: indexCurrentVariant,
+                    listVariants: widget.listVariants,
+                    product: widget.product,
+                  ),
                   const SizedBox(
                     height: TSizes.spaceBtwSections,
                   ),
@@ -71,16 +97,16 @@ class ProductDetailScreen extends StatelessWidget {
                   const SizedBox(
                     height: TSizes.spaceBtwItems,
                   ),
-                  const ReadMoreText(
-                    'This is a Product description for Blue Sleeve less vest. There are more things that can be added dsadasdasdasd adsdsadsad',
+                  ReadMoreText(
+                    widget.product.description,
                     trimLines: 2,
                     trimMode: TrimMode.Line,
                     trimCollapsedText: ' Show more',
                     trimExpandedText: ' Less',
-                    moreStyle:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
-                    lessStyle:
-                        TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
+                    moreStyle: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w800),
+                    lessStyle: const TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w800),
                   ),
 
                   /// Reviews

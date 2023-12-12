@@ -20,10 +20,7 @@ class BrandProducts extends StatelessWidget {
         child: Column(
           children: [
             /// Brand Detail
-            TBrandCard(
-                showBorder: true,
-                nameBrand: brand.name,
-                showVerify: brand.isVerified),
+            TBrandCard(showBorder: true, brand: brand),
             const SizedBox(
               height: TSizes.spaceBtwSections,
             ),

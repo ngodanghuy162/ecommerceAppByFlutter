@@ -34,7 +34,11 @@ class BrandRepository extends GetxController {
   }
 
   Future<List<BrandModel>> queryAllBrands() async {
-    final snapshot = await _db.collection('Brand').get();
+    final snapshot = await _db
+        .collection(
+          'Brand',
+        )
+        .get();
     final brandData =
         snapshot.docs.map((e) => BrandModel.fromSnapShot(e)).toList();
     return brandData;

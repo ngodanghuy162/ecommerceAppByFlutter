@@ -6,6 +6,7 @@ class ProductVariantModel {
   late String color;
   late double price;
   late String imageURL;
+  late String? productId;
 
   ProductVariantModel({
     this.id,
@@ -13,6 +14,7 @@ class ProductVariantModel {
     required this.color,
     required this.price,
     required this.imageURL,
+    this.productId,
   });
 
   toJson() {
@@ -21,6 +23,7 @@ class ProductVariantModel {
       'color': color,
       'price': price,
       'imageURL': imageURL,
+      'product_id': productId
     };
   }
 
@@ -28,11 +31,11 @@ class ProductVariantModel {
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return ProductVariantModel(
-      id: document.id,
-      size: data['size'],
-      color: data['color'],
-      price: data['price'],
-      imageURL: data['imageURL'],
-    );
+        id: document.id,
+        size: data['size'],
+        color: data['color'],
+        price: data['price'] + 0.0,
+        imageURL: data['imageURL'],
+        productId: data['product_id']);
   }
 }

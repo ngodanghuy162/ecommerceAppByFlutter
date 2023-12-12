@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/features/shop/screens/home/home.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/store/store.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,9 @@ class App extends StatelessWidget {
       darkTheme: TAppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
       // initialBinding: GeneralBindings(),
-      // home: StoreScreen(),
-      home: const SellProductScreen(),
+      // home: SellProductScreen()
+      home: StoreScreen(),
+      // home: OnBoardingScreen(),
     );
   }
 }
