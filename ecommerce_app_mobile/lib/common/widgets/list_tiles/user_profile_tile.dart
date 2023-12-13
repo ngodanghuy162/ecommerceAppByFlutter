@@ -1,42 +1,55 @@
-import 'package:ecommerce_app_mobile/common/widgets/images/t_circular_image.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/profile/profile_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
-import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class TUserProfileTile extends StatelessWidget {
-  const TUserProfileTile({
+class TUserProfileTitle extends StatefulWidget {
+  const TUserProfileTitle({
     super.key,
+    required this.lastName,
+    required this.firstName,
+    required this.email,
+    required this.profileUrl,
   });
 
+  final String lastName;
+  final String firstName;
+  final String email;
+  final String profileUrl;
+
+  @override
+  State<TUserProfileTitle> createState() => _TUserProfileTitleState();
+}
+
+class _TUserProfileTitleState extends State<TUserProfileTitle> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const TCircularImage(
-        image: TImages.user,
-        width: 50,
-        height: 50,
-        padding: 0,
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage(
+          widget.profileUrl,
+        ),
+        radius: 30,
       ),
       title: Text(
-        'Tran Van A',
-        style: Theme.of(context)
-            .textTheme
-            .headlineSmall!
-            .apply(color: TColors.white),
+        '${widget.firstName} ${widget.lastName}',
+        style: Theme.of(context).textTheme.headlineSmall!.apply(
+              color: TColors.white,
+            ),
       ),
       subtitle: Text(
-        'support@uet.com',
-        style:
-            Theme.of(context).textTheme.bodyMedium!.apply(color: TColors.white),
+        widget.email,
+        style: Theme.of(context).textTheme.bodyMedium!.apply(
+              color: TColors.white,
+            ),
       ),
       trailing: IconButton(
-        onPressed: () {
-          Get.to(const ProfileScreen());
-        },
-        icon: const Icon(Iconsax.edit, color: TColors.white),
+        onPressed: () => Get.off(const ProfileScreen()),
+        icon: const Icon(
+          Iconsax.edit,
+          color: TColors.white,
+        ),
       ),
     );
   }

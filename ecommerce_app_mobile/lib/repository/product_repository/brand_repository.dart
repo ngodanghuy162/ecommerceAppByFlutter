@@ -22,7 +22,18 @@ class BrandRepository extends GetxController {
           );
       print(error.toString());
     });
-    return id.path;
+    return id.id;
+  }
+
+  Future<String> checkDuplicatedBrand(String name) async {
+    var queryBrand =
+        await _db.collection('Brand').where('name', isEqualTo: name).get();
+
+    if (queryBrand.docs.isNotEmpty) {
+      // Nếu có tài liệu thì trả về ID của tài liệu đầu tiên
+      return queryBrand.docs.first.id;
+    }
+    return 'false';
   }
 
   Future<BrandModel> queryBrandById(String brandId) async {

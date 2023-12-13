@@ -3,6 +3,8 @@ import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/sear
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/all_products/all_products.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_categories.dart';
@@ -11,11 +13,15 @@ import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 import '../../../../utils/constants/colors.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final controllerBrand = Get.put(BrandController());
+  final controllerProduct = Get.put(ProductController());
 
   @override
   Widget build(BuildContext context) {
@@ -24,29 +30,29 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         children: [
           /// Header
-          const TPrimaryHeaderContainer(
+          TPrimaryHeaderContainer(
             child: Column(
               children: [
                 /// -- Appbar
-                THomeAppBar(),
-                SizedBox(height: TSizes.spaceBtwSections),
+                const THomeAppBar(),
+                const SizedBox(height: TSizes.spaceBtwSections),
 
                 /// -- SearchBar
-                TSearchContainer(text: 'Search in Store'),
-                SizedBox(height: TSizes.spaceBtwSections),
+                const TSearchContainer(text: 'Search in Store'),
+                const SizedBox(height: TSizes.spaceBtwSections),
 
                 /// -- Categories
                 Padding(
-                  padding: EdgeInsets.only(left: TSizes.defaultSpace),
+                  padding: const EdgeInsets.only(left: TSizes.defaultSpace),
                   child: Column(
                     children: [
                       /// -- Heading
-                      TSectionHeading(
+                      const TSectionHeading(
                         title: 'Popular Categories',
                         showActionButton: false,
                         textColor: TColors.white,
                       ),
-                      SizedBox(height: TSizes.spaceBtwItems),
+                      const SizedBox(height: TSizes.spaceBtwItems),
 
                       /// Categories
                       THomeCategories(),
@@ -54,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: TSizes.spaceBtwSections),
+                const SizedBox(height: TSizes.spaceBtwSections),
               ],
             ),
           ),
@@ -81,11 +87,28 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: TSizes.spaceBtwItems),
-
-                // TGridLayout(
-                //   itemCount: 4,
-                //   itemBuilder: (_, index) =>  TProductCardVertical(), //TODO query and add
-                // )
+                FutureBuilder(
+                    future: controllerProduct.getAllProduct(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          print(snapshot.data);
+                          return TGridLayout(
+                            itemCount: 4,
+                            itemBuilder: (_, index) => TProductCardVertical(
+                              isProductVariant: false,
+                              listProduct: snapshot.data!,
+                            ), //TODO query and add
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(child: Text(snapshot.error.toString()));
+                        } else {
+                          return const Center(child: Text("smt went wrong"));
+                        }
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    })
               ],
             ),
           ),

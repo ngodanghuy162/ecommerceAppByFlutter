@@ -1,60 +1,115 @@
-import 'package:ecommerce_app_mobile/Service/Auth/fb_auth_provider.dart';
-import 'package:ecommerce_app_mobile/Service/Auth/firebaseauth_provider.dart';
-import 'package:ecommerce_app_mobile/Service/Auth/gg_auth_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
+import 'package:ecommerce_app_mobile/Service/Repository/authentication_repository.dart';
+import 'package:ecommerce_app_mobile/Service/Repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class LoginController extends GetxController {
-  static LoginController get instance => Get.find();
+class SignInController extends GetxController {
+  static SignInController get instance => Get.find();
+  var controller = Get.put(AuthenticationRepository());
+  var userRepo = Get.put(UserRepository());
 
-  final isloginWithEmail = false.obs;
-  final isloginWithGg = false.obs;
-  final isloginWithFb = false.obs;
+  var deviceStorage = GetStorage('app-setting-configs');
+
+  var isPasswordObscure = true.obs;
+  var isRememberMe = true.obs;
+
+  void showHiddenPassword() {}
+
+  void rememberMe(bool isRememberMe) {}
+
+  final email = TextEditingController();
+  final password = TextEditingController();
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
+  final phoneNumber = TextEditingController();
 
   final isLoading = false.obs;
   final isGoogleLoading = false.obs;
   final isFacebookLoading = false.obs;
 
-  final email = TextEditingController();
-  final password = TextEditingController();
-
-  //log in ưith email and password
-  Future<User> logInWithEmail() async {
-    isloginWithGg.value = false;
-    isloginWithEmail.value = true;
-    return FirebaseAuthProvider.firebaseAuthProvider.logIn(
-      email: email.text,
-      password: password.text,
-    );
+  @override
+  void onReady() {
+    super.onReady();
+    final savedEmail = deviceStorage.read('userEmail');
+    email.text = savedEmail;
   }
 
-  //log in with gg
-  Future<UserCredential?> logInWithGoogle() async {
-    isloginWithGg.value = true;
-    isGoogleLoading.value = true;
-    UserCredential? userCredential =
-        await GgAuthProvider.ggProvider.signInWithGoogle();
-    isGoogleLoading.value = false;
-    return userCredential;
+  Future<void> signIn(String email, String password) async {
+    if (isRememberMe.value) {
+      await deviceStorage.write('userEmail', email);
+    }
+    isLoading.value = true;
+    await AuthenticationRepository.instance
+        .loginUserWithEmailAndPassword(email, password);
+    isLoading.value = false;
   }
 
-  Future<UserCredential?> logInWithFb() async {
-    isloginWithFb.value = true;
-    isloginWithGg.value = false;
-    return await FbAuthProvider.fbProvider.signInWithFacebook();
+  Future<void> googleSignIn() async {
+    try {
+      isGoogleLoading.value = true;
+      final auth = AuthenticationRepository.instance;
+      await auth.signInWithGoogle();
+      isGoogleLoading.value = false;
+
+      auth.setInitialScreen(auth.firebaseUser.value);
+      final names = auth.firebaseUser.value!.displayName!.split(' ');
+
+      final model = UserModel(
+        firstName: names[0],
+        lastName: names.sublist(1).join(' '),
+        email: auth.firebaseUser.value!.email!,
+        phoneNumber: auth.firebaseUser.value!.phoneNumber ?? '000000000',
+        password: '',
+      );
+      if (!await userRepo.isEmailExisted(model.email)) {
+        userRepo.createUser(model);
+      }
+    } catch (e) {
+      isGoogleLoading.value = false;
+      Get.snackbar(
+        'Lỗi',
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red,
+      );
+      GoogleSignIn().signOut();
+    }
   }
 
-  Future<void> logOut() async {
-    if (isloginWithGg.value == true) {
-      await GgAuthProvider.ggProvider.logOutGoogle();
-      isloginWithGg.value = false;
-    } else if (isloginWithEmail.value == true) {
-      isloginWithEmail.value = false;
-      await FirebaseAuthProvider.firebaseAuthProvider.logOut();
-    } else {
-      isloginWithFb.value = false;
-      await FbAuthProvider.fbProvider.logOutFb();
+  Future<void> facebookSignIn() async {
+    try {
+      isFacebookLoading.value = true;
+      final auth = AuthenticationRepository.instance;
+      await auth.signInWithFacebook();
+      isFacebookLoading.value = false;
+
+      auth.setInitialScreen(auth.firebaseUser.value);
+      final names = auth.firebaseUser.value!.displayName!.split(' ');
+
+      final model = UserModel(
+        firstName: names[0],
+        lastName: names.sublist(1).join(' '),
+        email: auth.firebaseUser.value!.email!,
+        phoneNumber: auth.firebaseUser.value!.phoneNumber ?? '000000000',
+        password: '',
+      );
+      if (!await userRepo.isEmailExisted(model.email)) {
+        userRepo.createUser(model);
+      }
+    } catch (e) {
+      isFacebookLoading.value = false;
+      Get.snackbar(
+        'Lỗi',
+        e.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red,
+      );
+      // FacebookAuth.instance.logOut();
     }
   }
 }

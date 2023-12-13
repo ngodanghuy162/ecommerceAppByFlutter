@@ -3,6 +3,7 @@ import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/brands/brand_card.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/brand/brand_products.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +40,7 @@ class AllBrandsScreen extends StatelessWidget {
                           itemCount: snapshot.data!.length,
                           mainAxisExtent: 80,
                           itemBuilder: (context, index) => TBrandCard(
-                            showVerify: snapshot.data![index].isVerified,
-                            nameBrand: snapshot.data![index].name,
+                            brand: snapshot.data![index],
                             showBorder: true,
                             onTap: () => Get.to(() => BrandProducts(
                                   brand: snapshot.data![index],

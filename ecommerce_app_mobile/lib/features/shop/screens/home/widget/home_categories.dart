@@ -1,29 +1,45 @@
 import 'package:ecommerce_app_mobile/common/widgets/image_text_widgets/vertical_image_text.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_category_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/sub_category/sub_category_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class THomeCategories extends StatelessWidget {
-  const THomeCategories({
+  THomeCategories({
     super.key,
   });
-
+  final categoriesController = Get.put(ProductCategoryController());
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 80,
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: 6,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (_, index) {
-          return TVerticalImageText(
-              image: TImages.shoeIcon,
-              title: 'Shoe',
-              onTap: () => Get.to(() => const SubCategoryScreen()));
-        },
-      ),
-    );
+    return FutureBuilder(
+        future: categoriesController.getAllCategories(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              List listCategories = snapshot.data!;
+              return SizedBox(
+                height: 80,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: listCategories.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (_, index) {
+                    return TVerticalImageText(
+                        image: TImages.shoeIcon,
+                        title: listCategories[index].name,
+                        onTap: () => Get.to(() => const SubCategoryScreen()));
+                  },
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Center(child: Text(snapshot.error.toString()));
+            } else {
+              return Center(child: Text("smt went wrong"));
+            }
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
   }
 }

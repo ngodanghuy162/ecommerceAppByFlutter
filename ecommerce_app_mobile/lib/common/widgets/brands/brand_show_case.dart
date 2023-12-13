@@ -24,7 +24,10 @@ class TBrandShowcase extends StatelessWidget {
       child: Column(
         children: [
           /// Brands with Products Count
-          // TBrandCard(showBorder: false), //TODO query and add
+          // TBrandCard(
+          //   showBorder: false,
+          //   brand: null,
+          // ), //TODO query and add
           const SizedBox(height: TSizes.spaceBtwItems),
 
           /// Brand Top 3 Product Images

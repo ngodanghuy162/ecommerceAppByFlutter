@@ -1,6 +1,7 @@
 import 'package:ecommerce_app_mobile/features/authentication/screens/login/login_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class OnBoardingController extends GetxController {
   static OnBoardingController get instance => Get.find();
@@ -20,6 +21,8 @@ class OnBoardingController extends GetxController {
   void nextPage() {
     if (currentPageIndex.value == 3 - 1) {
       Get.offAll(const LoginScreen());
+      final deviceStorage = GetStorage('app-setting-configs');
+      deviceStorage.write('isFirstTime', false);
     } else {
       int page = currentPageIndex.value + 1;
       pageController.animateToPage(page,
@@ -33,5 +36,7 @@ class OnBoardingController extends GetxController {
       duration: const Duration(milliseconds: 500),
       curve: Curves.ease,
     );
+    final deviceStorage = GetStorage('app-setting-configs');
+    deviceStorage.write('isFirstTime', false);
   }
 }

@@ -31,7 +31,7 @@ class ProductVariantModel {
       id: document.id,
       size: data['size'],
       color: data['color'],
-      price: data['price'],
+      price: data['price'] + 0.0,
       imageURL: data['imageURL'],
     );
   }

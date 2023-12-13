@@ -7,6 +7,7 @@ import 'package:ecommerce_app_mobile/common/widgets/products/cart_menu_icon.dart
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/brand/all_brands.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/brand/brand_products.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/store/widgets/category_tab.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
@@ -81,10 +82,12 @@ class StoreScreen extends StatelessWidget {
                                   mainAxisExtent: 80,
                                   itemBuilder: (_, index) {
                                     return TBrandCard(
-                                      showVerify:
-                                          snapshot.data![index].isVerified,
-                                      showBorder: false,
-                                      nameBrand: snapshot.data![index].name,
+                                      showBorder: true,
+                                      brand: snapshot.data![index],
+                                      onTap: () {
+                                        Get.to(() => BrandProducts(
+                                            brand: snapshot.data![index]));
+                                      },
                                     );
                                   },
                                 );
@@ -117,13 +120,13 @@ class StoreScreen extends StatelessWidget {
           },
 
           /// Body
-          body: const TabBarView(
+          body: TabBarView(
             children: [
-              TCategoryTab(),
-              TCategoryTab(),
-              TCategoryTab(),
-              TCategoryTab(),
-              TCategoryTab(),
+              TCategoryTab(topic: 'Sport'),
+              TCategoryTab(topic: 'Furniture'),
+              TCategoryTab(topic: 'Electronics'),
+              TCategoryTab(topic: 'Clothes'),
+              TCategoryTab(topic: 'Cosmetics'),
             ],
           ),
         ),

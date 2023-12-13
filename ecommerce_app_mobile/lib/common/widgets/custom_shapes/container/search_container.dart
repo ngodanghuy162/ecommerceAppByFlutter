@@ -1,9 +1,15 @@
+import 'dart:developer';
+
+import 'package:ecommerce_app_mobile/Controller/search_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/search/search_result_screen.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/search/search_sugges_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/device/device_utility.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:get/get.dart';
 
 class TSearchContainer extends StatelessWidget {
   const TSearchContainer({
@@ -24,10 +30,11 @@ class TSearchContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final searchController = Get.put(SearchControllerX());
     final dark = THelperFunctions.isDarkMode(context);
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {},
       child: Padding(
         padding: padding,
         child: Container(
@@ -44,14 +51,38 @@ class TSearchContainer extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Icon(icon, color: TColors.darkerGrey),
+              IconButton(
+                icon: Icon(icon, color: TColors.darkerGrey),
+                onPressed: () {
+                  log("An an nnut tim kiem");
+                  if (SearchControllerX.instance.keySearch.text.isNotEmpty) {
+                    log("Go to search RS");
+                    log("keySearch o container: ${searchController.keySearch.text}");
+                    searchController.isSearching = true;
+                    Get.off(() => SearchResultScreen(
+                          keySearch: SearchControllerX.instance.keySearch.text,
+                        ));
+                  }
+                },
+              ),
               const SizedBox(width: TSizes.spaceBtwItems),
               Expanded(
                 child: TextField(
+                  controller: searchController.keySearch,
                   decoration: InputDecoration(
                     hintText: 'Search in Store',
                     hintStyle: Theme.of(context).textTheme.bodySmall,
                   ),
+                  onTap: () {
+                    if (Get.currentRoute != SearchingScreen ||
+                        Get.currentRoute != SearchResultScreen) {
+                      if (searchController.isSearching == false) {
+                        searchController.isSearching == true;
+                        print("Go to searching");
+                        Get.to(() => SearchingScreen());
+                      }
+                    }
+                  },
                 ),
               ),
             ],
