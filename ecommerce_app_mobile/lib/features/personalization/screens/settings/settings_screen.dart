@@ -1,5 +1,5 @@
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
-import 'package:ecommerce_app_mobile/Service/Repository/authentication_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/authentication_repository.dart';
 import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';

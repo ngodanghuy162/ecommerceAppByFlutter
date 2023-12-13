@@ -9,6 +9,7 @@ class ProductModel {
   final String product_category_id;
   final List<dynamic>? rating;
   final List<dynamic>? variants_path;
+  final bool popular;
 
   ProductModel({
     this.id,
@@ -19,6 +20,7 @@ class ProductModel {
     required this.product_category_id,
     this.rating,
     required this.variants_path,
+    this.popular = false,
   });
 
   toJson() {
@@ -31,6 +33,7 @@ class ProductModel {
       'product_category_id': product_category_id,
       'rating': rating,
       'variants': variants_path,
+      'popular' : popular
     };
   }
 
@@ -44,8 +47,9 @@ class ProductModel {
       discount: data['discount'],
       name: data['name'],
       product_category_id: data['product_category_id'],
-      rating: data['rating'] ?? null,
+      rating: data['rating'],
       variants_path: data['variants_path'],
+      popular: data['popular']
     );
   }
 }

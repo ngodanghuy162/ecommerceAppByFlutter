@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_review_model.dart';
-import 'package:ecommerce_app_mobile/Service/Repository/authentication_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/authentication_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_review_controller/product_review_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/product_reviews.dart';
@@ -9,7 +9,6 @@ import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-
 
 //Sau này có trang đơn hang đã mua thì ghép vào sau
 class CreateProductReview extends StatefulWidget {
@@ -51,14 +50,15 @@ class _CreateProductReviewState extends State<CreateProductReview> {
               // Star ratings widget (you can use your own star rating widget)
               // Replace the following line with your actual star rating widget
               const Text('Có thể là thông tin về sản phẩm'),
-              const SizedBox(height: TSizes.spaceBtwSections,),
+              const SizedBox(
+                height: TSizes.spaceBtwSections,
+              ),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Text('Chất lượng sản phẩm:'),
                   const SizedBox(width: TSizes.spaceBtwItems),
-
                   RatingBar.builder(
                     initialRating: 5,
                     minRating: 1,
@@ -103,40 +103,47 @@ class _CreateProductReviewState extends State<CreateProductReview> {
               const SizedBox(height: TSizes.spaceBtwSections),
 
               // Submit button or any other actions
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: TColors.grey,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10), // Đặt độ cong cho viền của nút
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0), // Đặt khoảng cách giữa chữ và viền
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: TColors.grey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          10), // Đặt độ cong cho viền của nút
                     ),
-                    child: const Text('Trở lại' , style: TextStyle(color: TColors.black),),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16.0,
+                        horizontal: 24.0), // Đặt khoảng cách giữa chữ và viền
                   ),
-                  const SizedBox(width: TSizes.spaceBtwSections),
-
-                  ElevatedButton(
-                    onPressed: () {
-                      // Add logic to submit the review
-                      addReview();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepOrange,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10), // Đặt độ cong cho viền của nút
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0), // Đặt khoảng cách giữa chữ và viền
+                  child: const Text(
+                    'Trở lại',
+                    style: TextStyle(color: TColors.black),
+                  ),
+                ),
+                const SizedBox(width: TSizes.spaceBtwSections),
+                ElevatedButton(
+                  onPressed: () {
+                    // Add logic to submit the review
+                    addReview();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepOrange,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          10), // Đặt độ cong cho viền của nút
                     ),
-                    child: const Text('Hoàn thành', ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16.0,
+                        horizontal: 24.0), // Đặt khoảng cách giữa chữ và viền
                   ),
-                ]
-              ),
+                  child: const Text(
+                    'Hoàn thành',
+                  ),
+                ),
+              ]),
             ],
           ),
         );

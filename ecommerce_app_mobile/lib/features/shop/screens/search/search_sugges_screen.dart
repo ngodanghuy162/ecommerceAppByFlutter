@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 class SearchingScreen extends StatelessWidget {
   final _searchControllerX = Get.put(SearchControllerX());
 
+  SearchingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +16,7 @@ class SearchingScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Text("KeySearch:" + SearchControllerX.instance.keySearch.text),
+          Text("KeySearch:${SearchControllerX.instance.keySearch.text}"),
           TSearchContainer(text: SearchControllerX.instance.keySearch.text),
           Expanded(
             child: Obx(
@@ -40,6 +42,8 @@ class SearchingScreen extends StatelessWidget {
 }
 
 class SearchWidget extends StatefulWidget {
+  const SearchWidget({super.key});
+
   @override
   _SearchWidgetState createState() => _SearchWidgetState();
 }
@@ -74,7 +78,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     "What does CSS stands for?",
   ];
 
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   List<String> _filteredSuggestions = [];
 
   @override
@@ -88,7 +92,7 @@ class _SearchWidgetState extends State<SearchWidget> {
             onChanged: (value) {
               filterSuggestions(value);
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Search',
               prefixIcon: Icon(Icons.search),
             ),

@@ -5,24 +5,23 @@ import 'package:ecommerce_app_mobile/features/shop/controllers/product_controlle
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 
 class SearchResultScreen extends StatelessWidget {
   final String keySearch;
-  SearchResultScreen({super.key, required this.keySearch});
+  const SearchResultScreen({super.key, required this.keySearch});
 
   @override
   Widget build(BuildContext context) {
     final productController = Get.put(ProductController());
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Result'),
+        title: const Text('Search Result'),
       ),
       body: Column(
         children: [
-          Text("KeySearch la:" + keySearch),
-          TSearchContainer(text: "Testtt TSEARCH TEXT"),
+          Text("KeySearch la:$keySearch"),
+          const TSearchContainer(text: "Testtt TSEARCH TEXT"),
 
           /// Drop down
           DropdownButtonFormField(
@@ -58,7 +57,7 @@ class SearchResultScreen extends StatelessWidget {
                   } else if (snapshot.hasError) {
                     return Center(child: Text(snapshot.error.toString()));
                   } else {
-                    return Center(child: Text("smt went wrong"));
+                    return const Center(child: Text("smt went wrong"));
                   }
                 } else {
                   return const CircularProgressIndicator();

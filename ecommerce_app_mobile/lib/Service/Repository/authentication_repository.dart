@@ -1,4 +1,4 @@
-import 'package:ecommerce_app_mobile/Service/Repository/exception/email_password_failure.dart';
+import 'package:ecommerce_app_mobile/Service/repository/exception/email_password_failure.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/login/login_screen.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:ecommerce_app_mobile/features/authentication/screens/password_configuration/reset_password.dart';

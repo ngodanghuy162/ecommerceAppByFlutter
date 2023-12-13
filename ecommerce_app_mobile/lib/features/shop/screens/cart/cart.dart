@@ -10,19 +10,19 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       appBar: TAppBar(
         title: Text(
           'Cart',
           style: Theme.of(context).textTheme.headlineSmall,
         ),
+        showBackArrow: true,
       ),
       body: const TCartItems(),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: ElevatedButton(
-            onPressed: () => Get.to(() => const CheckoutScreen()),
+            onPressed: () => Get.to(() => CheckoutScreen()),
             child: const Text('Checkout \$256')),
       ),
     );

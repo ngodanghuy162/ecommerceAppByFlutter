@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';

@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class BarChartGraph extends StatefulWidget {
-  BarChartGraph({super.key});
+  const BarChartGraph({super.key});
 
   final Color waiting = Colors.black;
   final Color inShipping = Colors.blue;

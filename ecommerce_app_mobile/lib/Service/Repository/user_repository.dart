@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
@@ -55,6 +56,101 @@ class UserRepository extends GetxController {
   Future<void> updatePassword(UserModel userModel) async {
     await FirebaseAuth.instance.currentUser!
         .updatePassword(userModel.password!);
+  }
+
+  Future<List<Map<String, dynamic>>> getAllUserAddress() async {
+    final userData =
+        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+
+    return userData.address;
+  }
+
+  Future<void> setDefaultAddress(String addressId) async {
+    final userData =
+        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    final listAddress = userData.address.map(
+      (e) {
+        final addressModel = AddressModel(
+            id: e['id'],
+            phoneNumber: e['phoneNumber'],
+            name: e['name'],
+            province: e['province'],
+            district: e['district'],
+            street: e['street'],
+            ward: e['ward'],
+            isDefault: false,
+            districtId: e['districtId'],
+            provinceId: e['provinceId'],
+            wardCode: e['wardCode']);
+
+        if (addressModel.id == addressId) {
+          addressModel.isDefault = true;
+        }
+        return addressModel.toMap();
+      },
+    ).toList();
+    userData.address = listAddress;
+    await _db
+        .collection('Users')
+        .doc(userData.id)
+        .update(userData.toMap())
+        .whenComplete(() => Get.snackbar(
+              "Thành công",
+              "Đặt địa chỉ mặc định thành công",
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.green.withOpacity(0.1),
+              colorText: Colors.green,
+              duration: const Duration(seconds: 1),
+            ))
+        .catchError((error, stacktrace) {
+      () => Get.snackbar(
+            'Lỗi',
+            'Có gì đó không đúng, thử lại?',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.redAccent.withOpacity(0.1),
+            colorText: Colors.red,
+          );
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
+  }
+
+  Future<Map<String, dynamic>> getDefaultAddress() async {
+    final userData =
+        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    return userData.address
+        .singleWhere((element) => element['isDefault'] == true);
+  }
+
+  Future<void> addUserAddress(AddressModel addressModel) async {
+    final userData =
+        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    userData.address.add(addressModel.toMap());
+    await _db
+        .collection('Users')
+        .doc(userData.id)
+        .update(userData.toMap())
+        .whenComplete(() => Get.snackbar(
+              "Thành công",
+              "Địa chỉ đã được thêm thành công",
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.green.withOpacity(0.1),
+              colorText: Colors.green,
+              duration: const Duration(seconds: 1),
+            ))
+        .catchError((error, stacktrace) {
+      () => Get.snackbar(
+            'Lỗi',
+            'Có gì đó không đúng, thử lại?',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.redAccent.withOpacity(0.1),
+            colorText: Colors.red,
+          );
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
   }
 
   Future<void> updateUserDetail(UserModel userModel) async {

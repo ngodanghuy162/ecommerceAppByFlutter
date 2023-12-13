@@ -3,13 +3,10 @@ import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/roun
 import 'package:ecommerce_app_mobile/features/shop/screens/statistics/widgets/annotated_chart.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/statistics/widgets/dropdown.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/statistics/widgets/bar_graph.dart';
-import 'package:ecommerce_app_mobile/features/shop/screens/statistics/widgets/productItems.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/statistics/widgets/statistic_number.dart';
-import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 class StatisticScreen extends StatelessWidget {
   const StatisticScreen({super.key});
@@ -17,7 +14,7 @@ class StatisticScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
-    return Scaffold(
+    return const Scaffold(
       appBar: TAppBar(title: Text("Statistics"), showBackArrow: true),
       body: Padding(
         padding: EdgeInsets.all(TSizes.defaultSpace),
@@ -49,18 +46,18 @@ class StatisticScreen extends StatelessWidget {
                     ),
                   ],
                 )),
-            const SizedBox(height: TSizes.spaceBtwSections),
+            SizedBox(height: TSizes.spaceBtwSections),
             SizedBox(
               height: 350,
               child: BarChartGraph(),
             ),
-            const SizedBox(height: TSizes.spaceBtwSections),
-            const AnnotatedChart(),
-            const SizedBox(height: TSizes.spaceBtwSections),
+            SizedBox(height: TSizes.spaceBtwSections),
+            AnnotatedChart(),
+            SizedBox(height: TSizes.spaceBtwSections),
             Divider(
               height: 0.7,
             ),
-            const SizedBox(height: TSizes.spaceBtwSections),
+            SizedBox(height: TSizes.spaceBtwSections),
             Row(
               children: [
                 Text(

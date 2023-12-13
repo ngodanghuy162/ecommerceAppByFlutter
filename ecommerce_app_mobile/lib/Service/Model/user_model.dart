@@ -1,6 +1,5 @@
 // ignore: depend_on_referenced_packages
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../Repository/user_model_field.dart';
 
 class UserModel {
   String? id;
@@ -61,9 +60,9 @@ class UserModel {
         wishlist: List<DocumentReference>.from(data?['wishlist'] ?? []),
         voucher: Map<String, List<String>>.from(data?['voucher'] ?? {}),
         cart: List<Map<String, dynamic>>.from(data?['cart'] ?? []),
-        totalIncome: data?['totalIncome'] ?? 0,
+        totalIncome: data?['totalIncome'] * 1.0 ?? 0.0,
         bankAccount: data?['bankAccount'] ?? '',
-        totalConsumption: data?['totalConsumption'] ?? 0,
+        totalConsumption: data?['totalConsumption'] * 1.0 ?? 0.0,
         avatar_imgURL: data?['avatar_imgURL']);
   }
 

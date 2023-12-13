@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:ecommerce_app_mobile/Service/Repository/authentication_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/authentication_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_category_controller.dart';
@@ -29,6 +29,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
   List<String> imageList_url = [];
   String description = '';
   int discount = 0;
+  int quantity = 0;
   String name = '';
   List<ProductVariantModel> variants = [];
   List<String> variants_path = [];
@@ -48,7 +49,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
 
   String dropdownValue = categoryList.first;
 
-  List<XFile?> _imageList = [];
+  final List<XFile?> _imageList = [];
 
   XFile? _image;
 
@@ -118,7 +119,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                       .toRadixString(16)
                       .substring(2)
                       .toUpperCase(); // Lưu mã màu dưới dạng HEX
-                  print(variantIndex);
+                  //print(variantIndex);
                   print(variants[variantIndex].color);
                 });
                 Navigator.of(context).pop();
@@ -262,7 +263,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                     children: [
                       Text(
                         'Variant ${index + 1}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
@@ -327,6 +328,31 @@ class _SellProductScreenState extends State<SellProductScreen> {
                         },
                         keyboardType: TextInputType.number,
                       ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Quantity',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            variants[index].quantity = int.parse(value);
+                          });
+                        },
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Variant Description',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            variants[index].descriptionVariant = value;
+                          });
+                        },
+                      ),
                       const SizedBox(height: 16),
                       GestureDetector(
                         onTap: _pickImage,
@@ -365,7 +391,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   setState(() {
                     // Add an empty variant when the button is pressed
                     variants.add(ProductVariantModel(
-                        size: '', color: '', price: 0.0, imageURL: '', id: ''));
+                        size: '', color: '', price: 0.0, imageURL: '', id: '', quantity: 0, descriptionVariant: ''));
                     _imageList.add(null);
                   });
                 },
@@ -388,7 +414,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   //print('Image: $image_url');
                   print('Description: $description');
                   print('Discount: $discount');
-                  print('Variants: ${variants}');
+                  print('Variants: $variants');
 
                   /// Liên kết với category
                   final categoryResult = await ProductCategoryController
