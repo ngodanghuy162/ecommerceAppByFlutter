@@ -1,4 +1,5 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/sortable/sortable_product.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
@@ -16,9 +17,7 @@ class AllProductsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(TSizes.defaultSpace),
-          // child: TSortableProducts(
-          //   brand: null,
-          // ), //TODO query and add
+          child: TSortableProducts(type: "popular-product"),
         ),
       ),
     );

@@ -15,8 +15,6 @@ class BrandModel {
     this.userId,
   });
 
-  set value(BrandModel value) {}
-
   toJson() {
     return {
       'image_url': imageUrl,
