@@ -48,7 +48,7 @@ class ProductReviewModel {
     return ProductReviewModel(
       id: document.id,
       userEmail: data['userEmail'],
-      rating: data['rating'],
+      rating: data['rating'] * 1.0,
       date: data['date'],
       content: data['content'],
     );

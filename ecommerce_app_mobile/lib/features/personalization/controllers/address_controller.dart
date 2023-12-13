@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../Service/Repository/user_repository.dart';
+import '../../../Service/repository/user_repository.dart';
 
 class AddressController extends GetxController {
   static AddressController get instance => Get.find();

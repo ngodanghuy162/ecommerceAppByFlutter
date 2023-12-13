@@ -1,4 +1,4 @@
-import 'package:ecommerce_app_mobile/Service/Repository/authentication_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/authentication_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
