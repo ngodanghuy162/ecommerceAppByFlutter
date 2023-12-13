@@ -64,7 +64,7 @@ class _ProductReviewsScreenState extends State<ProductReviewsScreen> {
                       number++;
                     }
                   }
-                  double ratio = number / reviewList.length;
+                  double ratio = (number / reviewList.length).toDouble();
                   starRating.add(ratio);
                 }
 
@@ -74,33 +74,32 @@ class _ProductReviewsScreenState extends State<ProductReviewsScreen> {
                     2 * starRating[1] +
                     1 * starRating[0];
 
-                return SingleChildScrollView(
-                  physics: const ScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                          "Ratings and reviews are verifed and are from people who use the same type of device that you use"),
-                      const SizedBox(
-                        height: TSizes.spaceBtwItems,
-                      ),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                        "Ratings and reviews are verifed and are from people who use the same type of device that you use"),
+                    const SizedBox(
+                      height: TSizes.spaceBtwItems,
+                    ),
 
-                      /// Overall Product Ratings
-                      TOverallProductRating(
-                        oneStarRate: starRating[0],
-                        twoStarRate: starRating[1],
-                        threeStarRate: starRating[2],
-                        fourStarRate: starRating[3],
-                        fiveStarRate: starRating[4],
-                        overall: overall,
-                      ),
-                      TRatingBarIndicator(rating: overall),
-                      Text("${reviewList.length}",
-                          style: Theme.of(context).textTheme.bodySmall),
-                      const SizedBox(height: TSizes.spaceBtwSections),
+                    /// Overall Product Ratings
+                    TOverallProductRating(
+                      oneStarRate: starRating[0],
+                      twoStarRate: starRating[1],
+                      threeStarRate: starRating[2],
+                      fourStarRate: starRating[3],
+                      fiveStarRate: starRating[4],
+                      overall: overall,
+                    ),
+                    TRatingBarIndicator(rating: overall),
+                    Text("${reviewList.length}",
+                        style: Theme.of(context).textTheme.bodySmall),
+                    const SizedBox(height: TSizes.spaceBtwSections),
 
-                      /// User Reviews list
-                      ListView.builder(
+                    /// User Reviews list
+                    Expanded(
+                      child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: reviewList.length,
                         itemBuilder: (context, index) {
@@ -110,12 +109,12 @@ class _ProductReviewsScreenState extends State<ProductReviewsScreen> {
                           );
                         },
                       ),
-                      // const UserReviewCard(),
-                      // const UserReviewCard(),
-                      // const UserReviewCard(),
-                      // const UserReviewCard(),
-                    ],
-                  ),
+                    ),
+                    // const UserReviewCard(),
+                    // const UserReviewCard(),
+                    // const UserReviewCard(),
+                    // const UserReviewCard(),
+                  ],
                 );
               } else if (snapshot.hasError) {
                 print(snapshot.error);

@@ -6,6 +6,8 @@ class ProductVariantModel {
   late String color;
   late double price;
   late String imageURL;
+  late int quantity;
+  late String descriptionVariant;
 
   ProductVariantModel({
     this.id,
@@ -13,6 +15,8 @@ class ProductVariantModel {
     required this.color,
     required this.price,
     required this.imageURL,
+    required this.quantity,
+    required this.descriptionVariant,
   });
 
   toJson() {
@@ -21,6 +25,8 @@ class ProductVariantModel {
       'color': color,
       'price': price,
       'imageURL': imageURL,
+      'quantity': quantity,
+      'descriptionVariant': descriptionVariant,
     };
   }
 
@@ -33,6 +39,8 @@ class ProductVariantModel {
       color: data['color'],
       price: data['price'] + 0.0,
       imageURL: data['imageURL'],
+      quantity: data['quantity'],
+      descriptionVariant: data['descriptionVariant'],
     );
   }
 }
