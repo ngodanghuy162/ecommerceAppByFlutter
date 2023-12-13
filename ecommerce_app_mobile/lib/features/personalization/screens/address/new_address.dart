@@ -4,6 +4,10 @@ import 'package:ecommerce_app_mobile/features/personalization/screens/address/wi
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
+
 import 'package:iconsax/iconsax.dart';
 
 class NewAddressScreen extends StatefulWidget {
@@ -16,6 +20,59 @@ class NewAddressScreen extends StatefulWidget {
 
 class _NewAddressScreenState extends State<NewAddressScreen> {
   final controller = Get.put(AddressController());
+
+  final kGoogleApiKey = 'AIzaSyDzp4uGlbJQVPVNlJHouhHQKEPc_DRodD0';
+  Future<void> _handlePressButton() async {
+    void onError(PlacesAutocompleteResponse response) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response.errorMessage ?? 'Unknown error'),
+        ),
+      );
+    }
+
+    // show input autocomplete with selected mode
+    // then get the Prediction selected
+    final p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: kGoogleApiKey,
+      onError: onError,
+      mode: Mode.fullscreen,
+      language: 'vn',
+      components: [Component(Component.country, 'vn')],
+      resultTextStyle: Theme.of(context).textTheme.titleMedium,
+
+      // startText:
+      //     '${controller.province.text}, ${controller.district.text}, ${controller.ward.text}',
+    );
+
+    await displayPrediction(p, ScaffoldMessenger.of(context));
+  }
+
+  Future<void> displayPrediction(
+      Prediction? p, ScaffoldMessengerState messengerState) async {
+    if (p == null) {
+      return;
+    }
+
+    // get detail (lat/lng)
+    final _places = GoogleMapsPlaces(
+      apiKey: kGoogleApiKey,
+      apiHeaders: await const GoogleApiHeaders().getHeaders(),
+    );
+
+    final detail = await _places.getDetailsByPlaceId(p.placeId!);
+    final geometry = detail.result.geometry!;
+    final lat = geometry.location.lat;
+    final lng = geometry.location.lng;
+    detail.result.addressComponents.forEach((e) => print(e.longName));
+
+    messengerState.showSnackBar(
+      SnackBar(
+        content: Text('${p.description} - $lat/$lng'),
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -79,6 +136,9 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                     prefixIcon: Icon(Iconsax.building_31),
                     labelText: 'Street',
                   ),
+                  onTap: () async {
+                    await _handlePressButton();
+                  },
                 ),
                 const SizedBox(height: TSizes.defaultSpace),
                 SizedBox(
