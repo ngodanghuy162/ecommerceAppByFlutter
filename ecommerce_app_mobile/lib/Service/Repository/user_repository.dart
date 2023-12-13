@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
+import 'package:ecommerce_app_mobile/repository/product_repository/product_variant_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -215,7 +217,8 @@ class UserRepository extends GetxController {
     });
   }
 
-  Future<void> addProductToCart(ProductModel productModel) async {
+  Future<void> addProductToCart(ProductVariantModel? productVariant,
+      int quantity, String? productVariantId) async {
     final usersCollection = _db.collection('Users');
     try {
       /*  String currentUserId =
@@ -229,12 +232,27 @@ class UserRepository extends GetxController {
       if (snapshot.docs.isNotEmpty) {
         var firstDocument = snapshot.docs[0];
         var documentId = firstDocument.id;
-        if (productModel.id!.isNotEmpty) {
+        if (productVariantId != null) {
+          Map<String, int> productVariantMap = {
+            productVariantId:
+                quantity // set your value here, it could be a number or any other data,
+          };
+          await usersCollection.doc(documentId).update({
+            cartFieldName: FieldValue.arrayUnion(productVariantMap as List),
+          });
+          print("da them vao cart oke nhe");
+          return;
+        }
+        if (productVariant!.id!.isNotEmpty) {
           bool isProductInCart =
-              firstDocument[cartFieldName].contains(productModel.id);
+              firstDocument[cartFieldName].contains(productVariant.id);
           if (!isProductInCart) {
+            Map<String, int> productVariantMap = {
+              productVariant.id!:
+                  quantity // set your value here, it could be a number or any other data,
+            };
             await usersCollection.doc(documentId).update({
-              cartFieldName: FieldValue.arrayUnion([productModel.id]),
+              cartFieldName: FieldValue.arrayUnion(productVariantMap as List),
             });
             Get.snackbar('Ok', "Them vao cart ok");
           } else {
@@ -242,13 +260,17 @@ class UserRepository extends GetxController {
             return;
           }
         } else {
-          String? productId = await ProductRepository.instance
-              .getDocumentIdForProduct(productModel);
+          String? productVariantId = await ProductVariantRepository.instance
+              .getVariantId(productVariant);
           bool isProductInCart =
-              firstDocument[cartFieldName].contains(productId);
+              firstDocument[cartFieldName].contains(productVariantId);
           if (!isProductInCart) {
+            Map<String, int> productVariantMap = {
+              productVariant.id!:
+                  quantity // set your value here, it could be a number or any other data,
+            };
             await usersCollection.doc(documentId).update({
-              cartFieldName: FieldValue.arrayUnion([productId]),
+              cartFieldName: FieldValue.arrayUnion(productVariantMap as List),
             });
             Get.snackbar('Ok', "Them vao cart ok");
           } else {

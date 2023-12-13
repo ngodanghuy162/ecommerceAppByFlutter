@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/styles/shadows.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
@@ -38,6 +39,7 @@ class TProductCardVertical extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    final userRepo = Get.put(UserRepository());
     return isProductVariant
         ? FutureBuilder(
             future: variantController.getVariantByIDs(product!.variants_path!),
@@ -97,12 +99,16 @@ class TProductCardVertical extends StatelessWidget {
                               ),
                             ),
                             // -- Favourite Button
-                            const Positioned(
+                            Positioned(
                               top: 0,
                               right: 0,
                               child: TCircularIcon(
                                 icon: Iconsax.heart5,
                                 color: Colors.red,
+                                onPressed: () async {
+                                  bool ok = await UserRepository.instance
+                                      .addOrRemoveProductToWishlist(product!);
+                                },
                               ),
                             ),
                           ]),

@@ -20,10 +20,12 @@ class ProductDetailScreen extends StatefulWidget {
       {super.key,
       required this.product,
       this.brand,
-      required this.listVariants});
+      required this.listVariants,
+      this.choosenVariant});
   final ProductModel product;
   final BrandModel? brand;
   final List<ProductVariantModel> listVariants;
+  final ProductVariantModel? choosenVariant;
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();

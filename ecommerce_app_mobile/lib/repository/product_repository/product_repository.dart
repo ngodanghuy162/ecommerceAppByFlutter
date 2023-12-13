@@ -95,11 +95,8 @@ class ProductRepository extends GetxController {
     try {
       // Sử dụng query để tìm document có các trường dữ liệu giống với productModel
       final querySnapshot = await productCollection
-          .where('brand_id', isEqualTo: productModel.brand_id)
           .where('description', isEqualTo: productModel.description)
           .where('name', isEqualTo: productModel.name)
-          .where('product_category_id',
-              isEqualTo: productModel.product_category_id)
           .get();
 
       // Kiểm tra xem có document nào khớp hay không
