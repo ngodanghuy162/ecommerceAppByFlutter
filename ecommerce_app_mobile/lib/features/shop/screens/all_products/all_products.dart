@@ -7,7 +7,7 @@ class AllProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       /// AppBar
       appBar: TAppBar(
         title: Text('Popular Products'),

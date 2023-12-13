@@ -34,16 +34,18 @@ class _ProductReviewsScreenState extends State<ProductReviewsScreen> {
       return matchingReplies.isNotEmpty ? matchingReplies.first : null;
     }
 
-
     return Scaffold(
       appBar:
           const TAppBar(title: Text("Reviews & Rating"), showBackArrow: true),
       body: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: FutureBuilder(
-          future: Future.wait([reviewController.getAllReview(), replyController.getAllReplyReview()]),
+          future: Future.wait([
+            reviewController.getAllReview(),
+            replyController.getAllReplyReview()
+          ]),
           builder: (context, snapshot) {
-            if(snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData) {
                 final data = snapshot.data!;
 
@@ -54,20 +56,23 @@ class _ProductReviewsScreenState extends State<ProductReviewsScreen> {
                     .map((dynamic item) => item as ReplyReviewModel)
                     .toList();
 
-                for(int i = 0; i < 5; i ++) {
+                for (int i = 0; i < 5; i++) {
                   // số lần xuất hiện
                   double number = 0;
-                  for(int j = 0; j < reviewList.length; j++) {
-                    if (reviewList[j].rating == i + 1) {
+                  for (int j = 0; j < reviewList.length; j++) {
+                    if (reviewList[j].rating == (i + 1).toDouble()) {
                       number++;
                     }
                   }
                   double ratio = number / reviewList.length;
                   starRating.add(ratio);
-
                 }
 
-                double overall = 5 * starRating[4] + 4 * starRating[3] + 3 * starRating[2] + 2 * starRating[1] + 1 * starRating[0];
+                double overall = 5 * starRating[4] +
+                    4 * starRating[3] +
+                    3 * starRating[2] +
+                    2 * starRating[1] +
+                    1 * starRating[0];
 
                 return SingleChildScrollView(
                   physics: const ScrollPhysics(),
@@ -82,18 +87,16 @@ class _ProductReviewsScreenState extends State<ProductReviewsScreen> {
 
                       /// Overall Product Ratings
                       TOverallProductRating(
-                          oneStarRate: starRating[0],
-                          twoStarRate: starRating[1],
-                          threeStarRate: starRating[2],
-                          fourStarRate: starRating[3],
-                          fiveStarRate: starRating[4],
-                          overall: overall,
+                        oneStarRate: starRating[0],
+                        twoStarRate: starRating[1],
+                        threeStarRate: starRating[2],
+                        fourStarRate: starRating[3],
+                        fiveStarRate: starRating[4],
+                        overall: overall,
                       ),
                       TRatingBarIndicator(rating: overall),
-                      Text("${reviewList.length}", style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodySmall),
+                      Text("${reviewList.length}",
+                          style: Theme.of(context).textTheme.bodySmall),
                       const SizedBox(height: TSizes.spaceBtwSections),
 
                       /// User Reviews list
@@ -114,7 +117,7 @@ class _ProductReviewsScreenState extends State<ProductReviewsScreen> {
                     ],
                   ),
                 );
-              } else if(snapshot.hasError) {
+              } else if (snapshot.hasError) {
                 print(snapshot.error);
               }
             }

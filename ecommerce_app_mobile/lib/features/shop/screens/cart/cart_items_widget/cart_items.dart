@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class TCartItems extends StatelessWidget {
   const TCartItems({super.key, this.showAddRemoveButton = true});
 
-    final bool showAddRemoveButton;
+  final bool showAddRemoveButton;
 
   @override
   Widget build(BuildContext context) {
@@ -20,22 +20,22 @@ class TCartItems extends StatelessWidget {
           separatorBuilder: (context, index) {
             return const SizedBox(height: TSizes.spaceBtwSections);
           },
-          itemCount: 10,
+          itemCount: 4,
           itemBuilder: (context, index) {
             return Column(
               children: [
                 const TCartItem(),
                 if (showAddRemoveButton)
-                const SizedBox(height: TSizes.spaceBtwItems),
+                  const SizedBox(height: TSizes.spaceBtwItems),
                 if (showAddRemoveButton)
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(width: 70),
-                    TProductQuantityWithAddAndRemove(),
-                    TProductPriceText(price: '256'),
-                  ],
-                ),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(width: 70),
+                      TProductQuantityWithAddAndRemove(),
+                      TProductPriceText(price: '256'),
+                    ],
+                  ),
               ],
             );
           },

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:ecommerce_app_mobile/Service/Repository/authentication_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/authentication_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/success_screen/success_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/text_strings.dart';

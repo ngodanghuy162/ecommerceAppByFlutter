@@ -5,11 +5,27 @@ import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+// ignore: must_be_immutable
 class TSingleAddress extends StatelessWidget {
-  const TSingleAddress({Key? key, required this.isSelectedAddress})
-      : super(key: key);
+  const TSingleAddress(
+      {super.key,
+      required this.isSelectedAddress,
+      required this.province,
+      required this.district,
+      required this.name,
+      required this.phoneNumber,
+      required this.street,
+      required this.ward,
+      required this.id});
 
+  final String id;
   final bool isSelectedAddress;
+  final String province;
+  final String district;
+  final String ward;
+  final String name;
+  final String street;
+  final String phoneNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +57,20 @@ class TSingleAddress extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Tran Van A',
+                name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: TSizes.sm / 2),
-              const Text(
-                '+(012) 3456 7890',
+              Text(
+                phoneNumber,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: TSizes.sm / 2),
-              const Text(
-                '44 Tran Thai Tong, Dich Vong Hau, Cau Giay, Ha Noi',
+              Text(
+                '$street, $ward, $district, $province',
                 softWrap: true,
               )
             ],

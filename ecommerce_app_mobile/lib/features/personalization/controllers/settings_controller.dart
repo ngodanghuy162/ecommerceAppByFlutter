@@ -1,5 +1,5 @@
-import 'package:ecommerce_app_mobile/Service/Repository/authentication_repository.dart';
-import 'package:ecommerce_app_mobile/Service/Repository/user_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/authentication_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
