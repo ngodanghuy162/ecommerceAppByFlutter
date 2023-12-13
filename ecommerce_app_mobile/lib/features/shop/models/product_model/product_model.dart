@@ -33,7 +33,7 @@ class ProductModel {
       'product_category_id': product_category_id,
       'rating': rating,
       'variants': variants_path,
-      'popular' : popular
+      'popular': popular
     };
   }
 
@@ -41,15 +41,14 @@ class ProductModel {
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return ProductModel(
-      id: document.id,
-      brand_id: data['brand_id'],
-      description: data['description'],
-      discount: data['discount'],
-      name: data['name'],
-      product_category_id: data['product_category_id'],
-      rating: data['rating'],
-      variants_path: data['variants_path'],
-      popular: data['popular']
-    );
+        id: document.id,
+        brand_id: data['brand_id'],
+        description: data['description'],
+        discount: data['discount'],
+        name: data['name'],
+        product_category_id: data['product_category_id'],
+        rating: data['rating'],
+        variants_path: data['variants_path'],
+        popular: data['popular']);
   }
 }
