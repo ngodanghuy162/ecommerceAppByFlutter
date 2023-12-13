@@ -7,15 +7,17 @@ import 'package:iconsax/iconsax.dart';
 import 't_brand_title_text.dart';
 
 class TBrandTitleWithVerifiedIcon extends StatelessWidget {
-  const TBrandTitleWithVerifiedIcon({
-    super.key,
-    required this.title,
-    this.maxLines = 1,
-    this.textColor,
-    this.iconColor = TColors.primary,
-    this.textAlign = TextAlign.center,
-    this.brandTextSize = TextSizes.small,
-  });
+  const TBrandTitleWithVerifiedIcon(
+      {super.key,
+      required this.title,
+      this.maxLines = 1,
+      this.textColor,
+      this.iconColor = TColors.primary,
+      this.textAlign = TextAlign.center,
+      this.brandTextSize = TextSizes.small,
+      this.isVerified = false});
+
+  final bool isVerified;
 
   final String title;
   final int maxLines;
@@ -40,11 +42,13 @@ class TBrandTitleWithVerifiedIcon extends StatelessWidget {
         const SizedBox(
           width: TSizes.xs,
         ),
-        Icon(
-          Iconsax.verify5,
-          color: iconColor,
-          size: TSizes.iconXs,
-        ),
+        isVerified
+            ? Icon(
+                Iconsax.verify5,
+                color: iconColor,
+                size: TSizes.iconXs,
+              )
+            : Container(),
       ],
     );
   }

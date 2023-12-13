@@ -3,17 +3,33 @@ import 'package:ecommerce_app_mobile/common/styles/product_title_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/common/widgets/chips/choice_chip.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
-class TProductAttributes extends StatelessWidget {
-  const TProductAttributes({super.key});
+class TProductAttributes extends StatefulWidget {
+  const TProductAttributes(
+      {super.key,
+      required this.listVariants,
+      required this.index,
+      required this.product});
 
+  final List<ProductVariantModel> listVariants;
+  final int index;
+  final ProductModel product;
+
+  @override
+  State<TProductAttributes> createState() => _TProductAttributesState();
+}
+
+class _TProductAttributesState extends State<TProductAttributes> {
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
+    ProductVariantModel variant = widget.listVariants[widget.index];
     return Column(
       children: [
         /// Selected Attributes
@@ -44,7 +60,7 @@ class TProductAttributes extends StatelessWidget {
 
                             /// Actual Price
                             Text(
-                              '\$25',
+                              "\$${variant.price}",
                               style: Theme.of(context)
                                   .textTheme
                                   .titleSmall!
@@ -56,7 +72,9 @@ class TProductAttributes extends StatelessWidget {
                             ),
 
                             /// Sale Price
-                            const TProductPriceText(price: '20'),
+                            TProductPriceText(
+                                price:
+                                    "${variant.price * ((100 - widget.product.discount!) / 100)}"),
                           ],
                         ),
 
@@ -79,9 +97,8 @@ class TProductAttributes extends StatelessWidget {
                 ),
 
                 /// Variation Description
-                const TProductTitleText(
-                  title:
-                      'This is the Description of the Product and it can go up to max 4 lines.',
+                TProductTitleText(
+                  title: widget.product.description,
                   smallSize: true,
                   maxLines: 4,
                 )
@@ -105,16 +122,6 @@ class TProductAttributes extends StatelessWidget {
             Wrap(
               spacing: 8,
               children: [
-                TChoiceChip(
-                  text: 'Green',
-                  selected: false,
-                  onSelected: (value) {},
-                ),
-                TChoiceChip(
-                  text: 'Blue',
-                  selected: true,
-                  onSelected: (value) {},
-                ),
                 TChoiceChip(
                   text: 'Yellow',
                   selected: false,

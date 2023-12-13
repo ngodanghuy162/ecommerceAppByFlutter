@@ -30,7 +30,8 @@ class WishlistScreen extends StatelessWidget {
               children: [
                 // TGridLayout(
                 //   itemCount: 4,
-                //   itemBuilder: (_, index) => TProductCardVertical(), // TODO
+                //   itemBuilder: (_, index) =>
+                //       TProductCardVertical(), //TODO - query and add
                 // )
               ],
             ),

@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/brands/brand_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -8,23 +11,36 @@ import '../../../../utils/constants/sizes.dart';
 import '../../layout/grid_layout.dart';
 import '../product_cards/product_card_vertical.dart';
 
-class TSortableProducts extends StatelessWidget {
+class TSortableProducts extends StatefulWidget {
   TSortableProducts({
     super.key,
-    required this.brand,
+    required this.type,
   });
-  final BrandModel brand;
 
+  final String type;
+
+  @override
+  State<TSortableProducts> createState() => _TSortableProductsState();
+}
+
+class _TSortableProductsState extends State<TSortableProducts> {
   final productController = Get.put(ProductController());
+  final brandController = Get.put(BrandController());
+  String status = '';
 
   @override
   Widget build(BuildContext context) {
+    String type = widget.type;
     return Column(
       children: [
         /// Drop down
         DropdownButtonFormField(
           decoration: const InputDecoration(prefixIcon: Icon(Iconsax.sort)),
-          onChanged: (value) {},
+          onChanged: (value) {
+            setState(() {
+              status = value!;
+            });
+          },
           items: [
             'Name',
             'Higher Price',
@@ -40,10 +56,14 @@ class TSortableProducts extends StatelessWidget {
         const SizedBox(
           height: TSizes.spaceBtwItems,
         ),
+        const SizedBox(
+          height: TSizes.spaceBtwItems,
+        ),
 
         /// Product
         FutureBuilder(
-            future: productController.getAllProductbyBrand("Brand/${brand.id}"),
+            future: productController.getAllProductbyBrand(
+                "${brandController.choosedBrand.value.id}"),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
@@ -51,7 +71,28 @@ class TSortableProducts extends StatelessWidget {
                       itemCount: snapshot.data!.length,
                       itemBuilder: (_, index) => TProductCardVertical(
                             product: snapshot.data![index],
-                            brand: brand,
+                            brand: brandController.choosedBrand.value,
+                          ));
+                } else if (snapshot.hasError) {
+                  return Center(child: Text(snapshot.error.toString()));
+                } else {
+                  return const Center(child: Text("smt went wrong"));
+                }
+              } else {
+                return const CircularProgressIndicator();
+              }
+            }),
+        FutureBuilder(
+            future: productController.getAllProductbyBrand(
+                "Brand/${brandController.choosedBrand.value.id}"),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  return TGridLayout(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (_, index) => TProductCardVertical(
+                            product: snapshot.data![index],
+                            brand: brandController.choosedBrand.value,
                           ));
                 } else if (snapshot.hasError) {
                   return Center(child: Text(snapshot.error.toString()));

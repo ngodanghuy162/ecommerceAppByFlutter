@@ -1,5 +1,8 @@
 import 'package:ecommerce_app_mobile/features/personalization/screens/settings/settings_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/home.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/create_product_review.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/product_reviews.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/store/store.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/wishlist/wishlist_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
@@ -55,7 +58,7 @@ class NavigationController extends GetxController {
   }
 
   final screens = [
-    const HomeScreen(),
+    HomeScreen(),
     StoreScreen(),
     const WishlistScreen(),
     SettingsScreen()

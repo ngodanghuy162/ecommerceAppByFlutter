@@ -1,28 +1,28 @@
-import 'package:ecommerce_app_mobile/common/widgets/texts/t_brand_title_text.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/enums.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+import 't_brand_title_text.dart';
+
 class TBrandTitleWithVerifiedIcon extends StatelessWidget {
-  const TBrandTitleWithVerifiedIcon({
-    super.key,
-    required this.title,
-    this.maxLines = 1,
-    this.textColor,
-    this.iconColor = TColors.primary,
-    this.textAlign = TextAlign.center,
-    this.brandTextSize = TextSizes.small,
-    required this.showVerify,
-  });
+  const TBrandTitleWithVerifiedIcon(
+      {super.key,
+      required this.title,
+      this.maxLines = 1,
+      this.textColor,
+      this.iconColor = TColors.primary,
+      this.textAlign = TextAlign.center,
+      this.brandTextSize = TextSizes.small,
+      this.showVerify = false});
 
   final String title;
   final int maxLines;
   final Color? textColor, iconColor;
   final TextAlign? textAlign;
   final TextSizes brandTextSize;
-  final bool showVerify;
+  final bool? showVerify;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class TBrandTitleWithVerifiedIcon extends StatelessWidget {
           width: TSizes.xs,
         ),
         Icon(
-          showVerify ? Iconsax.verify5 : null,
+          showVerify! ? Iconsax.verify5 : null,
           color: iconColor,
           size: TSizes.iconXs,
         ),

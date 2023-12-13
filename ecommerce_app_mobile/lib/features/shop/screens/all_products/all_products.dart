@@ -1,4 +1,5 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class AllProductsScreen extends StatelessWidget {
@@ -13,11 +14,13 @@ class AllProductsScreen extends StatelessWidget {
         showBackArrow: true,
       ),
       body: SingleChildScrollView(
-          // child: Padding(
-          //   padding: const EdgeInsets.all(TSizes.defaultSpace),
-          //   child: TSortableProducts(), //TODO
-          // ),
-          ),
+        child: Padding(
+          padding: EdgeInsets.all(TSizes.defaultSpace),
+          // child: TSortableProducts(
+          //   brand: null,
+          // ), //TODO query and add
+        ),
+      ),
     );
   }
 }

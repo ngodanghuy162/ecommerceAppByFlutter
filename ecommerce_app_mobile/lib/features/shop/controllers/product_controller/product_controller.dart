@@ -1,14 +1,19 @@
-import 'dart:developer';
+import 'dart:math';
 
-import 'package:ecommerce_app_mobile/features/shop/controllers/brands_controller/brands_controller.dart';
+import 'package:ecommerce_app_mobile/features/admin/screens/display_all_product.dart/widgets/product_variant.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
+import 'package:ecommerce_app_mobile/repository/product_repository/product_variant_repository.dart';
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {
   static ProductController get instance => Get.find();
   final _productRepo = Get.put(ProductRepository());
-  final brandController = Get.put(BrandsController());
+  final variantController = Get.put(ProductVariantController());
+  final brandController = Get.put(BrandController());
 
   Future<ProductModel> createProduct({
     required String brand_id,
@@ -34,7 +39,35 @@ class ProductController extends GetxController {
   }
 
   Future<List<ProductModel>> getAllProductByName(String keySearch) async {
-    log("Da goi tim san pham");
     return await _productRepo.queryAllProductByName(keySearch);
   }
+
+  Future<List<ProductModel>> getAllProduct() async {
+    List list = await _productRepo.queryAllProducts();
+    list = shuffle(list);
+    return list as List<ProductModel>;
+  }
+
+  // Future<List<ProductVariantModel>> getAllVariantByProductID(
+  //     List<dynamic> listID) async {
+  //   List<ProductVariantModel> listVariants = [];
+  //   for (var e in listID) {
+  //     listVariants.add(await variantController.getVariantByID(e));
+  //   }
+  //   return listVariants;
+  // }
+}
+
+List shuffle(List array) {
+  var random = Random(); //import 'dart:math';
+
+  // Go through all elementsof list
+  for (var i = array.length - 1; i > 0; i--) {
+    // Pick a random number according to the lenght of list
+    var n = random.nextInt(i + 1);
+    var temp = array[i];
+    array[i] = array[n];
+    array[n] = temp;
+  }
+  return array;
 }

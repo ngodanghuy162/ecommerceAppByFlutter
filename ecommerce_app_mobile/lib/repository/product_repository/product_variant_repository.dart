@@ -21,16 +21,47 @@ class ProductVariantRepository extends GetxController {
             backgroundColor: Colors.redAccent.withOpacity(0.1),
             colorText: Colors.red,
           );
+      () => Get.snackbar(
+            'Lỗi',
+            'Có gì đó không đúng, thử lại?',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.redAccent.withOpacity(0.1),
+            colorText: Colors.red,
+          );
       print(error.toString());
     });
-    return id.path;
+    return id.id;
   }
 
   Future<List<ProductVariantModel>> queryAllProductVariants(
-      String product) async {
-    final snapshot = await _db.collection('ProductVariant').get();
+      String productId) async {
+    final snapshot = await _db
+        .collection('ProductVariant')
+        .where('product_id', isEqualTo: productId)
+        .get();
     final productData =
         snapshot.docs.map((e) => ProductVariantModel.fromSnapShot(e)).toList();
     return productData;
+  }
+
+  // Future<ProductVariantModel> queryVariantByID(String variantsID) async {
+  //   final snapshot = await _db
+  //       .collection('ProductVariant')
+  //       .where(document.getElementById(fK3ddutEpD2qQqRMXNW5)
+
+  //       .get();
+  //   final productData = ProductVariantModel.fromSnapShot(snapshot);
+  //   return productData;
+  // }
+
+  Future<List<ProductVariantModel>> queryVariants(
+      List<dynamic> variantsIDs) async {
+    final query = _db
+        .collection('ProductVariant')
+        .where(FieldPath.documentId, whereIn: variantsIDs);
+    final snapshot = await query.get();
+    return snapshot.docs
+        .map((e) => ProductVariantModel.fromSnapShot(e))
+        .toList();
   }
 }

@@ -8,7 +8,7 @@ class ProductVariantModel {
   late String imageURL;
 
   ProductVariantModel({
-     this.id,
+    this.id,
     required this.size,
     required this.color,
     required this.price,
@@ -31,7 +31,7 @@ class ProductVariantModel {
       id: document.id,
       size: data['size'],
       color: data['color'],
-      price: data['price'],
+      price: data['price'] + 0.0,
       imageURL: data['imageURL'],
     );
   }

@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:ecommerce_app_mobile/Service/Repository/authentication_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_category_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -54,34 +56,29 @@ class _SellProductScreenState extends State<SellProductScreen> {
     var pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      setState(() async {
-        _image = pickedFile;
+      _image = pickedFile;
+      setState(() {
         _imageList.last = _image;
-        //_imageList.add(_image);
-        String uniqueFileName =
-            '${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-        Reference referenceRoot = FirebaseStorage.instance.ref();
-        Reference referenceDirImages = referenceRoot.child('images');
-
-        Reference referenceImageToUpload =
-            referenceDirImages.child(uniqueFileName);
-
-        try {
-          await referenceImageToUpload.putFile(File(_image!.path));
-          image_url = await referenceImageToUpload.getDownloadURL();
-          setState(() {
-            imageList_url.add(image_url);
-          });
-
-          // setState(() {
-          //   imageList_url.add(image_url);
-          // });
-          // setState(() {
-          //   url = cloud_image_url;
-          // });
-        } catch (error) {}
       });
+      String uniqueFileName =
+          DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+
+      Reference referenceRoot = FirebaseStorage.instance.ref();
+      Reference referenceDirImages = referenceRoot.child('images');
+
+      Reference referenceImageToUpload =
+          referenceDirImages.child(uniqueFileName);
+
+      try {
+        await referenceImageToUpload.putFile(File(_image!.path));
+        image_url = await referenceImageToUpload.getDownloadURL();
+        setState(() {
+          imageList_url.add(image_url);
+        });
+        //print(imageList_url.length);
+      } catch (error) {
+        print(error);
+      }
     }
   }
 
@@ -140,6 +137,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
     Get.put(ProductVariantController());
     Get.put(ProductCategoryController());
     Get.put(BrandController());
+    final _authRepo = Get.put(AuthenticationRepository());
 
     return Scaffold(
       appBar: const TAppBar(
@@ -198,44 +196,28 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              GestureDetector(
-                onTap: _pickImage,
-                child: Container(
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: _image == null
-                        ? const Center(
-                            child: Icon(Icons.camera_alt,
-                                size: 40, color: Colors.grey),
-                          )
-                        : (_image!.path.contains('http')
-                            ? Image.network(_image!.path, fit: BoxFit.contain)
-                            : Image.file(
-                                File(_image!.path),
-                                fit: BoxFit.contain,
-                              ))),
-              ),
-              const SizedBox(height: 16),
-              const SizedBox(height: 16),
               // GestureDetector(
               //   onTap: _pickImage,
               //   child: Container(
-              //     height: 200,
-              //     decoration: BoxDecoration(
-              //       color: Colors.grey[200],
-              //       borderRadius: BorderRadius.circular(10),
-              //     ),
-              //     child: _image == null
-              //         ? Center(
-              //             child: Icon(Icons.camera_alt,
-              //                 size: 40, color: Colors.grey),
-              //           )
-              //         : (_image!.path.contains('http') ? Image.network(_image!.path, fit: BoxFit.contain) : Image.file(File(_image!.path), fit: BoxFit.contain,))
-              //   ),
+              //       height: 200,
+              //       decoration: BoxDecoration(
+              //         color: Colors.grey[200],
+              //         borderRadius: BorderRadius.circular(10),
+              //       ),
+              //       child: _image == null
+              //           ? const Center(
+              //               child: Icon(Icons.camera_alt,
+              //                   size: 40, color: Colors.grey),
+              //             )
+              //           : (_image!.path.contains('http')
+              //               ? Image.network(_image!.path, fit: BoxFit.contain)
+              //               : Image.file(
+              //                   File(_image!.path),
+              //                   fit: BoxFit.contain,
+              //                 ))),
               // ),
+              // const SizedBox(height: 16),
+
               const SizedBox(height: 16),
               TextField(
                 decoration: const InputDecoration(
@@ -257,7 +239,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    discount = value as int;
+                    discount = int.parse(value);
                   });
                 },
               ),
@@ -295,7 +277,6 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           });
                         },
                       ),
-
                       const SizedBox(height: 8),
                       InkWell(
                         onTap: () {
@@ -333,17 +314,6 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           ),
                         ),
                       ),
-                      // TextField(
-                      //   decoration: const InputDecoration(
-                      //     labelText: 'Color',
-                      //     border: OutlineInputBorder(),
-                      //   ),
-                      //   onChanged: (value) {
-                      //     setState(() {
-                      //       variants[index].color = value;
-                      //     });
-                      //   },
-                      // ),
                       const SizedBox(height: 8),
                       TextField(
                         decoration: const InputDecoration(
@@ -420,22 +390,40 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   print('Discount: $discount');
                   print('Variants: $variants');
 
+                  /// Liên kết với category
                   final categoryResult = await ProductCategoryController
                       .instance
                       .getCategoryDocumentIdByName(selectedCategory);
 
+                  /// Tao bien the va cap nhat anh
                   for (int i = 0; i < variants.length; i++) {
                     variants[i].imageURL = imageList_url[i];
                     variants_path.add(await ProductVariantController.instance
                         .createProductVariant(variants[i]));
                   }
 
+                  /// Check brand trung lap hoac tao brand moi
+                  String brandId;
+                  brandId = await BrandController.instance
+                      .checkDuplicatedBrand(brandName);
+
+                  if (brandId == 'false') {
+                    BrandModel brandModel = BrandModel(
+                      name: brandName,
+                      imageUrl: '',
+                      userId: _authRepo.firebaseUser.value!.uid,
+                    );
+                    brandId =
+                        await BrandController.instance.createBrand(brandModel);
+                  }
+
+                  /// Tao san pham
                   ProductController.instance.createProduct(
-                    brand_id: brandName,
+                    brand_id: brandId,
                     description: description,
                     discount: discount,
                     name: name,
-                    product_category_id: selectedCategory,
+                    product_category_id: categoryResult,
                     variants_path: variants_path,
                   );
                 },

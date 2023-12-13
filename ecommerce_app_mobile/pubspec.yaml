@@ -33,6 +33,7 @@ dependencies:
 
   # Image picker
   image_picker: ^1.0.4
+  cached_network_image: ^3.3.0
 
   # Icon
   iconsax: ^0.0.8
