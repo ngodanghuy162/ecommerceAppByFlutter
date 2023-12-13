@@ -1,13 +1,12 @@
 import 'dart:convert';
 
 import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../Service/repository/user_repository.dart';
 
 class AddressController extends GetxController {
   static AddressController get instance => Get.find();
