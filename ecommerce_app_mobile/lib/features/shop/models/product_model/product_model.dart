@@ -8,7 +8,7 @@ class ProductModel {
   final String name;
   final String product_category_id;
   final List<dynamic>? rating;
-  final List<dynamic>? variants_path;
+  final List<dynamic> variants_path;
   final bool popular;
 
   ProductModel({

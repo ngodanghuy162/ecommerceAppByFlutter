@@ -1,7 +1,9 @@
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -31,6 +33,7 @@ class _TSortableProductsState extends State<TSortableProducts> {
   @override
   Widget build(BuildContext context) {
     String type = widget.type;
+    List<DetailProductModel> listDetail = [];
     return Column(
       children: [
         /// Drop down
@@ -55,12 +58,13 @@ class _TSortableProductsState extends State<TSortableProducts> {
 
         /// Product
         FutureBuilder(
-            future: productController.getAllProductbyBrand(
-                "${brandController.choosedBrand.value.id}"),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  List<ProductModel> listProducts = snapshot.data!;
+            future: productController
+                .getAllProductbyBrand(//! GET ALL PRODUCT BY BRAND
+                    "${brandController.choosedBrand.value.id}"),
+            builder: (context, snapshot1) {
+              if (snapshot1.connectionState == ConnectionState.done) {
+                if (snapshot1.hasData) {
+                  List<ProductModel> listProducts = snapshot1.data!;
                   if (status == 'Name') {
                     listProducts.sort(((a, b) => a.name.compareTo(b.name)));
                   } else if (status == 'Higher Price') {
@@ -71,13 +75,37 @@ class _TSortableProductsState extends State<TSortableProducts> {
                   }
 
                   return TGridLayout(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (_, index) => TProductCardVertical(
-                            product: listProducts[index],
-                            brand: brandController.choosedBrand.value,
-                          ));
-                } else if (snapshot.hasError) {
-                  return Center(child: Text(snapshot.error.toString()));
+                      itemCount: snapshot1.data!.length,
+                      itemBuilder: (_, index) => FutureBuilder(
+                          future: variantController.getVariantByIDs(
+                              //! GET ALL VARIANTS BY PRODUCT IDS
+                              listProducts[index].variants_path!),
+                          builder: (context, snapshot2) {
+                            if (snapshot2.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot2.hasData) {
+                                List<ProductVariantModel> listVariants =
+                                    snapshot2.data!;
+                                for (var product in listProducts) {
+                                  listDetail.add(DetailProductModel(
+                                      brand: brandController.choosedBrand.value,
+                                      product: product,
+                                      listVariants: listVariants));
+                                }
+                                return TProductCardVertical(
+                                    modelDetail: listDetail[index]);
+                              } else if (snapshot2.hasError) {
+                                return Center(
+                                    child: Text(snapshot2.error.toString()));
+                              } else {
+                                return Center(child: Text("smt went wrong"));
+                              }
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          }));
+                } else if (snapshot1.hasError) {
+                  return Center(child: Text(snapshot1.error.toString()));
                 } else {
                   return const Center(child: Text("smt went wrong"));
                 }
@@ -85,27 +113,6 @@ class _TSortableProductsState extends State<TSortableProducts> {
                 return const CircularProgressIndicator();
               }
             }),
-        FutureBuilder(
-            future: productController.getAllProductbyBrand(
-                "Brand/${brandController.choosedBrand.value.id}"),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  return TGridLayout(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (_, index) => TProductCardVertical(
-                            product: snapshot.data![index],
-                            brand: brandController.choosedBrand.value,
-                          ));
-                } else if (snapshot.hasError) {
-                  return Center(child: Text(snapshot.error.toString()));
-                } else {
-                  return const Center(child: Text("smt went wrong"));
-                }
-              } else {
-                return const CircularProgressIndicator();
-              }
-            })
       ],
     );
   }

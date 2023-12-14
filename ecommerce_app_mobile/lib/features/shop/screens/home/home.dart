@@ -6,6 +6,11 @@ import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/home_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/all_products/all_products.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_categories.dart';
@@ -19,8 +24,9 @@ import '../../../../utils/constants/colors.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final controllerBrand = Get.put(BrandController());
-  final controllerProduct = Get.put(ProductController());
+  final brandController = Get.put(BrandController());
+  final productController = Get.put(ProductController());
+  final variantController = Get.put(ProductVariantController());
   final homeController = Get.put(HomeController());
 
   @override
@@ -83,21 +89,54 @@ class HomeScreen extends StatelessWidget {
                 TSectionHeading(
                   title: "Popular Products",
                   onPressed: () {
-                    Get.to(const AllProductsScreen());
+                    Get.to(() => const AllProductsScreen());
                   },
                 ),
                 const SizedBox(height: TSizes.spaceBtwItems),
                 FutureBuilder(
-                    future: homeController.getPopularProducts(),
+                    future: productController.getListPopularProduct(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.hasData) {
-                          print("object ${snapshot.data!}");
+                          List<ProductModel> listProducts = snapshot.data!;
+                          int lenghtShow = snapshot.data!.length > 4
+                              ? 4
+                              : snapshot.data!.length;
                           return TGridLayout(
-                            itemCount: 4,
-                            itemBuilder: (_, index) => TProductCardVertical(
-                              listProduct: snapshot.data!,
-                            ), //TODO query and add
+                            itemCount: lenghtShow,
+                            itemBuilder: (_, index) => FutureBuilder(
+                                future: Future.wait([
+                                  brandController.getBrandById(
+                                      listProducts[index].brand_id),
+                                  variantController.getVariantByIDs(
+                                      listProducts[index].variants_path),
+                                ]),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    if (snapshot.hasData) {
+                                      var brand =
+                                          snapshot.data![0] as BrandModel;
+                                      var listVariants = snapshot.data![1]
+                                          as List<ProductVariantModel>;
+                                      return TProductCardVertical(
+                                          modelDetail: DetailProductModel(
+                                              brand: brand,
+                                              product: listProducts[index],
+                                              listVariants: listVariants));
+                                      // return Container();
+                                    } else if (snapshot.hasError) {
+                                      return Center(
+                                          child:
+                                              Text(snapshot.error.toString()));
+                                    } else {
+                                      return const Center(
+                                          child: Text("smt went wrong"));
+                                    }
+                                  } else {
+                                    return const CircularProgressIndicator();
+                                  }
+                                }),
                           );
                         } else if (snapshot.hasError) {
                           return Center(child: Text(snapshot.error.toString()));

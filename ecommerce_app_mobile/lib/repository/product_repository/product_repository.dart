@@ -122,4 +122,12 @@ class ProductRepository extends GetxController {
         snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
     return productData;
   }
+
+  Future<List<ProductModel>> queryPopularProducts() async {
+    final snapshot =
+        await productCollection.where('popular', isEqualTo: true).get();
+    final productData =
+        snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
+    return productData;
+  }
 }

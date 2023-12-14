@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:ecommerce_app_mobile/features/admin/screens/display_all_product.dart/widgets/product_variant.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
@@ -14,6 +16,13 @@ class ProductController extends GetxController {
   final _productRepo = Get.put(ProductRepository());
   final variantController = Get.put(ProductVariantController());
   final brandController = Get.put(BrandController());
+
+  var choosedProduct = ProductModel(
+      brand_id: "brand_id",
+      description: "description",
+      name: "name",
+      product_category_id: "product_category_id",
+      variants_path: []).obs;
 
   Future<ProductModel> createProduct({
     required String brand_id,
@@ -48,14 +57,13 @@ class ProductController extends GetxController {
     return list as List<ProductModel>;
   }
 
-  // Future<List<ProductVariantModel>> getAllVariantByProductID(
-  //     List<dynamic> listID) async {
-  //   List<ProductVariantModel> listVariants = [];
-  //   for (var e in listID) {
-  //     listVariants.add(await variantController.getVariantByID(e));
-  //   }
-  //   return listVariants;
-  // }
+  Future<List<ProductModel>> getListPopularProduct() async {
+    return await _productRepo.queryPopularProducts();
+  }
+
+  Future<List<ProductModel>> getProductByCategory(String category) async {
+    return await _productRepo.queryPopularProducts();
+  }
 }
 
 List shuffle(List array) {
