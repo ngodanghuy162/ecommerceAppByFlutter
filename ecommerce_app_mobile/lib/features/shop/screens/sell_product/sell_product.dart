@@ -255,6 +255,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
               const SizedBox(height: 8),
               const SizedBox(height: 8),
               ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: variants.length,
                 itemBuilder: (context, index) {
