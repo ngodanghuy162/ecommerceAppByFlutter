@@ -38,7 +38,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     //final dark = THelperFunctions.isDarkMode(context);
 
-    int indexCurrentVariant = 0;
     var minPrice = double.infinity, maxPrice = 0.0;
     int totalStock = 0;
     for (var variant in widget.listVariants) {
@@ -66,7 +65,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Column(
                 children: [
                   /// Rating & Share Button
-                  const TRatingAndShare(),
+                  TRatingAndShare(product: widget.product),
 
                   /// Price, Title, Stack & Brand
                   TProductMetaData(
@@ -81,7 +80,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                   /// Attributes
                   TProductAttributes(
-                    index: indexCurrentVariant,
                     listVariants: widget.listVariants,
                     product: widget.product,
                   ),
