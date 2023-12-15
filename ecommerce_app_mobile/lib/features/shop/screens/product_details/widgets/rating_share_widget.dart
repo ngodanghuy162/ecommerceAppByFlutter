@@ -1,11 +1,30 @@
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/chat/chatting_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TRatingAndShare extends StatelessWidget {
   const TRatingAndShare({
     super.key,
+    required this.overall,
+    required this.reviewLength,
+    required this.variant,
+    required this.product,
+    required this.maxPrice,
+    required this.minPrice,
+    required this.discount,
   });
+
+  final double overall;
+  final int reviewLength;
+  final ProductVariantModel variant;
+  final ProductModel product;
+  final double maxPrice;
+  final double minPrice;
+  final int discount;
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +39,29 @@ class TRatingAndShare extends StatelessWidget {
             Text.rich(
                 TextSpan(
                     children: [
-                      TextSpan(text: '5.0 ', style: Theme.of(context).textTheme.bodyLarge),
-                      const TextSpan(text: '(199)'),
+                      TextSpan(text: '${overall.toStringAsFixed(1)} ', style: Theme.of(context).textTheme.bodyLarge),
+                      TextSpan(text: '($reviewLength)'),
                     ]
                 )
             )
           ],
         ),
-        /// Share Button
-        IconButton(onPressed: () {}, icon: const Icon(Icons.share, size: TSizes.iconMd,))
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            /// Chat Button
+            IconButton(onPressed: () => Get.to(() => ChattingScreen(
+              variant: variant,
+              product: product,
+              maxPrice: maxPrice,
+              minPrice: minPrice,
+              discount: discount,
+            )), icon: const Icon(Icons.chat, size: TSizes.iconMd,)),
+            /// Share Button
+            IconButton(onPressed: () {}, icon: const Icon(Icons.share, size: TSizes.iconMd,))
+          ],
+        ),
       ],
     );
   }

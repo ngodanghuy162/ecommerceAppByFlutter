@@ -1,6 +1,10 @@
+import 'dart:math';
+
+import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_review_model.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_review_controller/product_review_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
@@ -33,6 +37,7 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final brandController = Get.put(BrandController());
   final productController = Get.put(ProductController());
+  final reviewController = Get.put(ProductReviewController());
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +71,59 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Column(
                 children: [
                   /// Rating & Share Button
-                  const TRatingAndShare(),
+                  FutureBuilder(
+                      future: productController.getReviewByProductID(widget.product.id!),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData) {
+                            List<ProductReviewModel> reviewList = snapshot.data!;
+                            List<double> starRating = [];
+
+                            if(reviewList.isEmpty) {
+                              return TRatingAndShare(
+                                overall: 0,
+                                reviewLength: reviewList.length,
+                                variant: widget.listVariants[0],
+                                product: widget.product,
+                                maxPrice: maxPrice,
+                                minPrice: minPrice,
+                                discount: widget.product.discount!,
+                              );
+                            }
+
+                            for (int i = 0; i < 5; i++) {
+                              // số lần xuất hiện
+                              double number = 0;
+                              for (int j = 0; j < reviewList.length; j++) {
+                                if (reviewList[j].rating == (i + 1).toDouble()) {
+                                  number++;
+                                }
+                              }
+                              double ratio = (number / reviewList.length).toDouble();
+                              starRating.add(ratio);
+                            }
+
+                            double overall = 5 * starRating[4] +
+                                4 * starRating[3] +
+                                3 * starRating[2] +
+                                2 * starRating[1] +
+                                1 * starRating[0];
+
+                            return TRatingAndShare(
+                              overall: overall,
+                              reviewLength: reviewList.length,
+                              variant: widget.listVariants[0],
+                              product: widget.product,
+                              maxPrice: maxPrice,
+                              minPrice: minPrice,
+                              discount: widget.product.discount!,
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(child: Text(snapshot.error.toString()));
+                          }
+                        }
+                        return const CircularProgressIndicator();
+                      }),
 
                   /// Price, Title, Stack & Brand
                   TProductMetaData(
