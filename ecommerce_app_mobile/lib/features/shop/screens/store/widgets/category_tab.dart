@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:ecommerce_app_mobile/common/widgets/brands/brand_show_case.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
@@ -28,7 +30,6 @@ class TCategoryTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     categoriesController.choosedCategories.value = topic;
-    categoriesController.listCategoryProducts = [];
 
     return ListView(
       shrinkWrap: true,
@@ -38,33 +39,6 @@ class TCategoryTab extends StatelessWidget {
           padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
-              /// -- Brands
-              const TBrandShowcase(
-                images: [
-                  TImages.productImage3,
-                  TImages.productImage2,
-                  TImages.productImage1
-                ],
-              ),
-              const TBrandShowcase(
-                images: [
-                  TImages.productImage3,
-                  TImages.productImage2,
-                  TImages.productImage1
-                ],
-              ),
-              const SizedBox(
-                height: TSizes.spaceBtwItems,
-              ),
-
-              /// -- Products
-              TSectionHeading(
-                title: 'You might like',
-                showActionButton: true,
-                onPressed: () => Get.to(() => CategoryProducts(
-                    listCategories: categoriesController.listCategoryProducts)),
-              ),
-              const SizedBox(height: TSizes.spaceBtwItems),
               FutureBuilder(
                   future: categoriesController.getCategoryDocumentIdByName(
                       categoriesController.choosedCategories.value),
@@ -84,52 +58,139 @@ class TCategoryTab extends StatelessWidget {
                                   int lenghtShow = snapshot.data!.length > 4
                                       ? 4
                                       : snapshot.data!.length;
-                                  return TGridLayout(
-                                    itemCount: lenghtShow,
-                                    itemBuilder: (_, index) => FutureBuilder(
-                                        future: Future.wait([
-                                          brandController.getBrandById(
-                                              listProducts[index].brand_id),
-                                          variantController.getVariantByIDs(
-                                              listProducts[index]
-                                                  .variants_path),
-                                        ]),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.done) {
-                                            if (snapshot.hasData) {
-                                              var brand = snapshot.data![0]
-                                                  as BrandModel;
-                                              var listVariants = snapshot
-                                                      .data![1]
-                                                  as List<ProductVariantModel>;
-                                              DetailProductModel model =
-                                                  DetailProductModel(
-                                                      brand: brand,
-                                                      product:
-                                                          listProducts[index],
-                                                      listVariants:
-                                                          listVariants);
-                                              categoriesController
-                                                  .listCategoryProducts
-                                                  .add(model);
-                                              return TProductCardVertical(
-                                                modelDetail: model,
-                                              );
-                                              // return Container();
-                                            } else if (snapshot.hasError) {
-                                              return Center(
-                                                  child: Text(snapshot.error
-                                                      .toString()));
+                                  return Column(
+                                    children: [
+                                      FutureBuilder(
+                                          future: Future.wait([
+                                            brandController.getBrandById(
+                                                listProducts[0].brand_id),
+                                            brandController.getBrandById(
+                                                listProducts[1].brand_id),
+                                            variantController.getVariantByIDs(
+                                                listProducts[0].variants_path),
+                                            variantController.getVariantByIDs(
+                                                listProducts[1].variants_path),
+                                          ]),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.done) {
+                                              if (snapshot.hasData) {
+                                                BrandModel brand1 = snapshot
+                                                    .data![0] as BrandModel;
+                                                BrandModel brand2 = snapshot
+                                                    .data![1] as BrandModel;
+                                                List<ProductVariantModel>
+                                                    variant1 =
+                                                    snapshot.data![2] as List<
+                                                        ProductVariantModel>;
+                                                List<ProductVariantModel>
+                                                    variant2 =
+                                                    snapshot.data![3] as List<
+                                                        ProductVariantModel>;
+
+                                                return Column(
+                                                  children: [
+                                                    TBrandShowcase(
+                                                      brand: brand1,
+                                                      listVariant: variant1,
+                                                    ),
+                                                    TBrandShowcase(
+                                                      brand: brand2,
+                                                      listVariant: variant2,
+                                                    ),
+                                                    const SizedBox(
+                                                      height:
+                                                          TSizes.spaceBtwItems,
+                                                    ),
+                                                  ],
+                                                );
+                                              } else if (snapshot.hasError) {
+                                                return Center(
+                                                    child: Text(snapshot.error
+                                                        .toString()));
+                                              } else {
+                                                return Center(
+                                                    child:
+                                                        Text("smt went wrong"));
+                                              }
                                             } else {
-                                              return const Center(
-                                                  child:
-                                                      Text("smt went wrong"));
+                                              return const CircularProgressIndicator();
                                             }
-                                          } else {
-                                            return const CircularProgressIndicator();
-                                          }
-                                        }),
+                                          }),
+
+                                      /// -- Brands
+
+                                      /// -- Products
+                                      TSectionHeading(
+                                        title: 'You might like',
+                                        showActionButton: true,
+                                        onPressed: () => Get.to(() =>
+                                            CategoryProducts(
+                                                listCategories:
+                                                    categoriesController
+                                                        .listCategoryProducts)),
+                                      ),
+                                      const SizedBox(
+                                          height: TSizes.spaceBtwItems),
+                                      TGridLayout(
+                                        itemCount: lenghtShow,
+                                        itemBuilder: (_, index) =>
+                                            FutureBuilder(
+                                                future: Future.wait([
+                                                  brandController.getBrandById(
+                                                      listProducts[index]
+                                                          .brand_id),
+                                                  variantController
+                                                      .getVariantByIDs(
+                                                          listProducts[index]
+                                                              .variants_path),
+                                                ]),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot
+                                                          .connectionState ==
+                                                      ConnectionState.done) {
+                                                    if (snapshot.hasData) {
+                                                      var brand =
+                                                          snapshot.data![0]
+                                                              as BrandModel;
+                                                      var listVariants = snapshot
+                                                              .data![1]
+                                                          as List<
+                                                              ProductVariantModel>;
+                                                      brandController.listBrand
+                                                          .add(brand);
+                                                      DetailProductModel model =
+                                                          DetailProductModel(
+                                                              brand: brand,
+                                                              product:
+                                                                  listProducts[
+                                                                      index],
+                                                              listVariants:
+                                                                  listVariants);
+                                                      categoriesController
+                                                          .listCategoryProducts
+                                                          .add(model);
+                                                      return TProductCardVertical(
+                                                        modelDetail: model,
+                                                      );
+                                                      // return Container();
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Center(
+                                                          child: Text(snapshot
+                                                              .error
+                                                              .toString()));
+                                                    } else {
+                                                      return const Center(
+                                                          child: Text(
+                                                              "smt went wrong"));
+                                                    }
+                                                  } else {
+                                                    return const CircularProgressIndicator();
+                                                  }
+                                                }),
+                                      ),
+                                    ],
                                   );
                                 } else if (snapshot.hasError) {
                                   return Center(
