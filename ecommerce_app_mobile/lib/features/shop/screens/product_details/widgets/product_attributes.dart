@@ -27,13 +27,33 @@ class _TProductAttributesState extends State<TProductAttributes> {
   bool isViewAllDescription = false;
   int chooseColor = -1;
   int chooseSize = -1;
+  List<String> colorList = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    colorList.add(widget.listVariants[0].color);
+    for (int i = 0; i < widget.listVariants.length; i++) {
+      for (int j = 0; j < colorList.length; j++) {
+        if (widget.listVariants[i].color != colorList[j]) {
+          colorList.add(widget.listVariants[i].color);
+          continue;
+        }
+        break;
+      }
+    }
+
+    colorList.sort((a, b) => hexColor(a).compareTo(hexColor(b)));
+    colorList.forEach((element) {
+      print(element);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     ProductVariantModel? variant =
         currentIndex > -1 ? widget.listVariants[currentIndex] : null;
-    if (chooseColor > -1) {}
 
     return Column(
       children: [
@@ -193,4 +213,9 @@ class _TProductAttributesState extends State<TProductAttributes> {
 String priceAfterDis(double price, int discount) {
   double res = price * ((100 - discount) / 100);
   return res.toStringAsFixed(1);
+}
+
+int hexColor(String color) {
+  String newColor = '0xff$color';
+  return int.parse(newColor);
 }
