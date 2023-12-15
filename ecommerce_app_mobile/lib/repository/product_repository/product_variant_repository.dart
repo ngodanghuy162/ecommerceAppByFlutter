@@ -8,6 +8,27 @@ class ProductVariantRepository extends GetxController {
 
   final _db = FirebaseFirestore.instance;
 
+  Future<String?> getVariantId(ProductVariantModel productVariantModel) async{
+    try {
+    final querySnapshot = await _db.collection("ProductVariant")
+          .where('color', isEqualTo: productVariantModel.color)
+          .where('size', isEqualTo: productVariantModel.size)
+          .get();
+      // Kiểm tra xem có document nào khớp hay không
+      if (querySnapshot.docs.isNotEmpty) {
+        // Lấy documentId của document đầu tiên (nếu có nhiều document khớp)
+        final documentId = querySnapshot.docs.first.id;
+        return documentId;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      print('Lỗi khi lấy documentId cho ProductModel: $error');
+      return null;
+    }
+
+  }
+
   Future<String> createProductVariant(
       ProductVariantModel productVariantModel) async {
     var id = await _db

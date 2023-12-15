@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/Service/Repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -12,14 +13,14 @@ class TBottomAddToCart extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace / 2),
+      padding: const EdgeInsets.symmetric(
+          horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace / 2),
       decoration: BoxDecoration(
-        color: dark ? TColors.darkerGrey : TColors.light,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(TSizes.cardRadiusLg),
-          topRight: Radius.circular(TSizes.cardRadiusLg),
-        )
-      ),
+          color: dark ? TColors.darkerGrey : TColors.light,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(TSizes.cardRadiusLg),
+            topRight: Radius.circular(TSizes.cardRadiusLg),
+          )),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -32,9 +33,13 @@ class TBottomAddToCart extends StatelessWidget {
                 height: 40,
                 color: TColors.white,
               ),
-              const SizedBox(width: TSizes.spaceBtwItems,),
+              const SizedBox(
+                width: TSizes.spaceBtwItems,
+              ),
               Text('2', style: Theme.of(context).textTheme.titleSmall),
-              const SizedBox(width: TSizes.spaceBtwItems,),
+              const SizedBox(
+                width: TSizes.spaceBtwItems,
+              ),
               const TCircularIcon(
                 icon: Iconsax.add,
                 backgroundColor: TColors.black,
@@ -45,7 +50,11 @@ class TBottomAddToCart extends StatelessWidget {
             ],
           ),
           ElevatedButton(
-            onPressed: (){},
+            onPressed: () async {
+              await UserRepository.instance
+                  .addProductToCart(null, 2, "0DLRwpJP0r1tU5iyaXUc");
+              print("them vao cart oke r nhe");
+            },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(TSizes.md),
               backgroundColor: TColors.black,

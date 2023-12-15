@@ -63,8 +63,8 @@ class ProductController extends GetxController {
     return await _productRepo.queryPopularProducts();
   }
 
-  Future<List<ProductModel>> getProductByCategory(String category) async {
-    return await _productRepo.queryPopularProducts();
+  Future<List<ProductModel>> getProductByCategory(String categoryID) async {
+    return await _productRepo.queryProductByCategory(categoryID);
   }
 
   Future<List<ProductReviewModel>> getReviewByProductID(

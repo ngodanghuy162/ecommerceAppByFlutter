@@ -97,11 +97,8 @@ class ProductRepository extends GetxController {
     try {
       // Sử dụng query để tìm document có các trường dữ liệu giống với productModel
       final querySnapshot = await productCollection
-          .where('brand_id', isEqualTo: productModel.brand_id)
           .where('description', isEqualTo: productModel.description)
           .where('name', isEqualTo: productModel.name)
-          .where('product_category_id',
-              isEqualTo: productModel.product_category_id)
           .get();
 
       // Kiểm tra xem có document nào khớp hay không
@@ -128,6 +125,15 @@ class ProductRepository extends GetxController {
   Future<List<ProductModel>> queryPopularProducts() async {
     final snapshot =
         await productCollection.where('popular', isEqualTo: true).get();
+    final productData =
+        snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
+    return productData;
+  }
+
+  Future<List<ProductModel>> queryProductByCategory(String categoryID) async {
+    final snapshot = await productCollection
+        .where('product_category_id', isEqualTo: categoryID)
+        .get();
     final productData =
         snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
     return productData;

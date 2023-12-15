@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
@@ -17,11 +18,12 @@ import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen(
-      {super.key,
-      required this.product,
-      required this.brand,
-      required this.listVariants});
+  const ProductDetailScreen({
+    super.key,
+    required this.product,
+    required this.brand,
+    required this.listVariants,
+  });
   final ProductModel product;
   final BrandModel brand;
   final List<ProductVariantModel> listVariants;
@@ -33,6 +35,7 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final brandController = Get.put(BrandController());
   final productController = Get.put(ProductController());
+  final userController = Get.put(UserRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -83,15 +86,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     listVariants: widget.listVariants,
                     product: widget.product,
                   ),
-                  const SizedBox(
-                    height: TSizes.spaceBtwSections,
-                  ),
 
-                  /// Checkout Button
-                  SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {}, child: const Text('Checkout'))),
                   const SizedBox(
                     height: TSizes.spaceBtwSections,
                   ),
@@ -115,6 +110,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     lessStyle: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w800),
                   ),
+                  const SizedBox(
+                    height: TSizes.spaceBtwSections,
+                  ),
+
+                  /// Checkout Button
+                  SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          onPressed: () {}, child: const Text('Checkout'))),
 
                   /// Reviews
                   const Divider(),

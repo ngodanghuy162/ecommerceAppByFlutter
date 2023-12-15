@@ -30,7 +30,6 @@ class _TProductAttributesState extends State<TProductAttributes> {
   List<String> colorList = [];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     colorList.add(widget.listVariants[0].color);
     for (int i = 0; i < widget.listVariants.length; i++) {

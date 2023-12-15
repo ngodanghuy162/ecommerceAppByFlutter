@@ -1,4 +1,5 @@
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/styles/shadows.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
@@ -39,9 +40,9 @@ class TProductCardVertical extends StatelessWidget {
     }
     return GestureDetector(
       onTap: () => Get.to(() => ProductDetailScreen(
-            listVariants: modelDetail!.listVariants,
-            product: modelDetail!.product,
-            brand: modelDetail!.brand,
+            listVariants: modelDetail.listVariants,
+            product: modelDetail.product,
+            brand: modelDetail.brand,
           )),
       child: Container(
         width: 180,
@@ -71,20 +72,21 @@ class TProductCardVertical extends StatelessWidget {
                   backgroundColor: TColors.secondary.withOpacity(0.8),
                   padding: const EdgeInsets.symmetric(
                       horizontal: TSizes.sm, vertical: TSizes.xs),
-                  child: Text('${modelDetail!.product.discount!}%',
+                  child: Text('${modelDetail.product.discount!}%',
                       style: Theme.of(context).textTheme.labelLarge!.apply(
                             color: TColors.black,
                           )),
                 ),
               ),
               // -- Favourite Button
-              const Positioned(
+              Positioned(
                 top: 0,
                 right: 0,
                 child: TCircularIcon(
-                  // onPressed: () {
-                  //   userController.addOrRemoveProductToWishlist(product!);
-                  // },
+                  onPressed: () {
+                    userController
+                        .addOrRemoveProductToWishlist(modelDetail.product);
+                  },
                   icon: Iconsax.heart5,
                   color: Colors.red,
                 ),
@@ -95,13 +97,13 @@ class TProductCardVertical extends StatelessWidget {
             padding: const EdgeInsets.only(left: TSizes.sm),
             child: Column(children: [
               TProductTitleText(
-                title: modelDetail!.product.name,
+                title: modelDetail.product.name,
                 smallSize: true,
               ),
               const SizedBox(height: TSizes.spaceBtwItems / 2),
               TBrandTitleWithVerifiedIcon(
-                  title: modelDetail!.brand.name,
-                  showVerify: modelDetail!.brand.isVerified),
+                  title: modelDetail.brand.name,
+                  showVerify: modelDetail.brand.isVerified),
             ]),
           ),
 
@@ -116,8 +118,8 @@ class TProductCardVertical extends StatelessWidget {
                 padding: const EdgeInsets.only(left: TSizes.sm),
                 child: TProductPriceText(
                   price: minPrice == maxPrice
-                      ? priceAfterDis(minPrice, modelDetail!.product.discount!)
-                      : " ${priceAfterDis(minPrice, modelDetail!.product.discount!)} - ${priceAfterDis(maxPrice, modelDetail!.product.discount!)}",
+                      ? priceAfterDis(minPrice, modelDetail.product.discount!)
+                      : " ${priceAfterDis(minPrice, modelDetail.product.discount!)} - ${priceAfterDis(maxPrice, modelDetail.product.discount!)}",
                 ),
               ),
               //add to cart button
