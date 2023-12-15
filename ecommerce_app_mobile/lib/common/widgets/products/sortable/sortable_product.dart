@@ -1,8 +1,9 @@
-import 'dart:ffi';
-
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -26,6 +27,7 @@ class TSortableProducts extends StatefulWidget {
 class _TSortableProductsState extends State<TSortableProducts> {
   final productController = Get.put(ProductController());
   final brandController = Get.put(BrandController());
+  final variantController = Get.put(ProductVariantController());
   String status = '';
 
   @override
@@ -41,14 +43,7 @@ class _TSortableProductsState extends State<TSortableProducts> {
               status = value!;
             });
           },
-          items: [
-            'Name',
-            'Higher Price',
-            'Lower Price',
-            'Sale',
-            'Newest',
-            'Popularity'
-          ]
+          items: ['Name', 'Higher Price', 'Lower Price', 'Sale']
               .map((option) =>
                   DropdownMenuItem(value: option, child: Text(option)))
               .toList(),
@@ -62,19 +57,53 @@ class _TSortableProductsState extends State<TSortableProducts> {
 
         /// Product
         FutureBuilder(
-            future: productController.getAllProductbyBrand(
-                "${brandController.choosedBrand.value.id}"),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
+            future: productController
+                .getAllProductbyBrand(//* GET ALL PRODUCT BY BRAND
+                    "${brandController.choosedBrand.value.id}"),
+            builder: (context, snapshot1) {
+              if (snapshot1.connectionState == ConnectionState.done) {
+                if (snapshot1.hasData) {
+                  List<ProductModel> listProducts = snapshot1.data!;
+                  if (status == 'Name') {
+                    listProducts.sort(((a, b) => a.name.compareTo(b.name)));
+                  } else if (status == 'Higher Price') {
+                  } else if (status == 'Lower Price') {
+                  } else if (status == 'Sale') {
+                    listProducts
+                        .sort(((a, b) => b.discount!.compareTo(a.discount!)));
+                  }
+
                   return TGridLayout(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (_, index) => TProductCardVertical(
-                            product: snapshot.data![index],
-                            brand: brandController.choosedBrand.value,
-                          ));
-                } else if (snapshot.hasError) {
-                  return Center(child: Text(snapshot.error.toString()));
+                      itemCount: snapshot1.data!.length,
+                      itemBuilder: (_, index) => FutureBuilder(
+                          future: variantController.getVariantByIDs(
+                              //* GET ALL VARIANTS BY PRODUCT IDS
+                              listProducts[index].variants_path),
+                          builder: (context, snapshot2) {
+                            if (snapshot2.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot2.hasData) {
+                                List<ProductVariantModel> listVariants =
+                                    snapshot2.data!;
+                                return TProductCardVertical(
+                                    modelDetail: DetailProductModel(
+                                        brand:
+                                            brandController.choosedBrand.value,
+                                        listVariants: listVariants,
+                                        product: listProducts[index]));
+                              } else if (snapshot2.hasError) {
+                                return Center(
+                                    child: Text(snapshot2.error.toString()));
+                              } else {
+                                return const Center(
+                                    child: Text("smt went wrong"));
+                              }
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          }));
+                } else if (snapshot1.hasError) {
+                  return Center(child: Text(snapshot1.error.toString()));
                 } else {
                   return const Center(child: Text("smt went wrong"));
                 }
@@ -82,27 +111,6 @@ class _TSortableProductsState extends State<TSortableProducts> {
                 return const CircularProgressIndicator();
               }
             }),
-        FutureBuilder(
-            future: productController.getAllProductbyBrand(
-                "Brand/${brandController.choosedBrand.value.id}"),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  return TGridLayout(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (_, index) => TProductCardVertical(
-                            product: snapshot.data![index],
-                            brand: brandController.choosedBrand.value,
-                          ));
-                } else if (snapshot.hasError) {
-                  return Center(child: Text(snapshot.error.toString()));
-                } else {
-                  return const Center(child: Text("smt went wrong"));
-                }
-              } else {
-                return const CircularProgressIndicator();
-              }
-            })
       ],
     );
   }

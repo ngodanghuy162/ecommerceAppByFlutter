@@ -15,20 +15,25 @@ class ReplyReviewRepository extends GetxController {
         .collection('Reply')
         .add(replyReviewModel.toJson())
         .catchError((error, stacktrace) {
-          () => Get.snackbar(
-        'Lỗi',
-        'Có gì đó không đúng, thử lại?',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent.withOpacity(0.1),
-        colorText: Colors.red,
-      );
+      () => Get.snackbar(
+            'Lỗi',
+            'Có gì đó không đúng, thử lại?',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.redAccent.withOpacity(0.1),
+            colorText: Colors.red,
+          );
     });
   }
 
-  Future<List<ReplyReviewModel>> getAllReplyReview({String? productId}) async {
-    final snapshot = await _db.collection('Product').doc('3o2frQlDs3Zh75qLF0c9').collection('Reply').get();
-    final replyData = snapshot.docs.map((e) => ReplyReviewModel.fromSnapShot(e)).toList();
+  Future<List<ReplyReviewModel>> getAllReplyReview(
+      {required String productId}) async {
+    final snapshot = await _db
+        .collection('Product')
+        .doc(productId)
+        .collection('Reply')
+        .get();
+    final replyData =
+        snapshot.docs.map((e) => ReplyReviewModel.fromSnapShot(e)).toList();
     return replyData;
-
   }
 }

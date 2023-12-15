@@ -1,12 +1,16 @@
 import 'package:ecommerce_app_mobile/common/widgets/brands/brand_show_case.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_category_controller.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TCategoryTab extends StatelessWidget {
   TCategoryTab({super.key, required this.topic});
   final String topic;
+
+  final categoriesController = Get.put(ProductCategoryController());
 
   @override
   Widget build(BuildContext context) {

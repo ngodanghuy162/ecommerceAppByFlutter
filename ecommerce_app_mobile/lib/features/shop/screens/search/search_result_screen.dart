@@ -49,11 +49,12 @@ class SearchResultScreen extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
-                    return TGridLayout(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (_, index) => TProductCardVertical(
-                              product: snapshot.data![index],
-                            ));
+                    // return TGridLayout(
+                    //     itemCount: snapshot.data!.length,
+                    //     itemBuilder: (_, index) => TProductCardVertical(
+                    //           product: snapshot.data![index],
+                    //         )); //TODO query and add
+                    return Container();
                   } else if (snapshot.hasError) {
                     return Center(child: Text(snapshot.error.toString()));
                   } else {

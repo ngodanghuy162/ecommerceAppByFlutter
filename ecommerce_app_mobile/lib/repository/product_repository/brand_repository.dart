@@ -37,8 +37,10 @@ class BrandRepository extends GetxController {
   }
 
   Future<BrandModel> queryBrandById(String brandId) async {
-    final snapshot =
-        await _db.collection('Brand').where('Brand', isEqualTo: brandId).get();
+    final snapshot = await _db
+        .collection('Brand')
+        .where(FieldPath.documentId, isEqualTo: brandId)
+        .get();
     final brandData =
         snapshot.docs.map((e) => BrandModel.fromSnapShot(e)).single;
     return brandData;
