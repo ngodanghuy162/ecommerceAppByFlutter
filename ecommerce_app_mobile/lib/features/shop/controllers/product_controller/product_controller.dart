@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_review_model.dart';
+import 'package:ecommerce_app_mobile/Service/Model/product_review_model/reply_review_model.dart';
 import 'package:ecommerce_app_mobile/features/admin/screens/display_all_product.dart/widgets/product_variant.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
@@ -63,6 +65,11 @@ class ProductController extends GetxController {
 
   Future<List<ProductModel>> getProductByCategory(String category) async {
     return await _productRepo.queryPopularProducts();
+  }
+
+  Future<List<ProductReviewModel>> getReviewByProductID(
+      String productID) async {
+    return await _productRepo.queryReviewByProductID(productID);
   }
 }
 

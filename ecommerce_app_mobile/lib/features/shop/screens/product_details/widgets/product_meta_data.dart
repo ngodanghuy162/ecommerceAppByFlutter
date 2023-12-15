@@ -14,14 +14,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TProductMetaData extends StatelessWidget {
-  TProductMetaData(
-      {super.key,
-      required this.nameBrand,
-      required this.product,
-      required this.maxPrice,
-      required this.minPrice,
-      required this.discount,
-      this.isVerified = false});
+  TProductMetaData({
+    super.key,
+    required this.nameBrand,
+    required this.product,
+    required this.maxPrice,
+    required this.minPrice,
+    required this.discount,
+    this.isVerified = false,
+    required this.totalStock,
+  });
 
   final String nameBrand;
   final ProductModel product;
@@ -30,6 +32,7 @@ class TProductMetaData extends StatelessWidget {
   final double minPrice;
   final int discount;
   final bool isVerified;
+  final int totalStock;
 
   @override
   Widget build(BuildContext context) {

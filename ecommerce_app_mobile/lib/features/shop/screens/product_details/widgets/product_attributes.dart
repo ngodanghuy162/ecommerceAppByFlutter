@@ -26,10 +26,13 @@ class TProductAttributes extends StatefulWidget {
 }
 
 class _TProductAttributesState extends State<TProductAttributes> {
+  bool isViewAllDescription = false;
+
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     ProductVariantModel variant = widget.listVariants[widget.index];
+
     return Column(
       children: [
         /// Selected Attributes
@@ -41,9 +44,15 @@ class _TProductAttributesState extends State<TProductAttributes> {
                 /// Title, Price Stack status
                 Row(
                   children: [
-                    const TSectionHeading(
+                    TSectionHeading(
                       title: 'Variation',
-                      showActionButton: false,
+                      showActionButton: true,
+                      onPressed: () {
+                        setState(() {
+                          isViewAllDescription = !isViewAllDescription;
+                        });
+                        print(isViewAllDescription);
+                      },
                     ),
                     const SizedBox(
                       width: TSizes.spaceBtwItems,
@@ -73,8 +82,8 @@ class _TProductAttributesState extends State<TProductAttributes> {
 
                             /// Sale Price
                             TProductPriceText(
-                                price:
-                                    "${variant.price * ((100 - widget.product.discount!) / 100)}"),
+                                price: priceAfterDis(
+                                    variant.price, widget.product.discount!)),
                           ],
                         ),
 
@@ -85,10 +94,19 @@ class _TProductAttributesState extends State<TProductAttributes> {
                               title: 'Stock : ',
                               smallSize: true,
                             ),
-                            Text(
-                              'In Stock',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
+                            variant.quantity > 0
+                                ? Text(
+                                    'In Stock',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  )
+                                : Text(
+                                    'Out of Stock',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(color: Colors.red.shade900),
+                                  ),
                           ],
                         ),
                       ],
@@ -98,9 +116,9 @@ class _TProductAttributesState extends State<TProductAttributes> {
 
                 /// Variation Description
                 TProductTitleText(
-                  title: widget.product.description,
+                  title: variant.descriptionVariant,
                   smallSize: true,
-                  maxLines: 4,
+                  maxLines: isViewAllDescription ? 10 : 4,
                 )
               ],
             )),
@@ -163,4 +181,9 @@ class _TProductAttributesState extends State<TProductAttributes> {
       ],
     );
   }
+}
+
+String priceAfterDis(double price, int discount) {
+  double res = price * ((100 - discount) / 100);
+  return res.toStringAsFixed(1);
 }

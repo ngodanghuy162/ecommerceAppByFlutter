@@ -78,7 +78,7 @@ class StoreScreen extends StatelessWidget {
                                 ConnectionState.done) {
                               if (snapshot.hasData) {
                                 return TGridLayout(
-                                  itemCount: snapshot.data!.length,
+                                  itemCount: 4,
                                   mainAxisExtent: 80,
                                   itemBuilder: (_, index) {
                                     return TBrandCard(

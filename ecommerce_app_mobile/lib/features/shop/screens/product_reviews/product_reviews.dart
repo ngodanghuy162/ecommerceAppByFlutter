@@ -5,6 +5,7 @@ import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/ratings/rating_indicator.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_review_controller/product_review_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_review_controller/reply_review_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/widgets/rating_progress_indicator.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/widgets/user_review_card.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -12,7 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProductReviewsScreen extends StatefulWidget {
-  const ProductReviewsScreen({super.key});
+  const ProductReviewsScreen({super.key, required this.product});
+  final ProductModel product;
 
   @override
   State<ProductReviewsScreen> createState() => _ProductReviewsScreenState();
@@ -41,8 +43,8 @@ class _ProductReviewsScreenState extends State<ProductReviewsScreen> {
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: FutureBuilder(
           future: Future.wait([
-            reviewController.getAllReview(),
-            replyController.getAllReplyReview()
+            reviewController.getAllReview(widget.product.id!),
+            replyController.getAllReplyReview(widget.product.id!)
           ]),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {

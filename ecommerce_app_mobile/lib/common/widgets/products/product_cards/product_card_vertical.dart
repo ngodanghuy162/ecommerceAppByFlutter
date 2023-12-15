@@ -8,9 +8,7 @@ import 'package:ecommerce_app_mobile/common/widgets/texts/product_title_text.dar
 import 'package:ecommerce_app_mobile/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_product_model.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/product_detail_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
@@ -28,12 +26,12 @@ class TProductCardVertical extends StatelessWidget {
   final productController = Get.put(ProductController());
   final userController = Get.put(UserRepository());
 
-  final DetailProductModel? modelDetail;
+  final DetailProductModel modelDetail;
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
-    List<ProductVariantModel> listVariants = modelDetail!.listVariants;
+    List<ProductVariantModel> listVariants = modelDetail.listVariants;
     var minPrice = double.infinity, maxPrice = 0.0;
     for (var e in listVariants) {
       minPrice = e.price < minPrice ? e.price : minPrice;
