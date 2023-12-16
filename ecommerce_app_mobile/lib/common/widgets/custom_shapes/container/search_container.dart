@@ -34,7 +34,7 @@ class TSearchContainer extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Padding(
         padding: padding,
         child: Container(
@@ -51,31 +51,34 @@ class TSearchContainer extends StatelessWidget {
           ),
           child: Row(
             children: [
-              IconButton(
-                icon: Icon(icon, color: TColors.darkerGrey),
-                onPressed: () {
-                  log("An an nnut tim kiem");
-                  if (SearchControllerX.instance.keySearch.text.isNotEmpty) {
-                    log("Go to search RS");
-                    log("keySearch o container: ${searchController.keySearch.text}");
-                    searchController.isSearching = true;
-                    Get.off(() => SearchResultScreen(
-                          keySearch: SearchControllerX.instance.keySearch.text,
-                        ));
-                  }
-                },
+              GestureDetector(
+                onTap: onTap,
+                child: IconButton(
+                  icon: Icon(icon, color: TColors.darkerGrey),
+                  onPressed: () {
+                    if (SearchControllerX.instance.keySearch.text.isNotEmpty) {
+                      searchController.isSearching = true;
+                      SearchControllerX.instance.updateSearchKey();
+                      print(Get.currentRoute.toString());
+                      Get.to(() => SearchResultScreen(
+                            keySearch:
+                                SearchControllerX.instance.keySearch.text,
+                          ));
+                    }
+                  },
+                ),
               ),
               const SizedBox(width: TSizes.spaceBtwItems),
               Expanded(
                 child: TextField(
-                  controller: searchController.keySearch,
+                  controller: SearchControllerX.instance.keySearch,
                   decoration: InputDecoration(
                     hintText: 'Search in Store',
                     hintStyle: Theme.of(context).textTheme.bodySmall,
                   ),
                   onTap: () {
-                    if (Get.currentRoute != SearchingScreen ||
-                        Get.currentRoute != SearchResultScreen) {
+                    if (Get.currentRoute.runtimeType != SearchingScreen ||
+                        Get.currentRoute.runtimeType != SearchResultScreen) {
                       if (searchController.isSearching == false) {
                         searchController.isSearching == true;
                         print("Go to searching");
