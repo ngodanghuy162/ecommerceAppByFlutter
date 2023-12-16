@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_review_model.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
@@ -20,12 +18,15 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../../Service/repository/user_repository.dart';
+
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen(
-      {super.key,
-      required this.product,
-      required this.brand,
-      required this.listVariants});
+  const ProductDetailScreen({
+    super.key,
+    required this.product,
+    required this.brand,
+    required this.listVariants,
+  });
   final ProductModel product;
   final BrandModel brand;
   final List<ProductVariantModel> listVariants;
@@ -38,12 +39,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final brandController = Get.put(BrandController());
   final productController = Get.put(ProductController());
   final reviewController = Get.put(ProductReviewController());
+  final userController = Get.put(UserRepository());
 
   @override
   Widget build(BuildContext context) {
     //final dark = THelperFunctions.isDarkMode(context);
 
-    int indexCurrentVariant = 0;
     var minPrice = double.infinity, maxPrice = 0.0;
     int totalStock = 0;
     for (var variant in widget.listVariants) {
@@ -138,19 +139,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                   /// Attributes
                   TProductAttributes(
-                    index: indexCurrentVariant,
                     listVariants: widget.listVariants,
                     product: widget.product,
                   ),
-                  const SizedBox(
-                    height: TSizes.spaceBtwSections,
-                  ),
 
-                  /// Checkout Button
-                  SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {}, child: const Text('Checkout'))),
                   const SizedBox(
                     height: TSizes.spaceBtwSections,
                   ),
@@ -174,6 +166,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     lessStyle: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w800),
                   ),
+                  const SizedBox(
+                    height: TSizes.spaceBtwSections,
+                  ),
+
+                  /// Checkout Button
+                  SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                          onPressed: () {}, child: const Text('Checkout'))),
 
                   /// Reviews
                   const Divider(),

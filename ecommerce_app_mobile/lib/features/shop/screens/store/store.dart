@@ -108,7 +108,7 @@ class StoreScreen extends StatelessWidget {
                 /// Tabs
                 bottom: const TTabBar(
                   tabs: [
-                    Tab(child: Text('Sport')),
+                    Tab(child: Text('Shoe')),
                     Tab(child: Text('Furniture')),
                     Tab(child: Text('Electronics')),
                     Tab(child: Text('Clothes')),
@@ -122,7 +122,7 @@ class StoreScreen extends StatelessWidget {
           /// Body
           body: TabBarView(
             children: [
-              TCategoryTab(topic: 'Sport'),
+              TCategoryTab(topic: 'Shoe'),
               TCategoryTab(topic: 'Furniture'),
               TCategoryTab(topic: 'Electronics'),
               TCategoryTab(topic: 'Clothes'),
