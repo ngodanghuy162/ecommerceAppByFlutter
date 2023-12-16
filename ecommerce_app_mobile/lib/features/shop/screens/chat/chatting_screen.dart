@@ -73,6 +73,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                         fit: BoxFit.contain,
                       ),
                     ),
+                    const SizedBox(width: TSizes.spaceBtwItems),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
