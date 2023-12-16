@@ -9,21 +9,24 @@ class MessageRepository extends GetxController {
   final _db = FirebaseFirestore.instance;
 
   Stream<List<MessageModel>> getAllMessageByChatId(String chatId) async* {
-    final messageCollectionRef = await _db.collection('Chat').doc(chatId).collection('Message');
+    while(true) {
+      await Future.delayed(const Duration(seconds: 3));
+      final messageCollectionRef = await _db.collection('Chat').doc(chatId).collection('Message');
 
-    // Kiểm tra xem collection đã tồn tại hay chưa
-    final isCollectionExists = await messageCollectionRef.snapshots().isEmpty;
+      // Kiểm tra xem collection đã tồn tại hay chưa
+      final isCollectionExists = await messageCollectionRef.snapshots().isEmpty;
 
-    // Nếu collection không tồn tại, tạo mới nó
-    if (isCollectionExists) {
-      await messageCollectionRef.add({}); // Thêm collection trống
+      // Nếu collection không tồn tại, tạo mới nó
+      if (isCollectionExists) {
+        await messageCollectionRef.add({}); // Thêm collection trống
+      }
+
+      final snapshot = await messageCollectionRef.orderBy('time').get();
+
+      final messageData =
+      snapshot.docs.map((e) => MessageModel.fromSnapShot(e)).toList();
+      yield messageData;
     }
-
-    final snapshot = await messageCollectionRef.orderBy('time').get();
-
-    final messageData =
-    snapshot.docs.map((e) => MessageModel.fromSnapShot(e)).toList();
-    yield messageData;
   }
 
   Future<void> sendMessage(MessageModel messageModel, String chatId) async {

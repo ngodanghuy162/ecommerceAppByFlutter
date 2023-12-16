@@ -12,6 +12,7 @@ import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_
 import 'package:ecommerce_app_mobile/features/shop/screens/chat/widget/chat_bubble.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
+import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,13 +34,13 @@ class ChattingScreen extends StatefulWidget {
   final double minPrice;
   final int discount;
 
-
   @override
   State<ChattingScreen> createState() => _ChattingScreenState();
 }
 
 class _ChattingScreenState extends State<ChattingScreen> {
-  final TextEditingController _textEditingControllerController = TextEditingController();
+  final TextEditingController _textEditingControllerController =
+      TextEditingController();
   final variantsController = Get.put(ProductVariantController());
   final _authRepo = Get.put(AuthenticationRepository());
   final messageController = Get.put(MessageController());
@@ -64,22 +65,25 @@ class _ChattingScreenState extends State<ChattingScreen> {
   }
 
   Future<void> getChatId() async {
-    chatId = await chatController.getChatIfExist(_authRepo.firebaseUser.value!.email!, widget.product.shopEmail);
-    if(chatId == null) {
-      ChatModel chatModel = ChatModel(userEmail: _authRepo.firebaseUser.value!.email!, shopEmail: widget.product.shopEmail);
+    chatId = await chatController.getChatIfExist(
+        _authRepo.firebaseUser.value!.email!, widget.product.shopEmail);
+    if (chatId == null) {
+      ChatModel chatModel = ChatModel(
+          userEmail: _authRepo.firebaseUser.value!.email!,
+          shopEmail: widget.product.shopEmail);
       chatId = await chatController.createNewChat(chatModel);
     }
     setState(() {});
   }
 
   void sendMessage() async {
-    if(_textEditingControllerController.text.isNotEmpty && _textEditingControllerController.text != '') {
+    if (_textEditingControllerController.text.isNotEmpty &&
+        _textEditingControllerController.text != '') {
       MessageModel messageModel = MessageModel(
           emailFrom: _authRepo.firebaseUser.value!.email!,
           emailTo: widget.product.shopEmail,
           time: Timestamp.now(),
-          content: _textEditingControllerController.text
-      );
+          content: _textEditingControllerController.text);
       await messageController.sendMessage(messageModel, chatId!);
       _textEditingControllerController.clear();
       setState(() {});
@@ -89,7 +93,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const TAppBar(title: Text("Chatting with shop", style: TextStyle(color: TColors.white),), showBackArrow: true, backgroundColor: Colors.blue),
+      appBar: const TAppBar(
+          title: Text(
+            "Chatting with shop",
+            style: TextStyle(color: TColors.white),
+          ),
+          showBackArrow: true,
+          backgroundColor: Colors.blue),
       body: Column(
         children: [
           TRoundedContainer(
@@ -145,21 +155,33 @@ class _ChattingScreenState extends State<ChattingScreen> {
             ),
           ),
           const Divider(height: 1),
-          const SizedBox(height: TSizes.spaceBtwItems,),
+          const SizedBox(
+            height: TSizes.spaceBtwItems,
+          ),
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                /// Message
-                (chatId != null && chatId != '')
-                    ? _buildMessageList()
-                    : const CircularProgressIndicator(),
-                //Expanded(child: Text('Hello')),
+            child: SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: Stack(
+                children: [
+                  /// Message
+                  (chatId != null && chatId != '')
+                      ? _buildMessageList()
+                      : const CircularProgressIndicator(),
 
-                // _buildMessageItem(),
-                /// User input
-                _buildMessageInput(),
-              ],
+                  /// User input
+                  Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: Container(
+                        color: Colors.white,
+                        margin: EdgeInsets.all(8.0),
+                        width: THelperFunctions.screenWidth(),
+                        child: _buildMessageInput(),
+                        // child: Row(children: [Text('keke')],),
+                      )),
+                ],
+              ),
             ),
           )
         ],
@@ -172,29 +194,31 @@ class _ChattingScreenState extends State<ChattingScreen> {
     return StreamBuilder(
       stream: messageController.getAllMessageByChatId(chatId!),
       builder: (context, snapshot) {
-        if(snapshot.hasError) {
+        if (snapshot.hasError) {
           return const Text('Error');
         }
 
-        if(snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('Loading');
         }
 
         messageList = snapshot.data!;
 
-
         return ListView.builder(
           cacheExtent: messageList.length.toDouble(),
           shrinkWrap: true,
-          itemCount: messageList.length,
+          itemCount: messageList.length + 1,
           itemBuilder: (context, index) {
-            return _buildMessageItem(messageList[index]);
+            return index == messageList.length
+                ? const SizedBox(
+                    height: 75,
+                  )
+                : _buildMessageItem(messageList[index]);
           },
         );
       },
     );
   }
-
 
   /// Build message item
   Widget _buildMessageItem(MessageModel messageModel) {
@@ -210,12 +234,20 @@ class _ChattingScreenState extends State<ChattingScreen> {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
-          crossAxisAlignment: checkUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          mainAxisAlignment: checkUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+          crossAxisAlignment:
+              checkUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          mainAxisAlignment:
+              checkUser ? MainAxisAlignment.end : MainAxisAlignment.start,
           children: [
             Text(messageModel.emailFrom),
-            ChatBubble(message: messageModel.content, checkUser: checkUser,),
-            Text(messageModel.formattedDate, style: const TextStyle(fontSize: 12),),
+            ChatBubble(
+              message: messageModel.content,
+              checkUser: checkUser,
+            ),
+            Text(
+              messageModel.formattedDate,
+              style: const TextStyle(fontSize: 12),
+            ),
           ],
         ),
       ),
@@ -224,38 +256,36 @@ class _ChattingScreenState extends State<ChattingScreen> {
 
   /// Build message input
   Widget _buildMessageInput() {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _textEditingControllerController,
-              decoration: const InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: TColors.darkerGrey,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(18)),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: TextField(
+            controller: _textEditingControllerController,
+            decoration: const InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: TColors.darkerGrey,
                 ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: TColors.darkerGrey,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(18)),
-                ),
-                hintText: 'Nhập tin nhắn của bạn',
+                borderRadius: BorderRadius.all(Radius.circular(18)),
               ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: TColors.darkerGrey,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(18)),
+              ),
+              hintText: 'Nhập tin nhắn của bạn',
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.send),
-            onPressed: () {
-              sendMessage();
-            },
-          )
-        ],
-      ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.send),
+          onPressed: () {
+            sendMessage();
+          },
+        )
+      ],
     );
   }
 }
