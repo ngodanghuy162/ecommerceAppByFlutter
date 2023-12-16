@@ -74,11 +74,17 @@ dependencies:
   flutter_paypal: ^0.2.0
   contained_tab_bar_view: ^0.8.0
   http: ^0.13.6
-  flutter_google_places_hoc081098: ^1.2.0
+  flutter_google_places_hoc081098:
+    path: ./flutter_google_places_hoc081098-1.2.0/
   google_api_headers: ^1.6.0
-  google_maps_webservice: ^0.0.20-nullsafety.5
+  google_maps_webservice:
+    path: ./flutter_google_places_hoc081098-1.2.0/google_maps_webservice-0.0.20-nullsafety.5/
   geolocator: ^10.1.0
-  google_geocoding_api: ^1.4.1
+  google_geocoding_api:
+    path: ./google_geocoding_api-1.4.1/
+  rxdart_ext: ^0.2.9
+  listenable_stream: ^1.1.0
+  flutter_bloc_pattern: ^2.3.0
 
 dev_dependencies:
   flutter_test:

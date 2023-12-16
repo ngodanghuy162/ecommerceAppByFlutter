@@ -50,7 +50,7 @@ class AddressController extends GetxController {
     final currentLocation = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
-    const String googelApiKey = 'AIzaSyDzp4uGlbJQVPVNlJHouhHQKEPc_DRodD0';
+    const String googelApiKey = 'bn7OlF8CF3syL2gzOFztPdJVLtHBLlxzAQd2VcaE';
     const bool isDebugMode = true;
     final api = GoogleGeocodingApi(
       googelApiKey,
@@ -68,19 +68,21 @@ class AddressController extends GetxController {
 
     for (GoogleGeocodingAddressComponent element
         in reversedSearchResults.results.toList().first.addressComponents) {
-      if (element.types.contains('administrative_area_level_2') ||
-          element.types.contains('administrative_area_level_1') ||
-          element.types.contains('country')) {
-        break;
-      } else {
-        if (element.types.contains('street_number') ||
-            element.types.contains('plus_code')) {
-          continue;
-        }
-        streetList.add(element.longName);
-      }
+      // if (element.types.contains('administrative_area_level_2') ||
+      //     element.types.contains('administrative_area_level_1') ||
+      //     element.types.contains('country')) {
+      //   break;
+      // } else {
+      //   if (element.types.contains('street_number') ||
+      //       element.types.contains('plus_code')) {
+      //     continue;
+      //   }
+      //   streetList.add(element.longName);
+      // }
+      streetList.add(element.longName);
     }
     street.text = streetList.join(', ');
+
     await SmartDialog.dismiss();
   }
 
@@ -218,36 +220,40 @@ class AddressController extends GetxController {
   Future<void> displayPrediction(
       Prediction? p, ScaffoldMessengerState messengerState) async {
     if (p == null) {
+      // print('p null');
       return;
     }
+    // print('p khong null');
 
     // get detail (lat/lng)
-    final _places = GoogleMapsPlaces(
-      apiKey: 'AIzaSyDzp4uGlbJQVPVNlJHouhHQKEPc_DRodD0',
+    final places = GoogleMapsPlaces(
+      apiKey: 'bn7OlF8CF3syL2gzOFztPdJVLtHBLlxzAQd2VcaE',
       apiHeaders: await const GoogleApiHeaders().getHeaders(),
     );
 
-    final detail = await _places.getDetailsByPlaceId(p.placeId!);
+    final detail = await places.getDetailsByPlaceId(p.placeId!);
     final geometry = detail.result.geometry!;
     lat = geometry.location.lat;
     lng = geometry.location.lng;
 
-    final streetList = [];
+    // final streetList = [];
 
-    for (AddressComponent element in detail.result.addressComponents) {
-      if (element.types.contains('administrative_area_level_2') ||
-          element.types.contains('administrative_area_level_1') ||
-          element.types.contains('country')) {
-        break;
-      } else {
-        if (element.types.contains('street_number') ||
-            element.types.contains('plus_code')) {
-          continue;
-        }
-        streetList.add(element.longName);
-      }
-    }
-    street.text = streetList.join(', ');
+    // for (AddressComponent element in detail.result.addressComponents) {
+    //   // if (element.types.contains('administrative_area_level_2') ||
+    //   //     element.types.contains('administrative_area_level_1') ||
+    //   //     element.types.contains('country')) {
+    //   //   break;
+    //   // } else {
+    //   //   if (element.types.contains('street_number') ||
+    //   //       element.types.contains('plus_code')) {
+    //   //     continue;
+    //   //   }
+    //   //   streetList.add(element.longName);
+    //   // }
+    //   streetList.add(element.longName);
+    // }
+    // street.text = streetList.join(', ');
+    street.text = p.description ?? '';
     Get.back();
   }
 }

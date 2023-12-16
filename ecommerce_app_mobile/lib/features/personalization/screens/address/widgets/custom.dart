@@ -1,20 +1,20 @@
 import 'package:ecommerce_app_mobile/features/personalization/controllers/address_controller.dart';
+import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/custom_flutter_google_places.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 import 'package:google_maps_webservice/places.dart';
 import 'package:uuid/uuid.dart';
 
-import 'custom_flutter_google_places.dart';
-
 // custom scaffold that handle search
 // basically your widget need to extends [GooglePlacesAutocompleteWidget]
-// and your state [GooglePlacesAutocompleteState]
+// and your state [GooglePla,,cesAutocompleteState]
 class CustomSearch extends PlacesAutocompleteWidget {
   CustomSearch({Key? key})
       : super(
           key: key,
-          apiKey: 'AIzaSyDzp4uGlbJQVPVNlJHouhHQKEPc_DRodD0',
+          apiKey: 'bn7OlF8CF3syL2gzOFztPdJVLtHBLlxzAQd2VcaE',
           sessionToken: const Uuid().v4(),
           language: 'vn',
           components: [Component(Component.country, 'vn')],
