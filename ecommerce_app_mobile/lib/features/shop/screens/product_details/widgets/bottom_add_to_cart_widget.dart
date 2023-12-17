@@ -67,4 +67,3 @@ class TBottomAddToCart extends StatelessWidget {
     );
   }
 }
-

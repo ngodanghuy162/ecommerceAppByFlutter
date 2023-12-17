@@ -73,9 +73,9 @@ class ShopRepository {
 
   Future<String> createShop(ShopModel shopModel) async {
     try {
-      // if (await UserRepository.instance.isSeller()) {
-      //   return "";
-      // }
+      if (await UserRepository.instance.isSeller()) {
+        return "";
+      }
       DocumentReference documentReference =
           await shopCollection.add(shopModel.toMap());
 

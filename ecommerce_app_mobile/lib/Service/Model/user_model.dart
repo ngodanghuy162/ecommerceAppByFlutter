@@ -12,7 +12,7 @@ class UserModel {
   String phoneNumber;
   bool isSell;
   List<Map<String, dynamic>> address;
-  List<DocumentReference> wishlist;
+  List<String> wishlist;
   Map<String, List<String>> voucher;
   List<Map<String, dynamic>> cart;
   double totalIncome;
@@ -33,7 +33,7 @@ class UserModel {
     this.avatar_imgURL =
         "https://i.pinimg.com/564x/d7/fe/2f/d7fe2f9979320bb57a1e4676eeb3e91a.jpg",
     List<Map<String, dynamic>>? address,
-    List<DocumentReference>? wishlist,
+    List<String>? wishlist,
     Map<String, List<String>>? voucher,
     List<Map<String, dynamic>>? cart,
     double? totalIncome,
@@ -62,7 +62,7 @@ class UserModel {
         lastName: data?['last_name'] ?? '',
         isSell: data?[isSellFieldName] ?? false,
         address: List<Map<String, dynamic>>.from(data?['address'] ?? []),
-        wishlist: List<DocumentReference>.from(data?['wishlist'] ?? []),
+        wishlist: List<String>.from(data?['wishlist'] ?? []),
         voucher: Map<String, List<String>>.from(data?['voucher'] ?? {}),
         cart: List<Map<String, dynamic>>.from(data?['cart'] ?? []),
         totalIncome: data?['totalIncome'] * 1.0 ?? 0.0,
