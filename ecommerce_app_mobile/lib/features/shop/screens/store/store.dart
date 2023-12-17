@@ -6,6 +6,7 @@ import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart_menu_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/brand/all_brands.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/brand/brand_products.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
@@ -77,6 +78,17 @@ class StoreScreen extends StatelessWidget {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               if (snapshot.hasData) {
+                                List<BrandModel> listProducts = snapshot.data!;
+                                listProducts
+                                    .sort(((a, b) => a.name.compareTo(b.name)));
+                                listProducts.sort((a, b) {
+                                  if (a.isVerified && !b.isVerified) {
+                                    return -1; // Put completed objects first
+                                  } else if (!a.isVerified && b.isVerified) {
+                                    return 1; // Put non-completed objects last
+                                  }
+                                  return 0; // Equal
+                                });
                                 return TGridLayout(
                                   itemCount: 4,
                                   mainAxisExtent: 80,

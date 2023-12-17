@@ -1,5 +1,4 @@
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
-import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/styles/shadows.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
@@ -20,19 +19,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class TProductCardVertical extends StatelessWidget {
+class TProductCardVertical extends StatefulWidget {
   TProductCardVertical({super.key, required this.modelDetail});
-
-  final variantController = Get.put(ProductVariantController());
-  final productController = Get.put(ProductController());
-  final userController = Get.put(UserRepository());
 
   final DetailProductModel modelDetail;
 
   @override
+  State<TProductCardVertical> createState() => _TProductCardVerticalState();
+}
+
+class _TProductCardVerticalState extends State<TProductCardVertical> {
+  final variantController = Get.put(ProductVariantController());
+
+  final productController = Get.put(ProductController());
+
+  final userController = Get.put(UserRepository());
+
+  @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
-    List<ProductVariantModel> listVariants = modelDetail.listVariants;
+    List<ProductVariantModel> listVariants = widget.modelDetail.listVariants;
     var minPrice = double.infinity, maxPrice = 0.0;
     for (var e in listVariants) {
       minPrice = e.price < minPrice ? e.price : minPrice;
@@ -40,9 +46,9 @@ class TProductCardVertical extends StatelessWidget {
     }
     return GestureDetector(
       onTap: () => Get.to(() => ProductDetailScreen(
-            listVariants: modelDetail.listVariants,
-            product: modelDetail.product,
-            brand: modelDetail.brand,
+            listVariants: widget.modelDetail.listVariants,
+            product: widget.modelDetail.product,
+            brand: widget.modelDetail.brand,
           )),
       child: Container(
         width: 180,
@@ -72,38 +78,39 @@ class TProductCardVertical extends StatelessWidget {
                   backgroundColor: TColors.secondary.withOpacity(0.8),
                   padding: const EdgeInsets.symmetric(
                       horizontal: TSizes.sm, vertical: TSizes.xs),
-                  child: Text('${modelDetail.product.discount!}%',
+                  child: Text('${widget.modelDetail.product.discount!}%',
                       style: Theme.of(context).textTheme.labelLarge!.apply(
                             color: TColors.black,
                           )),
                 ),
               ),
               // -- Favourite Button
+
               Positioned(
                 top: 0,
                 right: 0,
                 child: TCircularIcon(
                   onPressed: () {
-                    userController
-                        .addOrRemoveProductToWishlist(modelDetail.product);
+                    userController.addOrRemoveProductToWishlist(
+                        widget.modelDetail.product);
                   },
                   icon: Iconsax.heart5,
-                  color: Colors.red,
+                  color: true ? Colors.red : Color.fromARGB(255, 0, 0, 0),
                 ),
-              ),
+              )
             ]),
           ),
           Padding(
             padding: const EdgeInsets.only(left: TSizes.sm),
             child: Column(children: [
               TProductTitleText(
-                title: modelDetail.product.name,
+                title: widget.modelDetail.product.name,
                 smallSize: true,
               ),
               const SizedBox(height: TSizes.spaceBtwItems / 2),
               TBrandTitleWithVerifiedIcon(
-                  title: modelDetail.brand.name,
-                  showVerify: modelDetail.brand.isVerified),
+                  title: widget.modelDetail.brand.name,
+                  showVerify: widget.modelDetail.brand.isVerified),
             ]),
           ),
 
@@ -118,8 +125,9 @@ class TProductCardVertical extends StatelessWidget {
                 padding: const EdgeInsets.only(left: TSizes.sm),
                 child: TProductPriceText(
                   price: minPrice == maxPrice
-                      ? priceAfterDis(minPrice, modelDetail.product.discount!)
-                      : " ${priceAfterDis(minPrice, modelDetail.product.discount!)} - ${priceAfterDis(maxPrice, modelDetail.product.discount!)}",
+                      ? priceAfterDis(
+                          minPrice, widget.modelDetail.product.discount!)
+                      : " ${priceAfterDis(minPrice, widget.modelDetail.product.discount!)} - ${priceAfterDis(maxPrice, widget.modelDetail.product.discount!)}",
                 ),
               ),
               //add to cart button

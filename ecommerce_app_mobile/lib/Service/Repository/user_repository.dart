@@ -383,4 +383,8 @@ class UserRepository extends GetxController {
       return false;
     }
   }
+
+  // Future<Object> getWishList() async {
+  //   return await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+  // }
 }
