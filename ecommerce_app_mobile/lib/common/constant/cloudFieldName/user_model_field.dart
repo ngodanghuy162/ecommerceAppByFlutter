@@ -9,3 +9,4 @@ const emailFieldName = 'email';
 const userNameFieldName = 'user_name';
 const userIdFieldName = 'userId';
 const totalConsumptionFieldName = 'totalConsumption';
+const isSellFieldName = "is_sell";

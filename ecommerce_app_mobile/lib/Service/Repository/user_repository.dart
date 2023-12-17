@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import './user_model_field.dart';
+import '../../common/constant/cloudFieldName/user_model_field.dart';
 
 class UserRepository extends GetxController {
   static UserRepository get instance => Get.find();
@@ -156,7 +156,7 @@ class UserRepository extends GetxController {
   }
 
 //get user id (doc id cua user)
-  Future<String?> getCurrentUserDocId() async {
+  Future<String> getCurrentUserDocId() async {
     String email = FirebaseAuth.instance.currentUser!.email!;
     try {
       final snapshot =
@@ -174,7 +174,7 @@ class UserRepository extends GetxController {
           colorText: Colors.red,
         );
       }
-    } catch (error, stacktrace) {
+    } catch (error) {
       Get.snackbar(
         'Error',
         'An error occurred',
@@ -187,8 +187,31 @@ class UserRepository extends GetxController {
         print(error.toString());
       }
     }
+    return "No";
+  }
 
-    return "";
+  //cap nhat neu nguoi ban dang ki ban hang
+  Future<void> registerSellUser() async {
+    try {
+      String userId = await getCurrentUserDocId();
+      await _db
+          .collection("Users")
+          .doc(userId)
+          .update({isSellFieldName: true}).then((value) =>
+              Get.snackbar("Success", "You register to be shop successly"));
+    } catch (error) {
+      Get.snackbar(
+        'Error',
+        'An error occurred',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red,
+      );
+
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    }
   }
 
   Future<void> updateUserDetail(UserModel userModel) async {
@@ -251,6 +274,13 @@ class UserRepository extends GetxController {
         print(error.toString());
       }
     });
+  }
+
+  // kiem tra xem da dang ki ban hang cuha
+  Future<bool> isSeller() async {
+    final user =
+        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    return user.isSell;
   }
 
   Future<void> addProductToCart(ProductVariantModel? productVariant,

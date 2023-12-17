@@ -2,15 +2,12 @@ import 'dart:math';
 
 import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_review_model.dart';
 import 'package:ecommerce_app_mobile/Service/Model/product_review_model/reply_review_model.dart';
-import 'package:ecommerce_app_mobile/features/admin/screens/display_all_product.dart/widgets/product_variant.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
-import 'package:ecommerce_app_mobile/repository/product_repository/product_variant_repository.dart';
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {
