@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/common/widgets/brands/brand_card.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/brands/brand_card.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';

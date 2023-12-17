@@ -95,7 +95,8 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                         widget.modelDetail.product);
                   },
                   icon: Iconsax.heart5,
-                  color: true ? Colors.red : Color.fromARGB(255, 0, 0, 0),
+                  // ignore: dead_code
+                  color: true ? Colors.red : const Color.fromARGB(255, 0, 0, 0),
                 ),
               )
             ]),
