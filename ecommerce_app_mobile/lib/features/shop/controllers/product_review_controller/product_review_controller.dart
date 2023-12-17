@@ -10,7 +10,7 @@ class ProductReviewController extends GetxController {
     await _productReviewRepo.createReview(productReviewModel);
   }
 
-  Future<List<ProductReviewModel>> getAllReview() async {
-    return await _productReviewRepo.getAllReview();
+  Future<List<ProductReviewModel>> getAllReview(String productId) async {
+    return await _productReviewRepo.getAllReview(productId: productId);
   }
 }

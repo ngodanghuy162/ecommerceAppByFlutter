@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_review_model.dart';
+import 'package:ecommerce_app_mobile/Service/Model/product_review_model/reply_review_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,8 @@ class ProductRepository extends GetxController {
     required String product_category_id,
     List<dynamic>? rating,
     required List<String> variants_path,
+    bool popular = false,
+    required String shopEmail,
   }) async {
     try {
       final documentReference = await productCollection.add({
@@ -30,7 +34,9 @@ class ProductRepository extends GetxController {
         'name': name,
         'product_category_id': product_category_id,
         'rating': rating,
-        'variants_path': variants_path
+        'variants_path': variants_path,
+        'popular': popular,
+        'shopEmail': shopEmail
       });
 
       // Lấy ID của document vừa được thêm vào Firestore
@@ -54,6 +60,7 @@ class ProductRepository extends GetxController {
         product_category_id: product_category_id,
         rating: rating,
         variants_path: variants_path,
+        shopEmail: shopEmail,
       );
     } catch (error, stacktrace) {
       Get.snackbar(
@@ -119,6 +126,32 @@ class ProductRepository extends GetxController {
     final snapshot = await productCollection.get();
     final productData =
         snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
+    return productData;
+  }
+
+  Future<List<ProductModel>> queryPopularProducts() async {
+    final snapshot =
+        await productCollection.where('popular', isEqualTo: true).get();
+    final productData =
+        snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
+    return productData;
+  }
+
+  Future<List<ProductModel>> queryProductByCategory(String categoryID) async {
+    final snapshot = await productCollection
+        .where('product_category_id', isEqualTo: categoryID)
+        .get();
+    final productData =
+        snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
+    return productData;
+  }
+
+  Future<List<ProductReviewModel>> queryReviewByProductID(
+      String productID) async {
+    final snapshot =
+        await productCollection.doc(productID).collection('Review').get();
+    final productData =
+        snapshot.docs.map((e) => ProductReviewModel.fromSnapShot(e)).toList();
     return productData;
   }
 }

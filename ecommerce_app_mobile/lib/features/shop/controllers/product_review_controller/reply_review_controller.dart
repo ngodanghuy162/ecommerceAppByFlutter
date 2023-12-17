@@ -10,7 +10,7 @@ class ReplyReviewController extends GetxController {
     await _replyReviewRepo.createReplyReview(replyReviewModel);
   }
 
-  Future<List<ReplyReviewModel>> getAllReplyReview() async {
-    return await _replyReviewRepo.getAllReplyReview();
+  Future<List<ReplyReviewModel>> getAllReplyReview(String productId) async {
+    return await _replyReviewRepo.getAllReplyReview(productId: productId);
   }
 }

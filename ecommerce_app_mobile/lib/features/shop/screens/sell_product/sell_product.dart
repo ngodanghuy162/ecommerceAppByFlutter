@@ -23,12 +23,15 @@ class SellProductScreen extends StatefulWidget {
 }
 
 class _SellProductScreenState extends State<SellProductScreen> {
+  final _authRepo = Get.put(AuthenticationRepository());
+
   String selectedCategory = '';
   String brandName = '';
   String image_url = '';
   List<String> imageList_url = [];
   String description = '';
   int discount = 0;
+  int quantity = 0;
   String name = '';
   List<ProductVariantModel> variants = [];
   List<String> variants_path = [];
@@ -118,7 +121,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                       .toRadixString(16)
                       .substring(2)
                       .toUpperCase(); // Lưu mã màu dưới dạng HEX
-                  print(variantIndex);
+                  //print(variantIndex);
                   print(variants[variantIndex].color);
                 });
                 Navigator.of(context).pop();
@@ -254,6 +257,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
               const SizedBox(height: 8),
               const SizedBox(height: 8),
               ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: variants.length,
                 itemBuilder: (context, index) {
@@ -327,6 +331,31 @@ class _SellProductScreenState extends State<SellProductScreen> {
                         },
                         keyboardType: TextInputType.number,
                       ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Quantity',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            variants[index].quantity = int.parse(value);
+                          });
+                        },
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Variant Description',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            variants[index].descriptionVariant = value;
+                          });
+                        },
+                      ),
                       const SizedBox(height: 16),
                       GestureDetector(
                         onTap: _pickImage,
@@ -365,7 +394,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                   setState(() {
                     // Add an empty variant when the button is pressed
                     variants.add(ProductVariantModel(
-                        size: '', color: '', price: 0.0, imageURL: '', id: ''));
+                        size: '', color: '', price: 0.0, imageURL: '', id: '', quantity: 0, descriptionVariant: ''));
                     _imageList.add(null);
                   });
                 },
@@ -425,6 +454,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                     name: name,
                     product_category_id: categoryResult,
                     variants_path: variants_path,
+                    shopEmail: _authRepo.firebaseUser.value!.email,
                   );
                 },
                 child: const Text('Đăng Sản Phẩm'),

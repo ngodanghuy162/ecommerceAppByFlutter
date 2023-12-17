@@ -8,7 +8,8 @@ class ProductReviewRepository extends GetxController {
 
   final _db = FirebaseFirestore.instance;
 
-  createReview(ProductReviewModel productReviewModel, {String? productId}) async {
+  createReview(ProductReviewModel productReviewModel,
+      {String? productId}) async {
     productId = '3o2frQlDs3Zh75qLF0c9';
     await _db
         .collection('Product')
@@ -26,11 +27,16 @@ class ProductReviewRepository extends GetxController {
     });
   }
 
-  Future<List<ProductReviewModel>> getAllReview({String? productId}) async {
-    final snapshot = await _db.collection('Product').doc('3o2frQlDs3Zh75qLF0c9').collection('Review').get();
-    final reviewData = snapshot.docs.map((e) => ProductReviewModel.fromSnapShot(e)).toList();
+  Future<List<ProductReviewModel>> getAllReview(
+      {required String productId}) async {
+    final snapshot = await _db
+        .collection('Product')
+        .doc(productId)
+        .collection('Review')
+        .get();
+    final reviewData =
+        snapshot.docs.map((e) => ProductReviewModel.fromSnapShot(e)).toList();
     return reviewData;
-
   }
 
   // Future<List<ProductModel>> queryAllProductsFiltedBrand(String brandId) async {
@@ -40,5 +46,4 @@ class ProductReviewRepository extends GetxController {
   //   snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
   //   return productData;
   // }
-
 }

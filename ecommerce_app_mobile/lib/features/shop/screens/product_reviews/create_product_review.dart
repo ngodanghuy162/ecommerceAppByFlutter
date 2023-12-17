@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
-//Sau này có trang đơn hang đã mua thì ghép vào sau
+//! Sau này có trang đơn hang đã mua thì ghép vào sau
 class CreateProductReview extends StatefulWidget {
   const CreateProductReview({super.key});
 
@@ -35,7 +35,7 @@ class _CreateProductReviewState extends State<CreateProductReview> {
         date: Timestamp.fromDate(DateTime.now()),
       );
       await reviewController.createReview(newReview);
-      Get.to(() => const ProductReviewsScreen());
+      // Get.to(() => ProductReviewsScreen()); //! điều hướng sau
     }
   }
 
