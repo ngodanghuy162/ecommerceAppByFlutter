@@ -2,10 +2,12 @@ import 'package:ecommerce_app_mobile/common/widgets/brands/brand_card.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/brand/brand_products.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TBrandShowcase extends StatelessWidget {
   const TBrandShowcase({
@@ -28,7 +30,11 @@ class TBrandShowcase extends StatelessWidget {
       child: Column(
         children: [
           /// Brands with Products Count
-          TBrandCard(showBorder: false, brand: brand),
+          TBrandCard(
+            showBorder: false,
+            brand: brand,
+            onTap: () => Get.to(() => BrandProducts(brand: brand)),
+          ),
           const SizedBox(height: TSizes.spaceBtwItems),
 
           /// Brand Top 3 Product Images

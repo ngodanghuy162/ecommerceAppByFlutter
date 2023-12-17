@@ -155,6 +155,42 @@ class UserRepository extends GetxController {
     });
   }
 
+//get user id (doc id cua user)
+  Future<String?> getCurrentUserDocId() async {
+    String email = FirebaseAuth.instance.currentUser!.email!;
+    try {
+      final snapshot =
+          await _db.collection("Users").where("email", isEqualTo: email).get();
+
+      if (snapshot.docs.isNotEmpty) {
+        String id = snapshot.docs[0].id;
+        return id;
+      } else {
+        Get.snackbar(
+          'Not Found User',
+          'Not Found User',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.redAccent.withOpacity(0.1),
+          colorText: Colors.red,
+        );
+      }
+    } catch (error, stacktrace) {
+      Get.snackbar(
+        'Error',
+        'An error occurred',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red,
+      );
+
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    }
+
+    return "";
+  }
+
   Future<void> updateUserDetail(UserModel userModel) async {
     await _db
         .collection('Users')
@@ -225,8 +261,8 @@ class UserRepository extends GetxController {
           await currentCloudUser.then((value) => value.userId);*/
       final snapshot = await usersCollection
           .where(
-            userIdFieldName,
-            isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+            "email",
+            isEqualTo: FirebaseAuth.instance.currentUser!.email,
           )
           .get();
       if (snapshot.docs.isNotEmpty) {
@@ -240,6 +276,7 @@ class UserRepository extends GetxController {
           await usersCollection.doc(documentId).update({
             cartFieldName: FieldValue.arrayUnion(productVariantMap as List),
           });
+          // Expected a value of type 'List<dynamic>', but got one of type 'IdentityMap<String, int>
           print("da them vao cart oke nhe");
           return;
         }
@@ -295,8 +332,8 @@ class UserRepository extends GetxController {
           await currentCloudUser.then((value) => value.userId);*/
       final snapshot = await usersCollection
           .where(
-            userIdFieldName,
-            isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+            emailFieldName,
+            isEqualTo: FirebaseAuth.instance.currentUser!.email,
           )
           .get();
       if (snapshot.docs.isNotEmpty) {

@@ -1,4 +1,4 @@
-import 'package:ecommerce_app_mobile/Service/Repository/user_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -67,3 +67,4 @@ class TBottomAddToCart extends StatelessWidget {
     );
   }
 }
+

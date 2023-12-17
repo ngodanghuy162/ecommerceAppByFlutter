@@ -39,6 +39,7 @@ class TCategoryTab extends StatelessWidget {
           padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
+              /// -- Brands
               FutureBuilder(
                   future: categoriesController.getCategoryDocumentIdByName(
                       categoriesController.choosedCategories.value),
@@ -117,8 +118,6 @@ class TCategoryTab extends StatelessWidget {
                                               return const CircularProgressIndicator();
                                             }
                                           }),
-
-                                      /// -- Brands
 
                                       /// -- Products
                                       TSectionHeading(
