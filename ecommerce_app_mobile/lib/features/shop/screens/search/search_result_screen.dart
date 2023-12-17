@@ -65,9 +65,7 @@ class SearchResultScreen extends StatelessWidget {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
-                    print("Dong 75 rs");
                     print(SearchControllerX.instance.keySearchObs.value);
-                    print("Do dai la: ${snapshot.data!.length}");
                     return TGridLayout(
                       itemCount: snapshot.data!.length,
                       // itemBuilder: (_, index) => TProductCardVertical(

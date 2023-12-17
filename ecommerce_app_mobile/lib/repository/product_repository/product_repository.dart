@@ -81,11 +81,13 @@ class ProductRepository extends GetxController {
   }
 
   Future<List<ProductModel>> queryAllProductByName(String keySearch) async {
+    String keySearchUpper = keySearch.toUpperCase();
+    String keySearchLower = keySearch.toLowerCase();
     final snapshot = await productCollection
-        .where('name', isGreaterThanOrEqualTo: keySearch)
-        .where('name', isLessThan: '${keySearch}z')
+        .where('name', isGreaterThanOrEqualTo: keySearchUpper)
+        .where('name', isLessThanOrEqualTo: '${keySearchLower}z')
         .get();
-    log("key: $keySearch :::$snapshot");
+    log("o ham quẻy key: $keySearch :::$snapshot");
     final productData =
         snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
     return productData;

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:ecommerce_app_mobile/Controller/search_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/search/search_result_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/search/search_sugges_screen.dart';
@@ -59,7 +57,6 @@ class TSearchContainer extends StatelessWidget {
                     if (SearchControllerX.instance.keySearch.text.isNotEmpty) {
                       searchController.isSearching = true;
                       SearchControllerX.instance.updateSearchKey();
-                      print(Get.currentRoute.toString());
                       Get.to(() => SearchResultScreen(
                             keySearch:
                                 SearchControllerX.instance.keySearch.text,
