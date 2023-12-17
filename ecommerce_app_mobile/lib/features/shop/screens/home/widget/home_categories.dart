@@ -26,7 +26,6 @@ class THomeCategories extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (_, index) {
                     return TVerticalImageText(
-                        image: TImages.shoeIcon,
                         title: listCategories[index].name,
                         onTap: () => Get.to(() => const SubCategoryScreen()));
                   },
@@ -35,7 +34,7 @@ class THomeCategories extends StatelessWidget {
             } else if (snapshot.hasError) {
               return Center(child: Text(snapshot.error.toString()));
             } else {
-              return Center(child: Text("smt went wrong"));
+              return const Center(child: Text("smt went wrong"));
             }
           } else {
             return const CircularProgressIndicator();
