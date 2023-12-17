@@ -6,7 +6,13 @@ class SearchControllerX extends GetxController {
   bool isSearching = false;
   final TextEditingController keySearch = TextEditingController();
 
+  RxString keySearchObs = ''.obs;
+
   RxList<String> suggestedKeywords = <String>[].obs;
+
+  void updateSearchKey() {
+    this.keySearchObs.value = keySearch.text;
+  }
 
   // Hàm cập nhật danh sách từ khóa gợi ý
   void updateSuggestedKeywords(String keySearch) {

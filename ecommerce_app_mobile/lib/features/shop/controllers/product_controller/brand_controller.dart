@@ -9,6 +9,8 @@ class BrandController extends GetxController {
 
   var choosedBrand = BrandModel(name: "name").obs;
 
+  List<BrandModel> listBrand = [];
+
   Future<String> createBrand(BrandModel brandModel) async {
     return await _brandRepo.createBrand(brandModel);
   }
