@@ -1,3 +1,6 @@
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/chat/chatting_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -6,56 +9,62 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TRatingAndShare extends StatelessWidget {
-  TRatingAndShare({super.key, required this.product});
+  const TRatingAndShare({
+    super.key,
+    required this.overall,
+    required this.reviewLength,
+    required this.variant,
+    required this.product,
+    required this.maxPrice,
+    required this.minPrice,
+    required this.discount,
+  });
+
+  final double overall;
+  final int reviewLength;
+  final ProductVariantModel variant;
   final ProductModel product;
-  final productController = Get.put(ProductController());
+  final double maxPrice;
+  final double minPrice;
+  final int discount;
 
   @override
   Widget build(BuildContext context) {
+    final productController = Get.put(ProductController());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         /// Ration
         Row(
           children: [
-            const Icon(
-              Iconsax.star5,
-              color: Colors.amber,
-              size: 24,
-            ),
-            const SizedBox(
-              width: TSizes.spaceBtwItems / 2,
-            ),
-            FutureBuilder(
-                future: productController.getReviewByProductID(product.id!),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasData) {
-                      return Text.rich(TextSpan(children: [
-                        TextSpan(
-                            text: '5.0 ',
-                            style: Theme.of(context).textTheme.bodyLarge),
-                        const TextSpan(text: '(199)'),
-                      ]));
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text(snapshot.error.toString()));
-                    } else {
-                      return const Center(child: Text("smt went wrong"));
-                    }
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                }),
+            const Icon(Iconsax.star5, color: Colors.amber, size: 24,),
+            const SizedBox(width: TSizes.spaceBtwItems / 2,),
+            Text.rich(
+                TextSpan(
+                    children: [
+                      TextSpan(text: '${overall.toStringAsFixed(1)} ', style: Theme.of(context).textTheme.bodyLarge),
+                      TextSpan(text: '($reviewLength)'),
+                    ]
+                )
+            )
           ],
         ),
 
-        /// Share Button
-        IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.share,
-              size: TSizes.iconMd,
-            ))
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            /// Chat Button
+            IconButton(onPressed: () => Get.to(() => ChattingScreen(
+              variant: variant,
+              product: product,
+              maxPrice: maxPrice,
+              minPrice: minPrice,
+              discount: discount,
+            )), icon: const Icon(Icons.chat, size: TSizes.iconMd,)),
+            /// Share Button
+            IconButton(onPressed: () {}, icon: const Icon(Icons.share, size: TSizes.iconMd,))
+          ],
+        ),
       ],
     );
   }

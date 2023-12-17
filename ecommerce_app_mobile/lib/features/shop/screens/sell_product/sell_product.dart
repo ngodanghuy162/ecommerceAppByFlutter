@@ -23,6 +23,8 @@ class SellProductScreen extends StatefulWidget {
 }
 
 class _SellProductScreenState extends State<SellProductScreen> {
+  final _authRepo = Get.put(AuthenticationRepository());
+
   String selectedCategory = '';
   String brandName = '';
   String image_url = '';
@@ -255,6 +257,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
               const SizedBox(height: 8),
               const SizedBox(height: 8),
               ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: variants.length,
                 itemBuilder: (context, index) {
@@ -451,6 +454,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                     name: name,
                     product_category_id: categoryResult,
                     variants_path: variants_path,
+                    shopEmail: _authRepo.firebaseUser.value!.email,
                   );
                 },
                 child: const Text('Đăng Sản Phẩm'),

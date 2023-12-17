@@ -58,6 +58,33 @@ class _ProductReviewsScreenState extends State<ProductReviewsScreen> {
                     .map((dynamic item) => item as ReplyReviewModel)
                     .toList();
 
+                if (reviewList.isEmpty) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Ratings and reviews are verifed and are from people who use the same type of device that you use"),
+                      const SizedBox(
+                        height: TSizes.spaceBtwItems,
+                      ),
+                      const TOverallProductRating(
+                        oneStarRate: 0,
+                        twoStarRate: 0,
+                        threeStarRate: 0,
+                        fourStarRate: 0,
+                        fiveStarRate: 0,
+                        overall: 0,
+                      ),
+                      const TRatingBarIndicator(rating: 0),
+                      Text("0",
+                          style: Theme.of(context).textTheme.bodySmall),
+                      const SizedBox(height: TSizes.spaceBtwSections),
+                      const Center(
+                        child: Text("There are no reviews yet."),
+                      ),
+                    ]
+                  );
+                }
+
                 for (int i = 0; i < 5; i++) {
                   // số lần xuất hiện
                   double number = 0;

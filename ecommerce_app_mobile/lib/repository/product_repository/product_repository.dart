@@ -23,6 +23,8 @@ class ProductRepository extends GetxController {
     required String product_category_id,
     List<dynamic>? rating,
     required List<String> variants_path,
+    bool popular = false,
+    required String shopEmail,
   }) async {
     try {
       final documentReference = await productCollection.add({
@@ -32,7 +34,9 @@ class ProductRepository extends GetxController {
         'name': name,
         'product_category_id': product_category_id,
         'rating': rating,
-        'variants_path': variants_path
+        'variants_path': variants_path,
+        'popular': popular,
+        'shopEmail': shopEmail
       });
 
       // Lấy ID của document vừa được thêm vào Firestore
@@ -56,6 +60,7 @@ class ProductRepository extends GetxController {
         product_category_id: product_category_id,
         rating: rating,
         variants_path: variants_path,
+        shopEmail: shopEmail,
       );
     } catch (error, stacktrace) {
       Get.snackbar(

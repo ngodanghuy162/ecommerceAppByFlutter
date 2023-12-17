@@ -24,7 +24,8 @@ class ProductController extends GetxController {
       description: "description",
       name: "name",
       product_category_id: "product_category_id",
-      variants_path: []).obs;
+      variants_path: [],
+      shopEmail: "shopEmail").obs;
 
   Future<ProductModel> createProduct({
     required String brand_id,
@@ -34,6 +35,8 @@ class ProductController extends GetxController {
     required String product_category_id,
     List<dynamic>? rating,
     required List<String> variants_path,
+    required shopEmail,
+    bool popular = false,
   }) async {
     return await _productRepo.createProduct(
         brand_id: brand_id,
@@ -42,7 +45,10 @@ class ProductController extends GetxController {
         name: name,
         product_category_id: product_category_id,
         rating: rating,
-        variants_path: variants_path);
+        variants_path: variants_path,
+        popular: popular,
+        shopEmail: shopEmail,
+    );
   }
 
   Future<List<ProductModel>> getAllProductbyBrand(String brandId) async {
