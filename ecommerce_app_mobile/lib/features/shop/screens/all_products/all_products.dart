@@ -17,7 +17,7 @@ class AllProductsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(TSizes.defaultSpace),
-          child: TSortableProducts(type: "popular-product"),
+          child: TSortableProducts(type: "popular"),
         ),
       ),
     );

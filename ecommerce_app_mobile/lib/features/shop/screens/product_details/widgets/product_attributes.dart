@@ -27,25 +27,20 @@ class _TProductAttributesState extends State<TProductAttributes> {
   bool isViewAllDescription = false;
   int chooseColor = -1;
   int chooseSize = -1;
-  List<String> colorList = [];
+  List<String> sizeList = [];
   @override
   void initState() {
     super.initState();
-    colorList.add(widget.listVariants[0].color);
+    sizeList.add(widget.listVariants[0].size);
     for (int i = 0; i < widget.listVariants.length; i++) {
-      for (int j = 0; j < colorList.length; j++) {
-        if (widget.listVariants[i].color != colorList[j]) {
-          colorList.add(widget.listVariants[i].color);
+      for (int j = 0; j < sizeList.length; j++) {
+        if (widget.listVariants[i].size != sizeList[j]) {
+          sizeList.add(widget.listVariants[i].size);
           continue;
         }
         break;
       }
     }
-
-    colorList.sort((a, b) => hexColor(a).compareTo(hexColor(b)));
-    colorList.forEach((element) {
-      print(element);
-    });
   }
 
   @override
@@ -190,7 +185,7 @@ class _TProductAttributesState extends State<TProductAttributes> {
             Wrap(
               spacing: 8,
               children: List.generate(
-                  widget.listVariants.length,
+                  sizeList.length,
                   (index) => TSizeChoiceChip(
                         quantity: variant?.quantity,
                         text: widget.listVariants[index].size,
