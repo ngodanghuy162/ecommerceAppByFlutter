@@ -24,7 +24,6 @@ class _CreateShopScreenState extends State<CreateShopScreen> {
   late TextEditingController shopNameController;
   final firebase_storage.FirebaseStorage _storage =
       firebase_storage.FirebaseStorage.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final ImagePicker _imagePicker = ImagePicker();
   late TextEditingController voucherController;
   @override
@@ -90,7 +89,7 @@ class _CreateShopScreenState extends State<CreateShopScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Shop'),
+        title: const Text('Create Shop'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -100,9 +99,9 @@ class _CreateShopScreenState extends State<CreateShopScreen> {
             // Your UI components go here
             TextFormField(
               controller: shopNameController,
-              decoration: InputDecoration(labelText: 'Shop Name'),
+              decoration: const InputDecoration(labelText: 'Shop Name'),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             ElevatedButton(
               onPressed: () async {
                 // Open the image picker

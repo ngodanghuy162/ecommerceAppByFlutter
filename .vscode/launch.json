@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ecommerce_app_mobile",
+            "cwd": "ecommerce_app_mobile",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "ecommerce_app_mobile (profile mode)",
+            "cwd": "ecommerce_app_mobile",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "ecommerce_app_mobile (release mode)",
+            "cwd": "ecommerce_app_mobile",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "google_maps_webservice-0.0.20-nullsafety.5",
+            "cwd": "ecommerce_app_mobile\\google_maps_webservice-0.0.20-nullsafety.5",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}

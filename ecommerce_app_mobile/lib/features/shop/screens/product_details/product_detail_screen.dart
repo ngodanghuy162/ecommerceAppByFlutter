@@ -54,13 +54,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
 
     return Scaffold(
-      bottomNavigationBar: const TBottomAddToCart(),
+      bottomNavigationBar: TBottomAddToCart(),
       body: SingleChildScrollView(
         child: Column(
           children: [
             /// Product Image Slider
             TProductImageSlider(
               listVariant: widget.listVariants,
+              productModel: widget.product,
             ),
 
             /// Product Details
@@ -73,14 +74,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 children: [
                   /// Rating & Share Button
                   FutureBuilder(
-                      future: productController.getReviewByProductID(widget.product.id!),
+                      future: productController
+                          .getReviewByProductID(widget.product.id!),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
                           if (snapshot.hasData) {
-                            List<ProductReviewModel> reviewList = snapshot.data!;
+                            List<ProductReviewModel> reviewList =
+                                snapshot.data!;
                             List<double> starRating = [];
 
-                            if(reviewList.isEmpty) {
+                            if (reviewList.isEmpty) {
                               return TRatingAndShare(
                                 overall: 0,
                                 reviewLength: reviewList.length,
@@ -96,11 +99,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               // số lần xuất hiện
                               double number = 0;
                               for (int j = 0; j < reviewList.length; j++) {
-                                if (reviewList[j].rating == (i + 1).toDouble()) {
+                                if (reviewList[j].rating ==
+                                    (i + 1).toDouble()) {
                                   number++;
                                 }
                               }
-                              double ratio = (number / reviewList.length).toDouble();
+                              double ratio =
+                                  (number / reviewList.length).toDouble();
                               starRating.add(ratio);
                             }
 
@@ -120,7 +125,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               discount: widget.product.discount!,
                             );
                           } else if (snapshot.hasError) {
-                            return Center(child: Text(snapshot.error.toString()));
+                            return Center(
+                                child: Text(snapshot.error.toString()));
                           }
                         }
                         return const CircularProgressIndicator();

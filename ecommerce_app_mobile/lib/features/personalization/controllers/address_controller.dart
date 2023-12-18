@@ -2,11 +2,16 @@ import 'dart:convert';
 
 import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
 import 'package:uuid/uuid.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_geocoding_api/google_geocoding_api.dart';
 
 class AddressController extends GetxController {
   static AddressController get instance => Get.find();
@@ -18,26 +23,88 @@ class AddressController extends GetxController {
   final district = TextEditingController();
   final ward = TextEditingController();
   final street = TextEditingController();
+  final optional = TextEditingController();
+  late double lat;
+  late double lng;
 
   String? provinceId;
   String? districtid;
   String? wardCode;
+  String? postalCode;
+
+  Future<void> getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Future.error('Location services is disabled');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permission is denied');
+      }
+    }
+    Get.back();
+    SmartDialog.showLoading();
+    final currentLocation = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    const String googelApiKey = 'bn7OlF8CF3syL2gzOFztPdJVLtHBLlxzAQd2VcaE';
+    const bool isDebugMode = true;
+    final api = GoogleGeocodingApi(
+      googelApiKey,
+      isLogged: isDebugMode,
+    );
+    final reversedSearchResults = await api.reverse(
+      '${currentLocation.latitude},${currentLocation.longitude}',
+      language: 'vn',
+    );
+    lat = currentLocation.latitude;
+    lng = currentLocation.longitude;
+
+    // print(reversedSearchResults.results.toList().first.addressComponents);
+    final streetList = [];
+
+    for (GoogleGeocodingAddressComponent element
+        in reversedSearchResults.results.toList().first.addressComponents) {
+      // if (element.types.contains('administrative_area_level_2') ||
+      //     element.types.contains('administrative_area_level_1') ||
+      //     element.types.contains('country')) {
+      //   break;
+      // } else {
+      //   if (element.types.contains('street_number') ||
+      //       element.types.contains('plus_code')) {
+      //     continue;
+      //   }
+      //   streetList.add(element.longName);
+      // }
+      streetList.add(element.longName);
+    }
+    street.text = streetList.join(', ');
+
+    await SmartDialog.dismiss();
+  }
 
   Future<void> addUserAddress() async {
     final addressId = const Uuid().v1();
     await _userRepo.addUserAddress(
       AddressModel(
-          phoneNumber: phoneNumber.text,
-          name: name.text,
-          province: province.text,
-          district: district.text,
-          street: street.text,
-          ward: ward.text,
-          isDefault: false,
-          id: addressId,
-          districtId: districtid!,
-          wardCode: wardCode!,
-          provinceId: provinceId!),
+        phoneNumber: phoneNumber.text,
+        name: name.text,
+        province: province.text,
+        district: district.text,
+        street: street.text,
+        ward: ward.text,
+        isDefault: false,
+        id: addressId,
+        districtId: districtid!,
+        wardCode: wardCode!,
+        provinceId: provinceId!,
+        lat: lat,
+        lng: lng,
+        optional: optional.text,
+      ),
     );
     await setDefaultAddress(addressId);
   }
@@ -148,5 +215,45 @@ class AddressController extends GetxController {
         },
       ).toList();
     } finally {}
+  }
+
+  Future<void> displayPrediction(
+      Prediction? p, ScaffoldMessengerState messengerState) async {
+    if (p == null) {
+      // print('p null');
+      return;
+    }
+    // print('p khong null');
+
+    // get detail (lat/lng)
+    final places = GoogleMapsPlaces(
+      apiKey: 'bn7OlF8CF3syL2gzOFztPdJVLtHBLlxzAQd2VcaE',
+      apiHeaders: await const GoogleApiHeaders().getHeaders(),
+    );
+
+    final detail = await places.getDetailsByPlaceId(p.placeId!);
+    final geometry = detail.result.geometry!;
+    lat = geometry.location.lat;
+    lng = geometry.location.lng;
+
+    // final streetList = [];
+
+    // for (AddressComponent element in detail.result.addressComponents) {
+    //   // if (element.types.contains('administrative_area_level_2') ||
+    //   //     element.types.contains('administrative_area_level_1') ||
+    //   //     element.types.contains('country')) {
+    //   //   break;
+    //   // } else {
+    //   //   if (element.types.contains('street_number') ||
+    //   //       element.types.contains('plus_code')) {
+    //   //     continue;
+    //   //   }
+    //   //   streetList.add(element.longName);
+    //   // }
+    //   streetList.add(element.longName);
+    // }
+    // street.text = streetList.join(', ');
+    street.text = p.description ?? '';
+    Get.back();
   }
 }
