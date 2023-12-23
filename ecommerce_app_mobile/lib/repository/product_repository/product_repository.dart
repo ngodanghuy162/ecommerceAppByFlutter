@@ -90,8 +90,8 @@ class ProductRepository extends GetxController {
     String keySearchUpper = keySearch.toUpperCase();
     String keySearchLower = keySearch.toLowerCase();
     final snapshot = await productCollection
-        .where('name', isGreaterThanOrEqualTo: keySearchUpper)
-        .where('name', isLessThanOrEqualTo: '${keySearchLower}z')
+        .where('name', isGreaterThanOrEqualTo: '${keySearch}A')
+        .where('name', isLessThanOrEqualTo: '${keySearch}z')
         .get();
     log("o ham quẻy key: $keySearch :::$snapshot");
     final productData =

@@ -21,7 +21,7 @@ import 'package:readmore/readmore.dart';
 import '../../../../Service/repository/user_repository.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({
+  ProductDetailScreen({
     super.key,
     required this.product,
     required this.brand,
@@ -41,6 +41,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final reviewController = Get.put(ProductReviewController());
   final userController = Get.put(UserRepository());
 
+  ProductVariantModel? chosenProductVariant;
+  int quantityChosen = 0;
   @override
   Widget build(BuildContext context) {
     //final dark = THelperFunctions.isDarkMode(context);

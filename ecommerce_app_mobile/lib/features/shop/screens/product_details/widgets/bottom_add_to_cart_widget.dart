@@ -53,7 +53,7 @@ class TBottomAddToCart extends StatelessWidget {
             onPressed: () async {
               await UserRepository.instance
                   .addProductToCart(null, 2, "0DLRwpJP0r1tU5iyaXUc");
-              print("them vao cart oke r nhe");
+              print("them vao cart oke r nhe dong 56 file bottom add to cart");
             },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(TSizes.md),
