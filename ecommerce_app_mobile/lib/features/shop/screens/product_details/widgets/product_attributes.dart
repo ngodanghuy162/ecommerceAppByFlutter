@@ -187,6 +187,7 @@ class _TProductAttributesState extends State<TProductAttributes> {
               children: List.generate(
                   sizeList.length,
                   (index) => TSizeChoiceChip(
+                        isIndex: index == chooseColor,
                         quantity: variant?.quantity,
                         text: widget.listVariants[index].size,
                         selected: chooseSize == index,
