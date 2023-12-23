@@ -65,9 +65,12 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
             backgroundColor: dark ? TColors.dark : TColors.light,
             child: Stack(children: [
               // -- Thumbnail Image
-              const TRoundedImage(
-                imageUrl: TImages.productImage1,
-                applyImageRadius: true,
+              Center(
+                child: TRoundedImage(
+                  imageUrl: widget.modelDetail.listVariants[0].imageURL,
+                  applyImageRadius: true,
+                  isNetworkImage: true,
+                ),
               ),
 
               // -- Sale Tag
@@ -90,11 +93,13 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                 top: 0,
                 right: 0,
                 child: TCircularIcon(
+                  backgroundColor: const Color.fromARGB(0, 0, 0, 0),
                   onPressed: () {
                     userController.addOrRemoveProductToWishlist(
                         widget.modelDetail.product);
                   },
                   icon: Iconsax.heart5,
+
                   // ignore: dead_code
                   color: true ? Colors.red : const Color.fromARGB(255, 0, 0, 0),
                 ),
@@ -122,7 +127,8 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               /// Price
-              Padding(
+              Container(
+                width: 150,
                 padding: const EdgeInsets.only(left: TSizes.sm),
                 child: TProductPriceText(
                   price: minPrice == maxPrice

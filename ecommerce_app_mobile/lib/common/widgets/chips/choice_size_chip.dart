@@ -2,12 +2,13 @@ import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class TSizeChoiceChip extends StatelessWidget {
-  const TSizeChoiceChip(
-      {super.key,
-      required this.text,
-      required this.selected,
-      this.onSelected,
-      required this.quantity});
+  const TSizeChoiceChip({
+    super.key,
+    required this.text,
+    required this.selected,
+    this.onSelected,
+    required this.quantity,
+  });
 
   final String text;
   final bool selected;

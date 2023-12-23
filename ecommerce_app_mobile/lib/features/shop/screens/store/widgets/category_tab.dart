@@ -30,6 +30,7 @@ class TCategoryTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     categoriesController.choosedCategories.value = topic;
+    print(categoriesController.choosedCategories.value);
 
     return ListView(
       shrinkWrap: true,

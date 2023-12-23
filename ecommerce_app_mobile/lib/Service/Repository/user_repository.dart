@@ -83,7 +83,10 @@ class UserRepository extends GetxController {
             isDefault: false,
             districtId: e['districtId'],
             provinceId: e['provinceId'],
-            wardCode: e['wardCode']);
+            wardCode: e['wardCode'],
+            lat: e['lat'],
+            lng: e['lng'],
+            optional: e['optional']);
 
         if (addressModel.id == addressId) {
           addressModel.isDefault = true;
@@ -413,8 +416,4 @@ class UserRepository extends GetxController {
       return false;
     }
   }
-
-  // Future<Object> getWishList() async {
-  //   return await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
-  // }
 }

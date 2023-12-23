@@ -67,6 +67,7 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
                                 SmartDialog.dismiss();
                               },
                               child: TSingleAddress(
+                                  optional: e['optional'],
                                   id: e['id'],
                                   isSelectedAddress: e['isDefault'],
                                   province: e['province'],
