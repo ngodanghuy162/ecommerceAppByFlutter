@@ -27,29 +27,29 @@ class THomeAppBar extends StatelessWidget {
                   .textTheme
                   .labelMedium!
                   .apply(color: TColors.grey)),
-          // FutureBuilder(
-          //     future: userController
-          //         .getUserDetails(FirebaseAuth.instance.currentUser!.email!),
-          //     builder: (context, snapshot) {
-          //       if (snapshot.connectionState == ConnectionState.done) {
-          //         if (snapshot.hasData) {
-          //           UserModel user = snapshot.data!;
-          //           print(user);
-          //           return Text(TTexts.homeAppbarSubTitle,
-          //               style: Theme.of(context)
-          //                   .textTheme
-          //                   .headlineSmall!
-          //                   .apply(color: TColors.white));
-          //         } else if (snapshot.hasError) {
-          //           print(snapshot.error.toString());
-          //           return Center(child: Text(snapshot.error.toString()));
-          //         } else {
-          //           return Center(child: Text("smt went wrong"));
-          //         }
-          //       } else {
-          //         return const CircularProgressIndicator();
-          //       }
-          //     })
+          FutureBuilder(
+              future: userController
+                  .getUserDetails(FirebaseAuth.instance.currentUser!.email!),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    UserModel user = snapshot.data!;
+
+                    return Text('${user.firstName} ${user.lastName}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall!
+                            .apply(color: TColors.white));
+                  } else if (snapshot.hasError) {
+                    print(snapshot.error.toString());
+                    return Center(child: Text(snapshot.error.toString()));
+                  } else {
+                    return Center(child: Text("smt went wrong"));
+                  }
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              })
         ],
       ),
       showBackArrow: false,

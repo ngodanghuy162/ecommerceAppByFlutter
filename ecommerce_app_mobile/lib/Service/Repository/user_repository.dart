@@ -13,8 +13,18 @@ import '../../common/constant/cloudFieldName/user_model_field.dart';
 
 class UserRepository extends GetxController {
   static UserRepository get instance => Get.find();
+  late UserModel currentUserModel;
+  @override
+  Future<void> onReady() async {
+    super.onReady();
+    await updateUserDetails();
+  }
 
   final _db = FirebaseFirestore.instance;
+  Future<void> updateUserDetails() async {
+    currentUserModel =
+        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+  }
 
   Future<bool> isEmailExisted(String email) async {
     final snapshot = await _db

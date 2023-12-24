@@ -39,7 +39,12 @@ class NavigationMenu extends StatelessWidget {
           ],
         ),
       ),
-      body: Obx(() => controller.screens[controller.selectedIndex.value]),
+      body: Obx(
+        () => IndexedStack(
+          index: controller.selectedIndex.value,
+          children: [...controller.screens],
+        ),
+      ),
     );
   }
 }
