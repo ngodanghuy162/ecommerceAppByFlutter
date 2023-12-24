@@ -102,6 +102,7 @@ class HomeScreen extends StatelessWidget {
                           int lenghtShow = snapshot.data!.length > 4
                               ? 4
                               : snapshot.data!.length;
+                          productController.listPopular = [];
                           return TGridLayout(
                             itemCount: lenghtShow,
                             itemBuilder: (_, index) => FutureBuilder(
@@ -119,11 +120,14 @@ class HomeScreen extends StatelessWidget {
                                           snapshot.data![0] as BrandModel;
                                       var listVariants = snapshot.data![1]
                                           as List<ProductVariantModel>;
-                                      return TProductCardVertical(
-                                          modelDetail: DetailProductModel(
+                                      DetailProductModel model =
+                                          DetailProductModel(
                                               brand: brand,
                                               product: listProducts[index],
-                                              listVariants: listVariants));
+                                              listVariants: listVariants);
+                                      productController.listPopular.add(model);
+                                      return TProductCardVertical(
+                                          modelDetail: model);
                                       // return Container();
                                     } else if (snapshot.hasError) {
                                       return Center(

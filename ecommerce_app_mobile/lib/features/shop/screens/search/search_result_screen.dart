@@ -1,12 +1,10 @@
 import 'package:ecommerce_app_mobile/Controller/search_controller.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
-import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:iconsax/iconsax.dart';
 
 class SearchResultScreen extends StatelessWidget {

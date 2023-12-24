@@ -3,7 +3,6 @@ import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_
 import 'package:ecommerce_app_mobile/Service/repository/authentication_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_review_controller/product_review_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/product_reviews.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';

@@ -1,10 +1,8 @@
 import 'dart:math';
 
 import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_review_model.dart';
-import 'package:ecommerce_app_mobile/Service/Model/product_review_model/reply_review_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
@@ -15,14 +13,16 @@ class ProductController extends GetxController {
   final _productRepo = Get.put(ProductRepository());
   final variantController = Get.put(ProductVariantController());
   final brandController = Get.put(BrandController());
+  List<DetailProductModel> listPopular = [];
 
   var choosedProduct = ProductModel(
-      brand_id: "brand_id",
-      description: "description",
-      name: "name",
-      product_category_id: "product_category_id",
-      variants_path: [],
-      shopEmail: "shopEmail").obs;
+          brand_id: "brand_id",
+          description: "description",
+          name: "name",
+          product_category_id: "product_category_id",
+          variants_path: [],
+          shopEmail: "shopEmail")
+      .obs;
 
   Future<ProductModel> createProduct({
     required String brand_id,
@@ -36,15 +36,15 @@ class ProductController extends GetxController {
     bool popular = false,
   }) async {
     return await _productRepo.createProduct(
-        brand_id: brand_id,
-        description: description,
-        discount: discount,
-        name: name,
-        product_category_id: product_category_id,
-        rating: rating,
-        variants_path: variants_path,
-        popular: popular,
-        shopEmail: shopEmail,
+      brand_id: brand_id,
+      description: description,
+      discount: discount,
+      name: name,
+      product_category_id: product_category_id,
+      rating: rating,
+      variants_path: variants_path,
+      popular: popular,
+      shopEmail: shopEmail,
     );
   }
 

@@ -9,15 +9,15 @@ class MyShopScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TAppBar(
+      appBar: const TAppBar(
         showBackArrow: true,
         backgroundColor: Colors.green,
         title: Text("Here is your shop"),
       ),
       body: Column(children: [
         TextButton(
-            onPressed: () => Get.to(SellProductScreen()),
-            child: Text("Add product to sell"))
+            onPressed: () => Get.to(() => SellProductScreen()),
+            child:const  Text("Add product to sell"))
       ]),
     );
   }

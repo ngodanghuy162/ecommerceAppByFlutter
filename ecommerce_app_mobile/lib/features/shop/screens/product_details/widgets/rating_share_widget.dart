@@ -2,7 +2,6 @@ import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/chat/chatting_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

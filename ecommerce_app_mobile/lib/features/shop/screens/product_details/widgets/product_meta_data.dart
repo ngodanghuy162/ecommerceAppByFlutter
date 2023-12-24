@@ -101,7 +101,7 @@ class TProductMetaData extends StatelessWidget {
                       const TProductTitleText(title: 'Status: '),
                       const SizedBox(height: TSizes.spaceBtwItems),
                       Text(
-                        product.variants_path!.isNotEmpty
+                        product.variants_path.isNotEmpty
                             ? 'In stock'
                             : 'Out of stock',
                         style: Theme.of(context).textTheme.titleMedium,

@@ -13,6 +13,7 @@ class StatisticScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final dark = THelperFunctions.isDarkMode(context);
     return const Scaffold(
       appBar: TAppBar(title: Text("Statistics"), showBackArrow: true),
