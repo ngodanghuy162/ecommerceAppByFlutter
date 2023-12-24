@@ -30,6 +30,7 @@ class TCategoryTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     categoriesController.choosedCategories.value = topic;
+    print(categoriesController.choosedCategories.value);
 
     return ListView(
       shrinkWrap: true,
@@ -39,6 +40,7 @@ class TCategoryTab extends StatelessWidget {
           padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
+              /// -- Brands
               FutureBuilder(
                   future: categoriesController.getCategoryDocumentIdByName(
                       categoriesController.choosedCategories.value),
@@ -117,8 +119,6 @@ class TCategoryTab extends StatelessWidget {
                                               return const CircularProgressIndicator();
                                             }
                                           }),
-
-                                      /// -- Brands
 
                                       /// -- Products
                                       TSectionHeading(

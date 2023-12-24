@@ -3,7 +3,7 @@ import 'package:ecommerce_app_mobile/utils/device/device_utility.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
-class TTabBar extends StatelessWidget implements PreferredSizeWidget{
+class TTabBar extends StatelessWidget implements PreferredSizeWidget {
   const TTabBar({super.key, required this.tabs});
 
   final List<Widget> tabs;

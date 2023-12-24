@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import './user_model_field.dart';
+import '../../common/constant/cloudFieldName/user_model_field.dart';
 
 class UserRepository extends GetxController {
   static UserRepository get instance => Get.find();
@@ -64,13 +64,13 @@ class UserRepository extends GetxController {
     final userData =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
 
-    return userData.address;
+    return userData.address!;
   }
 
   Future<void> setDefaultAddress(String addressId) async {
     final userData =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
-    final listAddress = userData.address.map(
+    final listAddress = userData.address!.map(
       (e) {
         final addressModel = AddressModel(
             id: e['id'],
@@ -83,7 +83,10 @@ class UserRepository extends GetxController {
             isDefault: false,
             districtId: e['districtId'],
             provinceId: e['provinceId'],
-            wardCode: e['wardCode']);
+            wardCode: e['wardCode'],
+            lat: e['lat'],
+            lng: e['lng'],
+            optional: e['optional']);
 
         if (addressModel.id == addressId) {
           addressModel.isDefault = true;
@@ -121,14 +124,14 @@ class UserRepository extends GetxController {
   Future<Map<String, dynamic>> getDefaultAddress() async {
     final userData =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
-    return userData.address
+    return userData.address!
         .singleWhere((element) => element['isDefault'] == true);
   }
 
   Future<void> addUserAddress(AddressModel addressModel) async {
     final userData =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
-    userData.address.add(addressModel.toMap());
+    userData.address!.add(addressModel.toMap());
     await _db
         .collection('Users')
         .doc(userData.id)
@@ -153,6 +156,65 @@ class UserRepository extends GetxController {
         print(error.toString());
       }
     });
+  }
+
+//get user id (doc id cua user)
+  Future<String> getCurrentUserDocId() async {
+    String email = FirebaseAuth.instance.currentUser!.email!;
+    try {
+      final snapshot =
+          await _db.collection("Users").where("email", isEqualTo: email).get();
+
+      if (snapshot.docs.isNotEmpty) {
+        String id = snapshot.docs[0].id;
+        return id;
+      } else {
+        Get.snackbar(
+          'Not Found User',
+          'Not Found User',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.redAccent.withOpacity(0.1),
+          colorText: Colors.red,
+        );
+      }
+    } catch (error) {
+      Get.snackbar(
+        'Error',
+        'An error occurred',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red,
+      );
+
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    }
+    return "No";
+  }
+
+  //cap nhat neu nguoi ban dang ki ban hang
+  Future<void> registerSellUser() async {
+    try {
+      String userId = await getCurrentUserDocId();
+      await _db
+          .collection("Users")
+          .doc(userId)
+          .update({isSellFieldName: true}).then((value) =>
+              Get.snackbar("Success", "You register to be shop successly"));
+    } catch (error) {
+      Get.snackbar(
+        'Error',
+        'An error occurred',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red,
+      );
+
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    }
   }
 
   Future<void> updateUserDetail(UserModel userModel) async {
@@ -217,6 +279,13 @@ class UserRepository extends GetxController {
     });
   }
 
+  // kiem tra xem da dang ki ban hang cuha
+  Future<bool> isSeller() async {
+    final user =
+        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    return user.isSell;
+  }
+
   Future<void> addProductToCart(ProductVariantModel? productVariant,
       int quantity, String? productVariantId) async {
     final usersCollection = _db.collection('Users');
@@ -225,8 +294,8 @@ class UserRepository extends GetxController {
           await currentCloudUser.then((value) => value.userId);*/
       final snapshot = await usersCollection
           .where(
-            userIdFieldName,
-            isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+            "email",
+            isEqualTo: FirebaseAuth.instance.currentUser!.email,
           )
           .get();
       if (snapshot.docs.isNotEmpty) {
@@ -237,9 +306,14 @@ class UserRepository extends GetxController {
             productVariantId:
                 quantity // set your value here, it could be a number or any other data,
           };
+          List<Map<String, dynamic>> productVariantList = productVariantMap
+              .entries
+              .map((entry) => {'${entry.key}': entry.value})
+              .toList();
           await usersCollection.doc(documentId).update({
-            cartFieldName: FieldValue.arrayUnion(productVariantMap as List),
+            cartFieldName: FieldValue.arrayUnion(productVariantList),
           });
+          // Expected a value of type 'List<dynamic>', but got one of type 'IdentityMap<String, int>
           print("da them vao cart oke nhe");
           return;
         }
@@ -251,10 +325,15 @@ class UserRepository extends GetxController {
               productVariant.id!:
                   quantity // set your value here, it could be a number or any other data,
             };
+            List<Map<String, dynamic>> productVariantList = productVariantMap
+                .entries
+                .map((entry) => {'${entry.key}': entry.value})
+                .toList();
             await usersCollection.doc(documentId).update({
-              cartFieldName: FieldValue.arrayUnion(productVariantMap as List),
+              cartFieldName: FieldValue.arrayUnion(productVariantList),
             });
             Get.snackbar('Ok', "Them vao cart ok");
+            return;
           } else {
             Get.snackbar('Error', "Product is already in cart");
             return;
@@ -269,8 +348,12 @@ class UserRepository extends GetxController {
               productVariant.id!:
                   quantity // set your value here, it could be a number or any other data,
             };
+            List<Map<String, dynamic>> productVariantList = productVariantMap
+                .entries
+                .map((entry) => {'${entry.key}': entry.value})
+                .toList();
             await usersCollection.doc(documentId).update({
-              cartFieldName: FieldValue.arrayUnion(productVariantMap as List),
+              cartFieldName: FieldValue.arrayUnion(productVariantList),
             });
             Get.snackbar('Ok', "Them vao cart ok");
           } else {
@@ -295,8 +378,8 @@ class UserRepository extends GetxController {
           await currentCloudUser.then((value) => value.userId);*/
       final snapshot = await usersCollection
           .where(
-            userIdFieldName,
-            isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+            emailFieldName,
+            isEqualTo: FirebaseAuth.instance.currentUser!.email,
           )
           .get();
       if (snapshot.docs.isNotEmpty) {

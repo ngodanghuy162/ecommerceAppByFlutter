@@ -12,11 +12,12 @@ class SearchingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Screen'),
+        title: const Text('Search Suggest Screen'),
       ),
       body: Column(
         children: [
-          Text("KeySearch:${SearchControllerX.instance.keySearch.text}"),
+          Text(
+              "KeySearch + Suggest:${SearchControllerX.instance.keySearch.text}"),
           TSearchContainer(text: SearchControllerX.instance.keySearch.text),
           Expanded(
             child: Obx(

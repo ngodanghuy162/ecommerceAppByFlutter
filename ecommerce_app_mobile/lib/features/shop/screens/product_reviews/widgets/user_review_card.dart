@@ -44,8 +44,8 @@ class UserReviewCard extends StatelessWidget {
                         // const CircleAvatar(
                         //     backgroundImage: AssetImage(TImages.userProfileImage1)),
                         CircleAvatar(
-                            backgroundImage:
-                                CachedNetworkImageProvider(user.avatar_imgURL)),
+                            backgroundImage: CachedNetworkImageProvider(
+                                user.avatar_imgURL!)),
                         const SizedBox(width: TSizes.spaceBtwItems),
                         Text('${user.lastName} ${user.firstName}',
                             style: Theme.of(context).textTheme.titleLarge)

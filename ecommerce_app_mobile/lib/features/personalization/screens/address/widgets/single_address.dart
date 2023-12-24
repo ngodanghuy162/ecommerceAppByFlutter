@@ -7,16 +7,18 @@ import 'package:iconsax/iconsax.dart';
 
 // ignore: must_be_immutable
 class TSingleAddress extends StatelessWidget {
-  const TSingleAddress(
-      {super.key,
-      required this.isSelectedAddress,
-      required this.province,
-      required this.district,
-      required this.name,
-      required this.phoneNumber,
-      required this.street,
-      required this.ward,
-      required this.id});
+  const TSingleAddress({
+    super.key,
+    required this.isSelectedAddress,
+    required this.province,
+    required this.district,
+    required this.name,
+    required this.phoneNumber,
+    required this.street,
+    required this.ward,
+    required this.id,
+    this.optional,
+  });
 
   final String id;
   final bool isSelectedAddress;
@@ -26,6 +28,7 @@ class TSingleAddress extends StatelessWidget {
   final String name;
   final String street;
   final String phoneNumber;
+  final String? optional;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +73,9 @@ class TSingleAddress extends StatelessWidget {
               ),
               const SizedBox(height: TSizes.sm / 2),
               Text(
-                '$street, $ward, $district, $province',
+                optional == ''
+                    ? '$street, $ward, $district, $province'
+                    : '$optional, $street, $ward, $district, $province',
                 softWrap: true,
               )
             ],

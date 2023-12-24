@@ -1,5 +1,6 @@
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/Service/repository/authentication_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
@@ -11,6 +12,8 @@ import 'package:ecommerce_app_mobile/features/personalization/controllers/settin
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/order/order.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/shop/create_shop_screen.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/shop/shop_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +24,6 @@ class SettingsScreen extends StatelessWidget {
   SettingsScreen({super.key});
 
   final settingsController = Get.put(SettingsController());
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,11 +51,10 @@ class SettingsScreen extends StatelessWidget {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasData) {
                         UserModel userModel = snapshot.data as UserModel;
-
                         return SizedBox(
                           height: 65,
                           child: TUserProfileTitle(
-                            profileUrl: userModel.avatar_imgURL,
+                            profileUrl: userModel.avatar_imgURL!,
                             email: userModel.email,
                             firstName: userModel.firstName,
                             lastName: userModel.lastName,
@@ -87,7 +88,38 @@ class SettingsScreen extends StatelessWidget {
                   const SizedBox(
                     height: TSizes.spaceBtwItems,
                   ),
-
+                  FutureBuilder<bool>(
+                      future: UserRepository.instance.isSeller(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData) {
+                            bool isSeller = snapshot.data!;
+                            return isSeller
+                                ? TSettingsMenuTile(
+                                    icon: Iconsax.shop,
+                                    title: "My Shop",
+                                    subTitle: "Get to my shop",
+                                    onTap: () => Get.to(() => const MyShopScreen()),
+                                  )
+                                : TSettingsMenuTile(
+                                    icon: Iconsax.shop,
+                                    title: "Register Shop",
+                                    subTitle: "Register to be Seller",
+                                    onTap: () {
+                                      showDialogOnScreen(
+                                        context: context,
+                                        title: "Are you sure?",
+                                        description:
+                                            "Are you sure to be a seller??",
+                                        onOkPressed: () =>
+                                            Get.to(() => CreateShopScreen()),
+                                      );
+                                    },
+                                  );
+                          }
+                        }
+                        return Container();
+                      }),
                   TSettingsMenuTile(
                     icon: Iconsax.safe_home,
                     title: 'My Addresses',

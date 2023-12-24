@@ -34,7 +34,9 @@ class SignInController extends GetxController {
   void onReady() {
     super.onReady();
     final savedEmail = deviceStorage.read('userEmail');
-    email.text = savedEmail;
+    if (savedEmail != Null) {
+      email.text = savedEmail;
+    }
   }
 
   Future<void> signIn(String email, String password) async {

@@ -3,7 +3,7 @@ import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/brands/brand_card.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/brand/brand_products.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +36,16 @@ class AllBrandsScreen extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasData) {
+                        List<BrandModel> listProducts = snapshot.data!;
+                        listProducts.sort(((a, b) => a.name.compareTo(b.name)));
+                        listProducts.sort((a, b) {
+                          if (a.isVerified && !b.isVerified) {
+                            return -1; // Put completed objects first
+                          } else if (!a.isVerified && b.isVerified) {
+                            return 1; // Put non-completed objects last
+                          }
+                          return 0; // Equal
+                        });
                         return TGridLayout(
                           itemCount: snapshot.data!.length,
                           mainAxisExtent: 80,
@@ -43,7 +53,7 @@ class AllBrandsScreen extends StatelessWidget {
                             brand: snapshot.data![index],
                             showBorder: true,
                             onTap: () => Get.to(() => BrandProducts(
-                                  brand: snapshot.data![index],
+                                  brand: listProducts[index],
                                 )),
                           ),
                         );
