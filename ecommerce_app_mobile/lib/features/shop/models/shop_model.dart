@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/common/constant/cloudFieldName/shop_field.dart';
 import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
-import 'package:flutter/material.dart';
 
 class ShopModel {
   String? id;
-  Map<String, dynamic>? address = null;
+  Map<String, dynamic>? address;
   final String name;
   final String owner;
   String? image;
@@ -17,18 +16,14 @@ class ShopModel {
   ShopModel({
     this.id,
     required this.name,
-    Map<String, dynamic>? address,
+    this.address,
     required this.owner,
     String? image,
     this.income = 0,
-    List<String>? order,
-    List<String>? product,
-    List<String>? voucher,
-  })  : address = address ?? null,
-        image = image ?? TImages.darkAppLogo,
-        order = order ?? null,
-        product = product ?? null,
-        voucher = voucher ?? null;
+    this.order,
+    this.product,
+    this.voucher,
+  })  : image = image ?? TImages.darkAppLogo;
 
   toJson() {
     return {
@@ -62,11 +57,11 @@ class ShopModel {
 
     return ShopModel(
       id: snapshot.id,
-      name: data?["name"] ?? null,
-      address: data?['address'] ?? null,
+      name: data?["name"],
+      address: data?['address'],
       owner: data?['owner'] ?? '',
       income: data?['income'] ?? 0,
-      image: data?[shopImageField] ?? null,
+      image: data?[shopImageField],
       order:
           (data?['order'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
       product: (data?['product'] as List<dynamic>?)

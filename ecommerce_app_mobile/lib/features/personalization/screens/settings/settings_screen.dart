@@ -54,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
                         return SizedBox(
                           height: 65,
                           child: TUserProfileTitle(
-                            profileUrl: userModel.avatar_imgURL,
+                            profileUrl: userModel.avatar_imgURL!,
                             email: userModel.email,
                             firstName: userModel.firstName,
                             lastName: userModel.lastName,
@@ -99,7 +99,7 @@ class SettingsScreen extends StatelessWidget {
                                     icon: Iconsax.shop,
                                     title: "My Shop",
                                     subTitle: "Get to my shop",
-                                    onTap: () => Get.to(() => MyShopScreen()),
+                                    onTap: () => Get.to(() => const MyShopScreen()),
                                   )
                                 : TSettingsMenuTile(
                                     icon: Iconsax.shop,

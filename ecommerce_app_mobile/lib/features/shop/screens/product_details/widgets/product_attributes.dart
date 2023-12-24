@@ -4,12 +4,14 @@ import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/common/widgets/chips/choice_color_chip.dart';
 import 'package:ecommerce_app_mobile/common/widgets/chips/choice_size_chip.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TProductAttributes extends StatefulWidget {
   const TProductAttributes(
@@ -41,6 +43,7 @@ class _TProductAttributesState extends State<TProductAttributes> {
         break;
       }
     }
+    Get.put(CartController());
   }
 
   @override
@@ -169,6 +172,8 @@ class _TProductAttributesState extends State<TProductAttributes> {
                             chooseColor = value ? index : -1;
                             chooseSize = -1;
                             currentIndex = index;
+                            CartController.instance.chosenVariant =
+                                widget.listVariants[index];
                           });
                         },
                       )),

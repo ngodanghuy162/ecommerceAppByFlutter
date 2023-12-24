@@ -64,13 +64,13 @@ class UserRepository extends GetxController {
     final userData =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
 
-    return userData.address;
+    return userData.address!;
   }
 
   Future<void> setDefaultAddress(String addressId) async {
     final userData =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
-    final listAddress = userData.address.map(
+    final listAddress = userData.address!.map(
       (e) {
         final addressModel = AddressModel(
             id: e['id'],
@@ -124,14 +124,14 @@ class UserRepository extends GetxController {
   Future<Map<String, dynamic>> getDefaultAddress() async {
     final userData =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
-    return userData.address
+    return userData.address!
         .singleWhere((element) => element['isDefault'] == true);
   }
 
   Future<void> addUserAddress(AddressModel addressModel) async {
     final userData =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
-    userData.address.add(addressModel.toMap());
+    userData.address!.add(addressModel.toMap());
     await _db
         .collection('Users')
         .doc(userData.id)
@@ -306,8 +306,12 @@ class UserRepository extends GetxController {
             productVariantId:
                 quantity // set your value here, it could be a number or any other data,
           };
+          List<Map<String, dynamic>> productVariantList = productVariantMap
+              .entries
+              .map((entry) => {'${entry.key}': entry.value})
+              .toList();
           await usersCollection.doc(documentId).update({
-            cartFieldName: FieldValue.arrayUnion(productVariantMap as List),
+            cartFieldName: FieldValue.arrayUnion(productVariantList),
           });
           // Expected a value of type 'List<dynamic>', but got one of type 'IdentityMap<String, int>
           print("da them vao cart oke nhe");
@@ -321,10 +325,15 @@ class UserRepository extends GetxController {
               productVariant.id!:
                   quantity // set your value here, it could be a number or any other data,
             };
+            List<Map<String, dynamic>> productVariantList = productVariantMap
+                .entries
+                .map((entry) => {'${entry.key}': entry.value})
+                .toList();
             await usersCollection.doc(documentId).update({
-              cartFieldName: FieldValue.arrayUnion(productVariantMap as List),
+              cartFieldName: FieldValue.arrayUnion(productVariantList),
             });
             Get.snackbar('Ok', "Them vao cart ok");
+            return;
           } else {
             Get.snackbar('Error', "Product is already in cart");
             return;
@@ -339,8 +348,12 @@ class UserRepository extends GetxController {
               productVariant.id!:
                   quantity // set your value here, it could be a number or any other data,
             };
+            List<Map<String, dynamic>> productVariantList = productVariantMap
+                .entries
+                .map((entry) => {'${entry.key}': entry.value})
+                .toList();
             await usersCollection.doc(documentId).update({
-              cartFieldName: FieldValue.arrayUnion(productVariantMap as List),
+              cartFieldName: FieldValue.arrayUnion(productVariantList),
             });
             Get.snackbar('Ok', "Them vao cart ok");
           } else {

@@ -3,8 +3,6 @@ import 'package:ecommerce_app_mobile/features/personalization/controllers/addres
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/address_bottom_sheet.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/custom.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
-import 'package:ecommerce_app_mobile/utils/device/device_utility.dart';
-import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

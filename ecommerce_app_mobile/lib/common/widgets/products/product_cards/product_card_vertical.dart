@@ -12,7 +12,6 @@ import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_p
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_details/product_detail_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
-import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';

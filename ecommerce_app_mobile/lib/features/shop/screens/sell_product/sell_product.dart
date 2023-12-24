@@ -23,11 +23,14 @@ class SellProductScreen extends StatefulWidget {
 }
 
 class _SellProductScreenState extends State<SellProductScreen> {
+  // ignore: unused_field
   final _authRepo = Get.put(AuthenticationRepository());
 
   String selectedCategory = '';
   String brandName = '';
+  // ignore: non_constant_identifier_names
   String image_url = '';
+  // ignore: non_constant_identifier_names
   List<String> imageList_url = [];
   String description = '';
   int discount = 0;

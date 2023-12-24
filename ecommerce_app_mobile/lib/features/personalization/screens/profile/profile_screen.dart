@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     final data = snapshot.data as UserModel;
-                    userAvatarURL = data.avatar_imgURL;
+                    userAvatarURL = data.avatar_imgURL!;
                     return Column(
                       children: [
                         //Profile picture

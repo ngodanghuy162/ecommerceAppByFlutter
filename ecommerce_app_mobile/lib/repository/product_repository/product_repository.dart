@@ -93,7 +93,7 @@ class ProductRepository extends GetxController {
         .where('name', isGreaterThanOrEqualTo: '${keySearch}A')
         .where('name', isLessThanOrEqualTo: '${keySearch}z')
         .get();
-    log("o ham quẻy key: $keySearch :::$snapshot");
+    log("o ham query key: $keySearch :::$snapshot");
     final productData =
         snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
     return productData;
