@@ -86,6 +86,23 @@ class ProductRepository extends GetxController {
     return productData;
   }
 
+//get product model by vảiant id
+  Future<ProductModel?> getProductByVariantId(String variantId) async {
+    final snapshot = await productCollection
+        .where('variants_path', arrayContains: variantId)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      // Nếu có ít nhất một tài liệu thỏa mãn điều kiện
+      final productData = ProductModel.fromSnapShot(snapshot.docs.first);
+      return productData;
+    } else {
+      // Nếu không có tài liệu nào thỏa mãn điều kiện
+      return null;
+    }
+  }
+
+// de tim kiem san pham
   Future<List<ProductModel>> queryAllProductByName(String keySearch) async {
     String keySearchUpper = keySearch.toUpperCase();
     String keySearchLower = keySearch.toLowerCase();

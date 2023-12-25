@@ -1,4 +1,5 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart_items_widget/cart_items.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/checkout_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -10,21 +11,25 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(CartController());
     return Scaffold(
-      appBar: TAppBar(
-        title: Text(
-          'Cart',
-          style: Theme.of(context).textTheme.headlineSmall,
+        appBar: TAppBar(
+          title: Text(
+            'Cart',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          showBackArrow: true,
         ),
-        showBackArrow: true,
-      ),
-      body: const TCartItems(),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: ElevatedButton(
+        body: const TCartItems(),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(TSizes.defaultSpace),
+          child: ElevatedButton(
             onPressed: () => Get.to(() => CheckoutScreen()),
-            child: const Text('Checkout \$256')),
-      ),
-    );
+            child: Obx(
+              () => Text(
+                  'Checkout \$${CartController.instance.totalAmount.value}'),
+            ),
+          ),
+        ));
   }
 }

@@ -85,6 +85,7 @@ dependencies:
   rxdart_ext: ^0.2.9
   listenable_stream: ^1.1.0
   flutter_bloc_pattern: ^2.3.0
+  colornames: ^0.1.0
 
 dev_dependencies:
   flutter_test:
