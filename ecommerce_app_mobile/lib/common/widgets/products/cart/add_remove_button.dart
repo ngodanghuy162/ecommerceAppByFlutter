@@ -5,11 +5,20 @@ import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class TProductQuantityWithAddAndRemove extends StatelessWidget {
-  const TProductQuantityWithAddAndRemove({
+class TProductQuantityWithAddAndRemove extends StatefulWidget {
+  int quantity;
+  TProductQuantityWithAddAndRemove({
+    required this.quantity,
     super.key,
   });
 
+  @override
+  State<TProductQuantityWithAddAndRemove> createState() =>
+      _TProductQuantityWithAddAndRemoveState();
+}
+
+class _TProductQuantityWithAddAndRemoveState
+    extends State<TProductQuantityWithAddAndRemove> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -26,9 +35,14 @@ class TProductQuantityWithAddAndRemove extends StatelessWidget {
           backgroundColor: THelperFunctions.isDarkMode(context)
               ? TColors.darkerGrey
               : TColors.light,
+          onPressed: () {
+            setState(() {
+              widget.quantity++;
+            });
+          },
         ),
         const SizedBox(width: TSizes.spaceBtwItems),
-        const Text('2'),
+        Text(widget.quantity.toString()),
         const SizedBox(width: TSizes.spaceBtwItems),
         const TCircularIcon(
           icon: Iconsax.add,

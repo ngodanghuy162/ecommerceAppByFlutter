@@ -7,8 +7,18 @@ import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
-class TCartItem extends StatelessWidget {
-  const TCartItem({
+class TCartItemByHuy extends StatelessWidget {
+  String? brand;
+  String? imgUrl;
+  String? title;
+  Color? color;
+  String? size;
+  TCartItemByHuy({
+    this.brand,
+    this.title,
+    this.imgUrl,
+    this.color,
+    this.size,
     super.key,
   });
 
@@ -18,7 +28,7 @@ class TCartItem extends StatelessWidget {
       children: [
         //Image
         TRoundedImage(
-          imageUrl: TImages.productImage1,
+          imageUrl: imgUrl ?? TImages.productImage1,
           width: 60,
           height: 60,
           padding: const EdgeInsets.all(TSizes.sm),
@@ -35,10 +45,10 @@ class TCartItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const TBrandTitleWithVerifiedIcon(title: 'Nike'),
-              const Flexible(
+              TBrandTitleWithVerifiedIcon(title: brand ?? ""),
+              Flexible(
                 child: TProductTitleText(
-                  title: 'Black sport shoes',
+                  title: title!,
                   maxLines: 1,
                 ),
               ),
@@ -49,16 +59,31 @@ class TCartItem extends StatelessWidget {
                       text: 'Color ',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    TextSpan(
-                      text: 'Green ',
-                      style: Theme.of(context).textTheme.bodyLarge,
+                    // TextSpan(
+                    //   text: "Green",
+                    //   style: Theme.of(context).textTheme.bodyLarge,
+                    // ),
+                    WidgetSpan(
+                      child: Container(
+                        width: 16, // Kích thước của hình tròn
+                        height: 16,
+                        margin: const EdgeInsets.only(
+                            bottom: 2,
+                            right: 5), // Khoảng cách giữa văn bản và hình tròn
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: color ??
+                              Colors
+                                  .lightBlue, // Màu của hình tròn, mặc định là màu xanh lá cây
+                        ),
+                      ),
                     ),
                     TextSpan(
                       text: 'Sizes ',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     TextSpan(
-                      text: 'UK 08 ',
+                      text: size ?? "42US",
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],

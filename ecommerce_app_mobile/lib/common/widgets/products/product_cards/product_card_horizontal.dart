@@ -94,7 +94,7 @@ class TProductCardHorizontal extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Flexible(child: TProductPriceText(price: "256.0")),
+                       Flexible(child: TProductPriceText(price: "256.0")),
                       //add to cart
                       Container(
                         decoration: const BoxDecoration(

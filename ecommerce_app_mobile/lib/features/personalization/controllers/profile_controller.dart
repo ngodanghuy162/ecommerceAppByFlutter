@@ -14,6 +14,8 @@ class ProfileController extends GetxController {
   var showNewPassword = false.obs;
   var showRetypePassword = false.obs;
 
+  UserModel? crtUser;
+
   getUserData() {
     final email = _authRepo.firebaseUser.value?.email;
     if (email != null) {

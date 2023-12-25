@@ -8,9 +8,10 @@ class ProductVariantRepository extends GetxController {
 
   final _db = FirebaseFirestore.instance;
 
-  Future<String?> getVariantId(ProductVariantModel productVariantModel) async{
+  Future<String?> getVariantId(ProductVariantModel productVariantModel) async {
     try {
-    final querySnapshot = await _db.collection("ProductVariant")
+      final querySnapshot = await _db
+          .collection("ProductVariant")
           .where('color', isEqualTo: productVariantModel.color)
           .where('size', isEqualTo: productVariantModel.size)
           .get();
@@ -26,7 +27,6 @@ class ProductVariantRepository extends GetxController {
       print('Lỗi khi lấy documentId cho ProductModel: $error');
       return null;
     }
-
   }
 
   Future<String> createProductVariant(
@@ -74,6 +74,18 @@ class ProductVariantRepository extends GetxController {
   //   final productData = ProductVariantModel.fromSnapShot(snapshot);
   //   return productData;
   // }
+
+  Future<ProductVariantModel> getVariantById(String variantId) async {
+    final snapshot =
+        await _db.collection('ProductVariant').doc(variantId).get();
+    if (snapshot.exists) {
+      // Nếu document tồn tại, lấy dữ liệu từ snapshot và trả về đối tượng ProductVariantModel
+      return ProductVariantModel.fromSnapShot(snapshot);
+    } else {
+      // Nếu document không tồn tại, có thể xử lý theo ý bạn, ví dụ, ném một ngoại lệ
+      throw Exception('Product variant with id $variantId not found');
+    }
+  }
 
   Future<List<ProductVariantModel>> queryVariants(
       List<dynamic> variantsIDs) async {
