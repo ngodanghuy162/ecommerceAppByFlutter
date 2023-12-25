@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
+import 'package:ecommerce_app_mobile/features/personalization/controllers/profile_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
@@ -52,6 +54,9 @@ class UserRepository extends GetxController {
     );
 
     final userData = snapshot.docs.map((e) => UserModel.fromSnapshot(e)).single;
+    Get.put(ProfileController());
+    //Get.put(CartController());
+    ProfileController.instance.crtUser = userData;
     return userData;
   }
 
@@ -126,6 +131,18 @@ class UserRepository extends GetxController {
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
     return userData.address!
         .singleWhere((element) => element['isDefault'] == true);
+  }
+
+  Future<List<String>?> getUserWishlist() async {
+    final userData =
+        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    return userData.wishlist;
+  }
+
+  Future<List<Map<String, dynamic>>?> getUserCart() async {
+    final userData =
+        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    return userData.cart;
   }
 
   Future<void> addUserAddress(AddressModel addressModel) async {
