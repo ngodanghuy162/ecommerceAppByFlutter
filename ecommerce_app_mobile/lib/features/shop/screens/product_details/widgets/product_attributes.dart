@@ -169,7 +169,7 @@ class _TProductAttributesState extends State<TProductAttributes> {
                         selected: chooseColor == index,
                         onSelected: (value) {
                           setState(() {
-                            chooseColor = value ? index : -1;
+                            chooseColor = value ? index : 0;
                             chooseSize = -1;
                             currentIndex = index;
                             CartController.instance.chosenVariant =
