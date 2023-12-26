@@ -1,4 +1,3 @@
-
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,8 @@ import '../../../../../common/widgets/appbar/appbar.dart';
 import '../../../../../common/widgets/products/cart/cart_menu_icon.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/text_strings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 
 class THomeAppBar extends StatelessWidget {
   THomeAppBar({
