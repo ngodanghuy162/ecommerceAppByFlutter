@@ -10,7 +10,7 @@ class MessageRepository extends GetxController {
 
   Stream<List<MessageModel>> getAllMessageByChatId(String chatId) async* {
     while(true) {
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 2));
       final messageCollectionRef = await _db.collection('Chat').doc(chatId).collection('Message');
 
       // Kiểm tra xem collection đã tồn tại hay chưa
