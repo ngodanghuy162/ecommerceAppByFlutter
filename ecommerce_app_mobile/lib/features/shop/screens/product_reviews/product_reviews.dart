@@ -21,6 +21,13 @@ class ProductReviewsScreen extends StatefulWidget {
 }
 
 class _ProductReviewsScreenState extends State<ProductReviewsScreen> {
+
+  // Cập nhật màn hình sau khi phản hồi
+  void didPop() {
+    // ignore: invalid_use_of_protected_member
+    (context as Element).reassemble();
+  }
+
   @override
   Widget build(BuildContext context) {
     final reviewController = Get.put(ProductReviewController());
@@ -135,6 +142,9 @@ class _ProductReviewsScreenState extends State<ProductReviewsScreen> {
                           return UserReviewCard(
                             review: reviewList[index],
                             reply: getReplyComments(reviewList[index].id!),
+                            productId: widget.product.id!,
+                            shopEmail: widget.product.shopEmail!,
+                            didPop: didPop,
                           );
                         },
                       ),
