@@ -13,7 +13,7 @@ class ProductReviewRepository extends GetxController {
     productId = 'r8reTOR7C1yFNE1tUDlB';
     await _db
         .collection('Product')
-        .doc('r8reTOR7C1yFNE1tUDlB')
+        .doc(productId)
         .collection('Review')
         .add(productReviewModel.toJson())
         .catchError((error, stacktrace) {
