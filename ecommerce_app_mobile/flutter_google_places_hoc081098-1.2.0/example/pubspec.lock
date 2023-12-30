@@ -138,10 +138,9 @@ packages:
   google_maps_webservice:
     dependency: transitive
     description:
-      name: google_maps_webservice
-      sha256: d0ae4e4508afd74a3f051565261a3cdbae59db29448f9b6e6beb5674545e1eb7
-      url: "https://pub.dev"
-    source: hosted
+      path: "../google_maps_webservice-0.0.20-nullsafety.5"
+      relative: true
+    source: path
     version: "0.0.20-nullsafety.5"
   http:
     dependency: transitive
