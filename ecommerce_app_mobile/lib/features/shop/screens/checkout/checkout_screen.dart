@@ -1,3 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_app_mobile/Service/Model/order_model/order_model.dart';
+import 'package:ecommerce_app_mobile/Service/Model/order_model/payment_model.dart';
+import 'package:ecommerce_app_mobile/Service/repository/order_respository/order_respository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/order_respository/payment_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart/coupon_widget.dart';
@@ -6,6 +12,7 @@ import 'package:ecommerce_app_mobile/features/personalization/controllers/addres
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart_items_widget/cart_items.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_address_section.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_payment_section.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/statistics/controllers/statistics_controller.dart';
 import 'package:ecommerce_app_mobile/navigation_menu.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/api_constants.dart'
@@ -29,6 +36,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final addressController = Get.put(AddressController());
   late Map<String, dynamic>? defaultAdress;
   var isSuccess = false;
+  final controller = Get.put(PaymentRepository());
+  final userController = Get.put(UserRepository());
+  final orderController = Get.put(OrderRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +96,42 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: ElevatedButton(
           onPressed: () async {
-            defaultAdress = await addressController.getDefaultAddress();
+            // final String id = await controller.addPaymentSuccess(
+            //   PaymentModel(
+            //     paymentDate: Timestamp.now(),
+            //     userId: 'abc',
+            //     paymentMethod: 'paypal',
+            //     total: 10,
+            //   ),
+            // );
+
+            // print(userController.currentUserModel.id);
+
+            // print((await controller.getPaymentDetails(id)).toMap());
+
+            // defaultAdress = await addressController.getDefaultAddress();
+            // print(defaultAdress);
+            // orderController.addOrderSuccess(OrderModel(
+            //     shopId: '1',
+            //     package: [
+            //       {
+            //         'variant_id1': 'quantity1',
+            //         'arraytest': [
+            //           {'map1': 1, 'map2': 2}
+            //         ]
+            //       },
+            //       {
+            //         'variant_id2': 'quantity2',
+            //       }
+            //     ],
+            //     paymentId: '1',
+            //     status: 'pending',
+            //     userId: '1',
+            //     shopAddress: defaultAdress!,
+            //     userAddress: defaultAdress!));
+            /*
+
+          
             Get.to(
               () => UsePaypal(
                 sandboxMode: true,
@@ -161,7 +206,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   print('cancelled: $params');
                 },
               ),
-            );
+            ); */
           },
           child: const Text("Checkout \$256"),
         ),
