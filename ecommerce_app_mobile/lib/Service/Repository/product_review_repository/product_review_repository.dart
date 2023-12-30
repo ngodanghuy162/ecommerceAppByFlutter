@@ -10,10 +10,10 @@ class ProductReviewRepository extends GetxController {
 
   createReview(ProductReviewModel productReviewModel,
       {String? productId}) async {
-    productId = '3o2frQlDs3Zh75qLF0c9';
+    productId = 'r8reTOR7C1yFNE1tUDlB';
     await _db
         .collection('Product')
-        .doc('3o2frQlDs3Zh75qLF0c9')
+        .doc('r8reTOR7C1yFNE1tUDlB')
         .collection('Review')
         .add(productReviewModel.toJson())
         .catchError((error, stacktrace) {

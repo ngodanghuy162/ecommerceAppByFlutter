@@ -1,5 +1,7 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/chat/shop_reply_chatting_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,11 +16,45 @@ class MyShopScreen extends StatelessWidget {
         backgroundColor: Colors.green,
         title: Text("Here is your shop"),
       ),
-      body: Column(children: [
-        TextButton(
-            onPressed: () => Get.to(() => SellProductScreen()),
-            child:const  Text("Add product to sell"))
-      ]),
+      body: Padding(
+        padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          ElevatedButton(
+              onPressed: () => Get.to(() => const SellProductScreen()),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(10), // Độ cong của góc nút
+                ),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 24.0),
+              ),
+              child: const Text(
+                "Add product to sell",
+                style: TextStyle(
+                    color: Colors.white, fontSize: 16),
+              )),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () => Get.to(() => const ShopReplyChattingScreen()),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blueAccent, // Màu nền của nút// Màu chữ trên nút
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(10), // Độ cong của góc nút
+              ),
+              padding: const EdgeInsets.symmetric(
+                  vertical: 16.0,
+                  horizontal: 24.0), // Khoảng cách giữa chữ và viền nút
+            ),
+            child: const Text("Reply Chatting",
+              style: TextStyle(
+                color: Colors.white, fontSize: 16),),
+          ),
+        ]),
+      ),
     );
   }
 }

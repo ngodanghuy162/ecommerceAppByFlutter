@@ -34,9 +34,9 @@ class MessageModel {
     } else if (diff.inDays < 7) {
       result = '${diff.inDays} ngày';
     } else if (diff.inDays < 365) {
-      result = '${(diff.inDays / 7) as int} tuần';
+      result = '${diff.inDays ~/ 7} tuần';
     } else {
-      result = '${(diff.inDays / 365) as int} năm';
+      result = '${diff.inDays ~/ 365} năm';
     }
     return result;
   }

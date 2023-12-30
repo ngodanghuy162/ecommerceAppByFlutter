@@ -13,4 +13,8 @@ class ChatController extends GetxController {
   Future<String?> getChatIfExist(String userEmail, String shopEmail) {
     return _chatRepo.getChatIfExist(userEmail, shopEmail);
   }
+
+  Future<List<ChatModel>> getAllChatModelByShopEmail(String shopEmail) async {
+    return _chatRepo.getAllChatModelByShopEmail(shopEmail);
+  }
 }
