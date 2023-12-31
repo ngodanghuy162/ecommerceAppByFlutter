@@ -99,7 +99,8 @@ class SettingsScreen extends StatelessWidget {
                                     icon: Iconsax.shop,
                                     title: "My Shop",
                                     subTitle: "Get to my shop",
-                                    onTap: () => Get.to(() => const MyShopScreen()),
+                                    onTap: () =>
+                                        Get.to(() => const MyShopScreen()),
                                   )
                                 : TSettingsMenuTile(
                                     icon: Iconsax.shop,
@@ -130,7 +131,7 @@ class SettingsScreen extends StatelessWidget {
                     icon: Iconsax.shopping_cart,
                     title: 'My Cart',
                     subTitle: 'Add, remove products and move to checkout',
-                    onTap: () => Get.to(const CartScreen()),
+                    onTap: () => Get.to(CartScreen()),
                   ),
                   TSettingsMenuTile(
                     icon: Iconsax.bag_tick,

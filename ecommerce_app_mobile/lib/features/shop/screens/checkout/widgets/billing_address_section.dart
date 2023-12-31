@@ -1,9 +1,19 @@
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
+import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TBillingAddressSection extends StatelessWidget {
-  const TBillingAddressSection({super.key});
+  const TBillingAddressSection(
+      {super.key,
+      required this.name,
+      required this.phoneNumber,
+      required this.fullAddress});
+
+  final String name;
+  final String phoneNumber;
+  final String fullAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +23,12 @@ class TBillingAddressSection extends StatelessWidget {
         TSectionHeading(
           title: "Shipping Address",
           buttonTitle: "Change",
-          onPressed: () {},
+          onPressed: () {
+            Get.to(UserAddressScreen());
+          },
         ),
         Text(
-          "NgoHuyDepTrai",
+          name,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         Row(
@@ -28,7 +40,7 @@ class TBillingAddressSection extends StatelessWidget {
             ),
             const SizedBox(width: TSizes.spaceBtwItems),
             Text(
-              "034555555",
+              phoneNumber,
               style: Theme.of(context).textTheme.bodyMedium,
             )
           ],
@@ -44,7 +56,7 @@ class TBillingAddressSection extends StatelessWidget {
             const SizedBox(width: TSizes.spaceBtwItems),
             Expanded(
                 child: Text(
-              "Hanoi, VietNam, DNA",
+              fullAddress,
               style: Theme.of(context).textTheme.bodyMedium,
               softWrap: true,
             ))

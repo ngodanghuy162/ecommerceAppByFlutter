@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/order_model/order_model.dart';
 import 'package:ecommerce_app_mobile/Service/Model/order_model/payment_model.dart';
+import 'package:ecommerce_app_mobile/Service/repository/address_repository.dart';
 import 'package:ecommerce_app_mobile/Service/repository/order_respository/order_respository.dart';
 import 'package:ecommerce_app_mobile/Service/repository/order_respository/payment_repository.dart';
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
@@ -9,6 +10,7 @@ import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/roun
 import 'package:ecommerce_app_mobile/common/widgets/products/cart/coupon_widget.dart';
 import 'package:ecommerce_app_mobile/common/widgets/success_screen/success_screen.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/address_controller.dart';
+import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart_items_widget/cart_items.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_address_section.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_payment_section.dart';
@@ -39,11 +41,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final controller = Get.put(PaymentRepository());
   final userController = Get.put(UserRepository());
   final orderController = Get.put(OrderRepository());
+  final addressRepository = Get.put(AddressRepository());
 
   @override
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
 
+    final currentUserModel = userController.currentUserModel;
+    Map<String, dynamic> currentUserAddress = currentUserModel.address!
+        .singleWhere((element) => element['isDefault']);
     return Scaffold(
       appBar: TAppBar(
           showBackArrow: true,
@@ -63,8 +69,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               TRoundedContainer(
                 showBorder: true,
                 backgroundColor: dark ? TColors.black : TColors.white,
-                child: const Padding(
-                  padding: EdgeInsets.only(
+                child: Padding(
+                  padding: const EdgeInsets.only(
                     top: TSizes.sm,
                     bottom: TSizes.sm,
                     right: TSizes.sm,
@@ -72,16 +78,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   child: Column(
                     children: [
-                      TBillingPaymentSection(),
-                      SizedBox(
+                      const TBillingPaymentSection(),
+                      const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
-                      Divider(),
-                      SizedBox(
-                        height: TSizes.spaceBtwSections,
+                      const Divider(),
+                      TBillingAddressSection(
+                        name: currentUserModel.firstName +
+                            currentUserModel.lastName,
+                        phoneNumber: currentUserModel.phoneNumber,
+                        fullAddress: currentUserAddress != null
+                            ? '${currentUserAddress['province']}, ${currentUserAddress['district']}, ${currentUserAddress['ward']}, ${currentUserAddress['street']}'
+                            : '',
                       ),
-                      TBillingAddressSection(),
-                      SizedBox(
+                      const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
                     ],
@@ -108,6 +118,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             // print(userController.currentUserModel.id);
 
             // print((await controller.getPaymentDetails(id)).toMap());
+
+            // print(await addressRepository.shippingCostEstimate());
+            print(await addressRepository.getShippingServiceAvailable());
 
             // defaultAdress = await addressController.getDefaultAddress();
             // print(defaultAdress);

@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/address_controller.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/address_bottom_sheet.dart';
@@ -18,6 +19,7 @@ class NewAddressScreen extends StatefulWidget {
 
 class _NewAddressScreenState extends State<NewAddressScreen> {
   final controller = Get.put(AddressController());
+  final userRepository = Get.put(UserRepository());
 
   @override
   void initState() {
@@ -106,6 +108,7 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       await controller.addUserAddress();
+                      await userRepository.updateUserDetails();
                     },
                     child: const Text('Save'),
                   ),
