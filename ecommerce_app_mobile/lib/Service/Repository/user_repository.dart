@@ -47,12 +47,13 @@ class UserRepository extends GetxController {
     return userData.isNotEmpty;
   }
 
-  Future<void> removeUserAddress(String id) async {
+  Future<void> removeUserAddress(
+      String id, BuildContext context, void Function() callback) async {
     final userData = currentUserModel;
-    final listAddress = userData.address!;
+    var listAddress = userData.address!;
     final currentObj =
-        listAddress.where((element) => element['id'] == id).toList()[0];
-    // final currentIndex = listAddress.indexOf(currentObj);
+        listAddress.singleWhere((element) => element['id'] == id);
+    final currentIndex = listAddress.indexOf(currentObj);
     if (currentObj['isDefault'] == true && listAddress.length > 1) {
       listAddress.remove(currentObj);
       listAddress.first['isDefault'] = true;
@@ -65,11 +66,46 @@ class UserRepository extends GetxController {
         .doc(userData.id)
         .update(userData.toMap())
         .whenComplete(() async {
-      SmartDialog.showNotify(
-        msg: 'Xoá thành công',
-        notifyType: NotifyType.success,
-        displayTime: const Duration(seconds: 1),
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Successfully deleted'),
+          duration: const Duration(seconds: 3),
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () async {
+              if (currentObj['isDefault']) {
+                listAddress = listAddress
+                    .map(
+                      (e) => {...e, 'isDefault': false},
+                    )
+                    .toList();
+              }
+
+              listAddress.insert(currentIndex, currentObj);
+              userData.address = listAddress;
+              await _db
+                  .collection('Users')
+                  .doc(userData.id)
+                  .update(userData.toMap())
+                  .whenComplete(() async {
+                await updateUserDetails();
+                callback();
+              }).catchError((error, stacktrace) {
+                () => SmartDialog.showNotify(
+                      msg: 'Failed to undo operation!',
+                      notifyType: NotifyType.failure,
+                      displayTime: const Duration(seconds: 1),
+                    );
+                if (kDebugMode) {
+                  print(error.toString());
+                }
+              });
+            },
+          ),
+        ),
       );
+
       await updateUserDetails();
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(

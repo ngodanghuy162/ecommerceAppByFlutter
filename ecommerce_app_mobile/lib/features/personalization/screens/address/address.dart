@@ -68,8 +68,8 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
                           dismissible: DismissiblePane(
                             onDismissed: () {
                               controller.removeUserAddress(
-                                controller.listUserAddress[index]['id'],
-                              );
+                                  controller.listUserAddress[index]['id'],
+                                  context);
                             },
                           ),
                           motion: const StretchMotion(),
@@ -77,8 +77,8 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
                             SlidableAction(
                               onPressed: (context) {
                                 controller.removeUserAddress(
-                                  controller.listUserAddress[index]['id'],
-                                );
+                                    controller.listUserAddress[index]['id'],
+                                    context);
                               },
                               icon: Iconsax.trash,
                               backgroundColor:

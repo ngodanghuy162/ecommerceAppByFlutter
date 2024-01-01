@@ -100,8 +100,8 @@ class AddressController extends GetxController {
     await SmartDialog.dismiss();
   }
 
-  Future<void> removeUserAddress(String id) async {
-    await _userRepo.removeUserAddress(id);
+  Future<void> removeUserAddress(String id, BuildContext context) async {
+    await _userRepo.removeUserAddress(id, context, updateUserDetails);
     updateUserDetails();
   }
 
