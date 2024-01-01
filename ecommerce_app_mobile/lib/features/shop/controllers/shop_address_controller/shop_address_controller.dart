@@ -134,6 +134,7 @@ class ShopAddressController extends GetxController {
   // }
 
   Future<void> updateShopDetails() async {
+    await _shopRepo.getShopDetails();
     listShopAddress.value = (_shopRepo.currentShopModel.address as List);
   }
 
