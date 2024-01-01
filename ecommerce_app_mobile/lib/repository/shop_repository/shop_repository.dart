@@ -4,6 +4,7 @@ import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/constant/cloudFieldName/shop_field.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/shop_model.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
@@ -20,12 +21,13 @@ class ShopRepository extends GetxController {
     await updateShopDetails();
   }
 
-  Future<void> removeShopAddress(String id) async {
+  Future<void> removeShopAddress(
+      String id, BuildContext context, void Function() callback) async {
     final shopData = currentShopModel;
-    final listAddress = shopData.address!;
+    var listAddress = shopData.address!;
     final currentObj =
-        listAddress.where((element) => element['id'] == id).toList()[0];
-    // final currentIndex = listAddress.indexOf(currentObj);
+        listAddress.singleWhere((element) => element['id'] == id);
+    final currentIndex = listAddress.indexOf(currentObj);
     if (currentObj['isDefault'] == true && listAddress.length > 1) {
       listAddress.remove(currentObj);
       listAddress.first['isDefault'] = true;
@@ -38,15 +40,49 @@ class ShopRepository extends GetxController {
         .doc(shopData.id)
         .update(shopData.toMap())
         .whenComplete(() async {
-      SmartDialog.showNotify(
-        msg: 'Xoá thành công',
-        notifyType: NotifyType.success,
-        displayTime: const Duration(seconds: 1),
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Successfully deleted'),
+          duration: const Duration(seconds: 3),
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () async {
+              if (currentObj['isDefault']) {
+                listAddress = listAddress
+                    .map(
+                      (e) => {...e, 'isDefault': false},
+                    )
+                    .toList();
+              }
+
+              listAddress.insert(currentIndex, currentObj);
+              shopData.address = listAddress;
+              await _db
+                  .collection('Shop')
+                  .doc(shopData.id)
+                  .update(shopData.toMap())
+                  .whenComplete(() async {
+                await updateShopDetails();
+                callback();
+              }).catchError((error, stacktrace) {
+                () => SmartDialog.showNotify(
+                      msg: 'Failed to undo operation!',
+                      notifyType: NotifyType.failure,
+                      displayTime: const Duration(seconds: 1),
+                    );
+                if (kDebugMode) {
+                  print(error.toString());
+                }
+              });
+            },
+          ),
+        ),
       );
       await updateShopDetails();
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Có gì đó không đúng, thử lại',
+            msg: 'Something went wrong, try again?',
             notifyType: NotifyType.failure,
             displayTime: const Duration(seconds: 1),
           );

@@ -101,8 +101,8 @@ class ShopAddressController extends GetxController {
     await SmartDialog.dismiss();
   }
 
-  Future<void> removeShopAddress(String id) async {
-    await _shopRepo.removeShopAddress(id);
+  Future<void> removeShopAddress(String id, BuildContext context) async {
+    await _shopRepo.removeShopAddress(id, context, updateShopDetails);
     updateShopDetails();
   }
 

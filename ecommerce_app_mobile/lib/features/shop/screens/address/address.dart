@@ -67,8 +67,8 @@ class _ShopAddressScreenState extends State<ShopAddressScreen> {
                           dismissible: DismissiblePane(
                             onDismissed: () {
                               controller.removeShopAddress(
-                                controller.listShopAddress[index]['id'],
-                              );
+                                  controller.listShopAddress[index]['id'],
+                                  context);
                             },
                           ),
                           motion: const StretchMotion(),
@@ -76,8 +76,8 @@ class _ShopAddressScreenState extends State<ShopAddressScreen> {
                             SlidableAction(
                               onPressed: (context) {
                                 controller.removeShopAddress(
-                                  controller.listShopAddress[index]['id'],
-                                );
+                                    controller.listShopAddress[index]['id'],
+                                    context);
                               },
                               icon: Iconsax.trash,
                               backgroundColor:

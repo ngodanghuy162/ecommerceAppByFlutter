@@ -1,5 +1,4 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
-import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/address_controller.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/new_address.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/single_address.dart';
