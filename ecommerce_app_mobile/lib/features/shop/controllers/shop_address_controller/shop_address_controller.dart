@@ -101,6 +101,11 @@ class ShopAddressController extends GetxController {
     await SmartDialog.dismiss();
   }
 
+  Future<void> removeShopAddress(String id) async {
+    await _shopRepo.removeShopAddress(id);
+    updateShopDetails();
+  }
+
   Future<void> addShopAddress() async {
     final addressId = const Uuid().v1();
     await _shopRepo.addShopAddress(
@@ -129,7 +134,6 @@ class ShopAddressController extends GetxController {
   // }
 
   Future<void> updateShopDetails() async {
-    await _shopRepo.updateShopDetails();
     listShopAddress.value = (_shopRepo.currentShopModel.address as List);
   }
 

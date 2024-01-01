@@ -1,11 +1,11 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
-import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/single_address.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/shop_address_controller/shop_address_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/address/new_address.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -47,34 +47,81 @@ class _ShopAddressScreenState extends State<ShopAddressScreen> {
           ),
         ),
         body: Obx(
-          () => SingleChildScrollView(
-            padding: const EdgeInsets.all(TSizes.defaultSpace),
-            child: Column(
-              children: [
-                ...controller.listShopAddress
-                    .map(
-                      (e) => GestureDetector(
-                        onTap: () async {
-                          SmartDialog.showLoading();
-                          await controller.setDefaultAddress(e['id']);
-                          SmartDialog.dismiss();
-                        },
-                        child: TSingleAddress(
-                            optional: e['optional'],
-                            id: e['id'],
-                            isSelectedAddress: e['isDefault'],
-                            province: e['province'],
-                            district: e['district'],
-                            name: e['name'],
-                            phoneNumber: e['phoneNumber'],
-                            street: e['street'],
-                            ward: e['ward']),
-                      ),
-                    )
-                    .toList(),
-                const SizedBox(height: TSizes.spaceBtwSections * 2),
-              ],
+          () => Padding(
+            padding: const EdgeInsets.only(
+              top: TSizes.defaultSpace,
+              right: TSizes.defaultSpace,
+              left: TSizes.defaultSpace,
             ),
+            child: ListView.separated(
+                itemBuilder: (ctx, index) => GestureDetector(
+                      onTap: () async {
+                        SmartDialog.showLoading();
+                        await controller.setDefaultAddress(
+                            controller.listShopAddress[index]['id']);
+                        SmartDialog.dismiss();
+                      },
+                      child: Slidable(
+                        key: ValueKey(controller.listShopAddress[index]),
+                        endActionPane: ActionPane(
+                          dismissible: DismissiblePane(
+                            onDismissed: () {
+                              controller.removeShopAddress(
+                                controller.listShopAddress[index]['id'],
+                              );
+                            },
+                          ),
+                          motion: const StretchMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) {
+                                controller.removeShopAddress(
+                                  controller.listShopAddress[index]['id'],
+                                );
+                              },
+                              icon: Iconsax.trash,
+                              backgroundColor:
+                                  Colors.redAccent.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(
+                                TSizes.cardRadiusLg,
+                              ),
+                            )
+                          ],
+                        ),
+                        startActionPane: ActionPane(
+                          motion: const StretchMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) {},
+                              icon: Iconsax.setting,
+                              backgroundColor:
+                                  Colors.blueAccent.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(
+                                TSizes.cardRadiusLg,
+                              ),
+                            )
+                          ],
+                        ),
+                        child: TSingleAddress(
+                            optional: controller.listShopAddress[index]
+                                ['optional'],
+                            id: controller.listShopAddress[index]['id'],
+                            isSelectedAddress: controller.listShopAddress[index]
+                                ['isDefault'],
+                            province: controller.listShopAddress[index]
+                                ['province'],
+                            district: controller.listShopAddress[index]
+                                ['district'],
+                            name: controller.listShopAddress[index]['name'],
+                            phoneNumber: controller.listShopAddress[index]
+                                ['phoneNumber'],
+                            street: controller.listShopAddress[index]['street'],
+                            ward: controller.listShopAddress[index]['ward']),
+                      ),
+                    ),
+                separatorBuilder: (ctx, index) =>
+                    const SizedBox(height: TSizes.spaceBtwItems),
+                itemCount: controller.listShopAddress.length),
           ),
         )
 

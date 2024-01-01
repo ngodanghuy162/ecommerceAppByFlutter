@@ -20,6 +20,42 @@ class ShopRepository extends GetxController {
     await updateShopDetails();
   }
 
+  Future<void> removeShopAddress(String id) async {
+    final shopData = currentShopModel;
+    final listAddress = shopData.address!;
+    final currentObj =
+        listAddress.where((element) => element['id'] == id).toList()[0];
+    // final currentIndex = listAddress.indexOf(currentObj);
+    if (currentObj['isDefault'] == true && listAddress.length > 1) {
+      listAddress.remove(currentObj);
+      listAddress.first['isDefault'] = true;
+    } else {
+      listAddress.remove(currentObj);
+    }
+    shopData.address = listAddress;
+    await _db
+        .collection('Shop')
+        .doc(shopData.id)
+        .update(shopData.toMap())
+        .whenComplete(() async {
+      SmartDialog.showNotify(
+        msg: 'Xoá thành công',
+        notifyType: NotifyType.success,
+        displayTime: const Duration(seconds: 1),
+      );
+      await updateShopDetails();
+    }).catchError((error, stacktrace) {
+      () => SmartDialog.showNotify(
+            msg: 'Có gì đó không đúng, thử lại',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
+          );
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
+  }
+
   Future<void> updateShopDetails() async {
     currentShopModel = await getShopDetails();
   }

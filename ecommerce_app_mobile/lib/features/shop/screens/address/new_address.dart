@@ -110,7 +110,7 @@ class _NewShopAddressScreenState extends State<NewShopAddressScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       await controller.addShopAddress();
-                      controller.clearTextField();
+                      // controller.clearTextField();
                       // ignore: use_build_context_synchronously
                       Navigator.of(popContext).pop();
                     },
