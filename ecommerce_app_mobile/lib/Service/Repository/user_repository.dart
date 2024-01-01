@@ -47,6 +47,42 @@ class UserRepository extends GetxController {
     return userData.isNotEmpty;
   }
 
+  Future<void> removeUserAddress(String id) async {
+    final userData = currentUserModel;
+    final listAddress = userData.address!;
+    final currentObj =
+        listAddress.where((element) => element['id'] == id).toList()[0];
+    // final currentIndex = listAddress.indexOf(currentObj);
+    if (currentObj['isDefault'] == true && listAddress.length > 1) {
+      listAddress.remove(currentObj);
+      listAddress.first['isDefault'] = true;
+    } else {
+      listAddress.remove(currentObj);
+    }
+    userData.address = listAddress;
+    await _db
+        .collection('Users')
+        .doc(userData.id)
+        .update(userData.toMap())
+        .whenComplete(() async {
+      SmartDialog.showNotify(
+        msg: 'Xoá thành công',
+        notifyType: NotifyType.success,
+        displayTime: const Duration(seconds: 1),
+      );
+      await updateUserDetails();
+    }).catchError((error, stacktrace) {
+      () => SmartDialog.showNotify(
+            msg: 'Có gì đó không đúng, thử lại',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
+          );
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
+  }
+
   Future<UserModel> getUserDetails(String email) async {
     final snapshot = await _db
         .collection('Users')
