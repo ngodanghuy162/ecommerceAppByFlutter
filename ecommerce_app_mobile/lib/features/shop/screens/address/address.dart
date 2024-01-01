@@ -1,8 +1,8 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
-import 'package:ecommerce_app_mobile/features/personalization/controllers/address_controller.dart';
-import 'package:ecommerce_app_mobile/features/personalization/screens/address/new_address.dart';
-import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/single_address.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/shop_address_controller/shop_address_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/address/new_address.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/address/widgets/single_address.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -10,15 +10,15 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class UserAddressScreen extends StatefulWidget {
-  const UserAddressScreen({Key? key}) : super(key: key);
+class ShopAddressScreen extends StatefulWidget {
+  const ShopAddressScreen({Key? key}) : super(key: key);
 
   @override
-  State<UserAddressScreen> createState() => _UserAddressScreenState();
+  State<ShopAddressScreen> createState() => _ShopAddressScreenState();
 }
 
-class _UserAddressScreenState extends State<UserAddressScreen> {
-  final controller = Get.put(AddressController());
+class _ShopAddressScreenState extends State<ShopAddressScreen> {
+  final controller = Get.put(ShopAddressController());
   void didPop() {
     setState(() {});
   }
@@ -27,7 +27,7 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Get.to(() => NewAddressScreen(
+          onPressed: () => Get.to(() => NewShopAddressScreen(
                 didPop: didPop,
               )),
           // onPressed: () async {
@@ -47,7 +47,7 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
           ),
         ),
         body: FutureBuilder(
-          future: controller.getAllUserAddress(),
+          future: controller.getAllShopAddress(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData) {

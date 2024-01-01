@@ -75,15 +75,12 @@ class UserRepository extends GetxController {
   }
 
   Future<List<Map<String, dynamic>>> getAllUserAddress() async {
-    final userData =
-        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
-
+    final userData = currentUserModel;
     return userData.address!;
   }
 
   Future<void> setDefaultAddress(String addressId) async {
-    final userData =
-        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    final userData = currentUserModel;
     final listAddress = userData.address!.map(
       (e) {
         final addressModel = AddressModel(
@@ -113,15 +110,17 @@ class UserRepository extends GetxController {
         .collection('Users')
         .doc(userData.id)
         .update(userData.toMap())
-        .whenComplete(() => Get.snackbar(
-              "Thành công",
-              "Đặt địa chỉ mặc định thành công",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.green.withOpacity(0.1),
-              colorText: Colors.green,
-              duration: const Duration(seconds: 1),
-            ))
-        .catchError((error, stacktrace) {
+        .whenComplete(() {
+      Get.snackbar(
+        "Thành công",
+        "Đặt địa chỉ mặc định thành công",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green.withOpacity(0.1),
+        colorText: Colors.green,
+        duration: const Duration(seconds: 1),
+      );
+      currentUserModel = userData;
+    }).catchError((error, stacktrace) {
       () => Get.snackbar(
             'Lỗi',
             'Có gì đó không đúng, thử lại?',
@@ -136,8 +135,7 @@ class UserRepository extends GetxController {
   }
 
   Future<Map<String, dynamic>> getDefaultAddress() async {
-    final userData =
-        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    final userData = currentUserModel;
     return userData.address!
         .singleWhere((element) => element['isDefault'] == true);
   }
@@ -155,22 +153,23 @@ class UserRepository extends GetxController {
   }
 
   Future<void> addUserAddress(AddressModel addressModel) async {
-    final userData =
-        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    final userData = currentUserModel;
     userData.address!.add(addressModel.toMap());
     await _db
         .collection('Users')
         .doc(userData.id)
         .update(userData.toMap())
-        .whenComplete(() => Get.snackbar(
-              "Thành công",
-              "Địa chỉ đã được thêm thành công",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.green.withOpacity(0.1),
-              colorText: Colors.green,
-              duration: const Duration(seconds: 1),
-            ))
-        .catchError((error, stacktrace) {
+        .whenComplete(() {
+      Get.snackbar(
+        "Thành công",
+        "Địa chỉ đã được thêm thành công",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green.withOpacity(0.1),
+        colorText: Colors.green,
+        duration: const Duration(seconds: 1),
+      );
+      currentUserModel = userData;
+    }).catchError((error, stacktrace) {
       () => Get.snackbar(
             'Lỗi',
             'Có gì đó không đúng, thử lại?',

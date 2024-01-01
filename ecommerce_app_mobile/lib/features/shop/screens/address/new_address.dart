@@ -1,25 +1,26 @@
-import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
-import 'package:ecommerce_app_mobile/features/personalization/controllers/address_controller.dart';
-import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/address_bottom_sheet.dart';
-import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/custom.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/address/widgets/address_bottom_sheet.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/shop_address_controller/shop_address_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/address/widgets/custom.dart';
+import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:iconsax/iconsax.dart';
 
-class NewAddressScreen extends StatefulWidget {
-  const NewAddressScreen({Key? key, required this.didPop}) : super(key: key);
+class NewShopAddressScreen extends StatefulWidget {
+  const NewShopAddressScreen({Key? key, required this.didPop})
+      : super(key: key);
   final void Function() didPop;
 
   @override
-  State<NewAddressScreen> createState() => _NewAddressScreenState();
+  State<NewShopAddressScreen> createState() => _NewShopAddressScreenState();
 }
 
-class _NewAddressScreenState extends State<NewAddressScreen> {
-  final controller = Get.put(AddressController());
-  final userRepository = Get.put(UserRepository());
+class _NewShopAddressScreenState extends State<NewShopAddressScreen> {
+  final controller = Get.put(ShopAddressController());
+  final shopRepository = Get.put(ShopRepository());
 
   @override
   void initState() {
@@ -29,6 +30,7 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final popContext = context;
     return Scaffold(
       appBar: TAppBar(
         showBackArrow: true,
@@ -107,7 +109,10 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      await controller.addUserAddress();
+                      await controller.addShopAddress();
+                      controller.clearTextField();
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(popContext).pop();
                     },
                     child: const Text('Save'),
                   ),
