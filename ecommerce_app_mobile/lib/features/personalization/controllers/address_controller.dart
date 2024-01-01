@@ -15,6 +15,15 @@ import 'package:google_geocoding_api/google_geocoding_api.dart';
 
 class AddressController extends GetxController {
   static AddressController get instance => Get.find();
+
+  @override
+  void onReady() async {
+    super.onReady();
+    listUserAddress.value = (_userRepo.currentUserModel.address as List);
+  }
+
+  RxList<dynamic> listUserAddress = [].obs;
+
   final _userRepo = Get.put(UserRepository());
   final name = TextEditingController();
   final phoneNumber = TextEditingController();
@@ -114,16 +123,22 @@ class AddressController extends GetxController {
     await setDefaultAddress(addressId);
   }
 
-  Future<List<Map<String, dynamic>>> getAllUserAddress() async {
-    return await _userRepo.getAllUserAddress();
+  Future<void> updateUserDetails() async {
+    await _userRepo.updateUserDetails();
+    listUserAddress.value = (_userRepo.currentUserModel.address as List);
   }
 
-  Future<Map<String, dynamic>> getDefaultAddress() async {
-    return await _userRepo.getDefaultAddress();
+  List<Map<String, dynamic>> getAllUserAddress() {
+    return _userRepo.getAllUserAddress();
+  }
+
+  Map<String, dynamic> getDefaultAddress() {
+    return _userRepo.getDefaultAddress();
   }
 
   Future<void> setDefaultAddress(addressId) async {
     await _userRepo.setDefaultAddress(addressId);
+    await updateUserDetails();
   }
 
   Future<List<Map<String, dynamic>>> getAllProvinceVN() async {

@@ -25,83 +25,70 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(controller.listUserAddress);
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => Get.to(() => NewAddressScreen(
-                didPop: didPop,
-              )),
-          // onPressed: () async {
-          //   print(await controller.getAllUserAddress());
-          // },
-          backgroundColor: TColors.primary,
-          child: const Icon(
-            Iconsax.add,
-            color: TColors.white,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Get.to(() => NewAddressScreen(
+              didPop: didPop,
+            )),
+        // onPressed: () async {
+        //   print(await controller.getAllUserAddress());
+        // },
+        backgroundColor: TColors.primary,
+        child: const Icon(
+          Iconsax.add,
+          color: TColors.white,
+        ),
+      ),
+      appBar: TAppBar(
+        showBackArrow: true,
+        title: Text(
+          'Address',
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+      ),
+      body: Obx(
+        () => SingleChildScrollView(
+          padding: const EdgeInsets.all(TSizes.defaultSpace),
+          child: Column(
+            children: [
+              ...controller.listUserAddress
+                  .map(
+                    (e) => GestureDetector(
+                      onTap: () async {
+                        SmartDialog.showLoading();
+                        await controller.setDefaultAddress(e['id']);
+                        setState(() {});
+                        SmartDialog.dismiss();
+                      },
+                      child: TSingleAddress(
+                          optional: e['optional'],
+                          id: e['id'],
+                          isSelectedAddress: e['isDefault'],
+                          province: e['province'],
+                          district: e['district'],
+                          name: e['name'],
+                          phoneNumber: e['phoneNumber'],
+                          street: e['street'],
+                          ward: e['ward']),
+                    ),
+                  )
+                  .toList(),
+              const SizedBox(height: TSizes.spaceBtwSections * 2),
+            ],
           ),
         ),
-        appBar: TAppBar(
-          showBackArrow: true,
-          title: Text(
-            'Address',
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-        ),
-        body: FutureBuilder(
-          future: controller.getAllUserAddress(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                final data = snapshot.data;
+      ),
 
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(TSizes.defaultSpace),
-                  child: Column(
-                    children: [
-                      ...data!
-                          .map(
-                            (e) => GestureDetector(
-                              onTap: () async {
-                                SmartDialog.showLoading();
-                                await controller.setDefaultAddress(e['id']);
-                                setState(() {});
-                                SmartDialog.dismiss();
-                              },
-                              child: TSingleAddress(
-                                  optional: e['optional'],
-                                  id: e['id'],
-                                  isSelectedAddress: e['isDefault'],
-                                  province: e['province'],
-                                  district: e['district'],
-                                  name: e['name'],
-                                  phoneNumber: e['phoneNumber'],
-                                  street: e['street'],
-                                  ward: e['ward']),
-                            ),
-                          )
-                          .toList(),
-                      const SizedBox(height: TSizes.spaceBtwSections * 2),
-                    ],
-                  ),
-                );
-              }
-            }
-            return const SizedBox(
-              height: 65,
-              child: Center(
-                child: Center(child: CustomLoading()),
-              ),
-            );
-          },
-        )
-        // body: const SingleChildScrollView(
-        //   padding: EdgeInsets.all(TSizes.defaultSpace),
-        //   child: Column(
-        //     children: [
-        //       TSingleAddress(isSelectedAddress: false),
-        //       TSingleAddress(isSelectedAddress: true),
-        //     ],
-        //   ),
-        // ),
-        );
+      // body: const SingleChildScrollView(
+      //   padding: EdgeInsets.all(TSizes.defaultSpace),
+      //   child: Column(
+      //     children: [
+      //       TSingleAddress(isSelectedAddress: false),
+      //       TSingleAddress(isSelectedAddress: true),
+      //     ],
+      //   ),
+      // ),
+    );
   }
 }

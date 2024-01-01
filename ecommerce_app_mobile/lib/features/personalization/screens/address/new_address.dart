@@ -29,6 +29,7 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final popContext = context;
     return Scaffold(
       appBar: TAppBar(
         showBackArrow: true,
@@ -108,6 +109,9 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       await controller.addUserAddress();
+                      controller.clearTextField();
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(popContext).pop();
                     },
                     child: const Text('Save'),
                   ),

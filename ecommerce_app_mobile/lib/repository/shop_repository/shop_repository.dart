@@ -90,7 +90,7 @@ class ShopRepository extends GetxController {
       currentShopModel = shopData;
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Đặt địa chỉ mặc định thành công',
+            msg: 'Có gì đó không đúng, thử lại',
             notifyType: NotifyType.failure,
             displayTime: const Duration(seconds: 1),
           );

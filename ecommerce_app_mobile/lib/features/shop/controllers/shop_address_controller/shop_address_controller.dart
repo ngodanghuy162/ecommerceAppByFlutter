@@ -139,8 +139,7 @@ class ShopAddressController extends GetxController {
 
   Future<void> setDefaultAddress(addressId) async {
     await _shopRepo.setDefaultAddress(addressId);
-    await _shopRepo.updateShopDetails();
-    listShopAddress.value = (_shopRepo.currentShopModel.address as List);
+    await updateShopDetails();
   }
 
   Future<List<Map<String, dynamic>>> getAllProvinceVN() async {

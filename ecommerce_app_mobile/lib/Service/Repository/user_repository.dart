@@ -9,6 +9,7 @@ import 'package:ecommerce_app_mobile/repository/product_repository/product_varia
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import '../../common/constant/cloudFieldName/user_model_field.dart';
 
@@ -74,7 +75,7 @@ class UserRepository extends GetxController {
         .updatePassword(userModel.password!);
   }
 
-  Future<List<Map<String, dynamic>>> getAllUserAddress() async {
+  List<Map<String, dynamic>> getAllUserAddress() {
     final userData = currentUserModel;
     return userData.address!;
   }
@@ -111,22 +112,17 @@ class UserRepository extends GetxController {
         .doc(userData.id)
         .update(userData.toMap())
         .whenComplete(() {
-      Get.snackbar(
-        "Thành công",
-        "Đặt địa chỉ mặc định thành công",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.withOpacity(0.1),
-        colorText: Colors.green,
-        duration: const Duration(seconds: 1),
+      SmartDialog.showNotify(
+        msg: 'Đặt địa chỉ mặc định thành công',
+        notifyType: NotifyType.success,
+        displayTime: const Duration(seconds: 1),
       );
       currentUserModel = userData;
     }).catchError((error, stacktrace) {
-      () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
+      () => SmartDialog.showNotify(
+            msg: 'Có gì đó không đúng, thử lại',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
           );
       if (kDebugMode) {
         print(error.toString());
@@ -134,7 +130,7 @@ class UserRepository extends GetxController {
     });
   }
 
-  Future<Map<String, dynamic>> getDefaultAddress() async {
+  Map<String, dynamic> getDefaultAddress() {
     final userData = currentUserModel;
     return userData.address!
         .singleWhere((element) => element['isDefault'] == true);
@@ -160,22 +156,17 @@ class UserRepository extends GetxController {
         .doc(userData.id)
         .update(userData.toMap())
         .whenComplete(() {
-      Get.snackbar(
-        "Thành công",
-        "Địa chỉ đã được thêm thành công",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.withOpacity(0.1),
-        colorText: Colors.green,
-        duration: const Duration(seconds: 1),
+      SmartDialog.showNotify(
+        msg: 'Địa chỉ đã được thêm thành công',
+        notifyType: NotifyType.success,
+        displayTime: const Duration(seconds: 1),
       );
       currentUserModel = userData;
     }).catchError((error, stacktrace) {
-      () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
+      () => SmartDialog.showNotify(
+            msg: 'Có gì đó không đúng, thử lại',
+            notifyType: NotifyType.success,
+            displayTime: const Duration(seconds: 1),
           );
       if (kDebugMode) {
         print(error.toString());
