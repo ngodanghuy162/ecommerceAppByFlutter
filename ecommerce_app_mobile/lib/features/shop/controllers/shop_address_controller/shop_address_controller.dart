@@ -16,6 +16,15 @@ import 'package:google_geocoding_api/google_geocoding_api.dart';
 
 class ShopAddressController extends GetxController {
   static ShopAddressController get instance => Get.find();
+
+  RxList<dynamic> listShopAddress = [].obs;
+
+  @override
+  void onReady() async {
+    super.onReady();
+    await updateShopDetails();
+  }
+
   final _shopRepo = Get.put(ShopRepository());
   final name = TextEditingController();
   final phoneNumber = TextEditingController();
@@ -115,16 +124,23 @@ class ShopAddressController extends GetxController {
     await setDefaultAddress(addressId);
   }
 
-  Future<List<Map<String, dynamic>>> getAllShopAddress() async {
-    return await _shopRepo.getAllShopAddress();
+  // List<Map<String, dynamic>> getAllShopAddress() {
+  //   return _shopRepo.getAllShopAddress();
+  // }
+
+  Future<void> updateShopDetails() async {
+    await _shopRepo.updateShopDetails();
+    listShopAddress.value = (_shopRepo.currentShopModel.address as List);
   }
 
-  Future<Map<String, dynamic>> getDefaultAddress() async {
-    return await _shopRepo.getDefaultAddress();
+  Map<String, dynamic> getDefaultAddress() {
+    return _shopRepo.getDefaultAddress();
   }
 
   Future<void> setDefaultAddress(addressId) async {
     await _shopRepo.setDefaultAddress(addressId);
+    await _shopRepo.updateShopDetails();
+    listShopAddress.value = (_shopRepo.currentShopModel.address as List);
   }
 
   Future<List<Map<String, dynamic>>> getAllProvinceVN() async {
@@ -177,8 +193,6 @@ class ShopAddressController extends GetxController {
       // print('Response body: ${response.body}');
       final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
       final List<dynamic> districtList = responseBody['data'];
-      print(districtList);
-
       return districtList.map(
         (element) {
           final e = element as Map<String, dynamic>;

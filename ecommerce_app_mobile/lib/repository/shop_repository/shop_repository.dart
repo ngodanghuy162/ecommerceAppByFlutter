@@ -4,7 +4,7 @@ import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/constant/cloudFieldName/shop_field.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/shop_model.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class ShopRepository extends GetxController {
@@ -44,8 +44,8 @@ class ShopRepository extends GetxController {
     return shopData;
   }
 
-  Future<List<Map<String, dynamic>>> getAllShopAddress() async {
-    final shopDetail = await getShopDetails();
+  List<Map<String, dynamic>> getAllShopAddress() {
+    final shopDetail = currentShopModel;
 
     return shopDetail.address!;
   }
@@ -82,22 +82,17 @@ class ShopRepository extends GetxController {
         .doc(shopData.id)
         .update(shopData.toMap())
         .whenComplete(() {
-      Get.snackbar(
-        "Thành công",
-        "Đặt địa chỉ mặc định thành công",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.withOpacity(0.1),
-        colorText: Colors.green,
-        duration: const Duration(seconds: 1),
+      SmartDialog.showNotify(
+        msg: 'Đặt địa chỉ mặc định thành công',
+        notifyType: NotifyType.success,
+        displayTime: const Duration(seconds: 1),
       );
       currentShopModel = shopData;
     }).catchError((error, stacktrace) {
-      () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
+      () => SmartDialog.showNotify(
+            msg: 'Đặt địa chỉ mặc định thành công',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
           );
       if (kDebugMode) {
         print(error.toString());
@@ -105,7 +100,7 @@ class ShopRepository extends GetxController {
     });
   }
 
-  Future<Map<String, dynamic>> getDefaultAddress() async {
+  Map<String, dynamic> getDefaultAddress() {
     final userData = currentShopModel;
     return userData.address!
         .singleWhere((element) => element['isDefault'] == true);
@@ -119,23 +114,19 @@ class ShopRepository extends GetxController {
         .doc(shopData.id)
         .update(shopData.toMap())
         .whenComplete(() {
-      Get.snackbar(
-        "Thành công",
-        "Địa chỉ đã được thêm thành công",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.withOpacity(0.1),
-        colorText: Colors.green,
-        duration: const Duration(seconds: 1),
+      SmartDialog.showNotify(
+        msg: 'Địa chỉ đã được thêm thành công',
+        notifyType: NotifyType.success,
+        displayTime: const Duration(seconds: 1),
       );
       currentShopModel = shopData;
     }).catchError((error, stacktrace) {
-      () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
+      () => SmartDialog.showNotify(
+            msg: 'Có gì đó không đúng, thử lại',
+            notifyType: NotifyType.success,
+            displayTime: const Duration(seconds: 1),
           );
+      ;
       if (kDebugMode) {
         print(error.toString());
       }
