@@ -31,6 +31,7 @@ class TCartItemByHuy extends StatelessWidget {
           imageUrl: imgUrl ?? TImages.productImage1,
           width: 60,
           height: 60,
+          isNetworkImage: true,
           padding: const EdgeInsets.all(TSizes.sm),
           backgroundColor: THelperFunctions.isDarkMode(context)
               ? TColors.darkerGrey
