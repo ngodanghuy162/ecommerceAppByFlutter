@@ -30,4 +30,13 @@ class ChatRepository extends GetxController {
         ? snapshot.docs.first.id
         : null;
   }
+
+  Future<List<ChatModel>> getAllChatModelByShopEmail(String shopEmail) async {
+    final snapshot = await _db
+        .collection('Chat')
+        .where('shopEmail', isEqualTo: shopEmail)
+        .get();
+    final chatData = snapshot.docs.map((e) => ChatModel.fromSnapshot(e)).toList();
+    return chatData;
+  }
 }

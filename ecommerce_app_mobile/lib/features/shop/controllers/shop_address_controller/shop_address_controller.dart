@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
-import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
+import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
+
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -13,18 +14,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_geocoding_api/google_geocoding_api.dart';
 
-class AddressController extends GetxController {
-  static AddressController get instance => Get.find();
+class ShopAddressController extends GetxController {
+  static ShopAddressController get instance => Get.find();
+
+  RxList<dynamic> listShopAddress = [].obs;
 
   @override
   void onReady() async {
     super.onReady();
-    listUserAddress.value = (_userRepo.currentUserModel.address as List);
+    await updateShopDetails();
   }
 
-  RxList<dynamic> listUserAddress = [].obs;
-
-  final _userRepo = Get.put(UserRepository());
+  final _shopRepo = Get.put(ShopRepository());
   final name = TextEditingController();
   final phoneNumber = TextEditingController();
   final address = TextEditingController();
@@ -100,14 +101,14 @@ class AddressController extends GetxController {
     await SmartDialog.dismiss();
   }
 
-  Future<void> removeUserAddress(String id, BuildContext context) async {
-    await _userRepo.removeUserAddress(id, context, updateUserDetails);
-    updateUserDetails();
+  Future<void> removeShopAddress(String id, BuildContext context) async {
+    await _shopRepo.removeShopAddress(id, context, updateShopDetails);
+    updateShopDetails();
   }
 
-  Future<void> addUserAddress() async {
+  Future<void> addShopAddress() async {
     final addressId = const Uuid().v1();
-    await _userRepo.addUserAddress(
+    await _shopRepo.addShopAddress(
       AddressModel(
         phoneNumber: phoneNumber.text,
         name: name.text,
@@ -128,22 +129,22 @@ class AddressController extends GetxController {
     await setDefaultAddress(addressId);
   }
 
-  Future<void> updateUserDetails() async {
-    await _userRepo.updateUserDetails();
-    listUserAddress.value = (_userRepo.currentUserModel.address as List);
-  }
+  // List<Map<String, dynamic>> getAllShopAddress() {
+  //   return _shopRepo.getAllShopAddress();
+  // }
 
-  List<Map<String, dynamic>> getAllUserAddress() {
-    return _userRepo.getAllUserAddress();
+  Future<void> updateShopDetails() async {
+    await _shopRepo.getShopDetails();
+    listShopAddress.value = (_shopRepo.currentShopModel.address as List);
   }
 
   Map<String, dynamic> getDefaultAddress() {
-    return _userRepo.getDefaultAddress();
+    return _shopRepo.getDefaultAddress();
   }
 
   Future<void> setDefaultAddress(addressId) async {
-    await _userRepo.setDefaultAddress(addressId);
-    await updateUserDetails();
+    await _shopRepo.setDefaultAddress(addressId);
+    await updateShopDetails();
   }
 
   Future<List<Map<String, dynamic>>> getAllProvinceVN() async {
@@ -196,8 +197,6 @@ class AddressController extends GetxController {
       // print('Response body: ${response.body}');
       final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
       final List<dynamic> districtList = responseBody['data'];
-      print(districtList);
-
       return districtList.map(
         (element) {
           final e = element as Map<String, dynamic>;

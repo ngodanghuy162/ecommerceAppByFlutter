@@ -8,10 +8,10 @@ class ReplyReviewRepository extends GetxController {
 
   final _db = FirebaseFirestore.instance;
 
-  createReplyReview(ReplyReviewModel replyReviewModel) async {
+  Future<void> createReplyReview(ReplyReviewModel replyReviewModel, String productId) async {
     await _db
         .collection('Product')
-        .doc('3o2frQlDs3Zh75qLF0c9')
+        .doc(productId)
         .collection('Reply')
         .add(replyReviewModel.toJson())
         .catchError((error, stacktrace) {

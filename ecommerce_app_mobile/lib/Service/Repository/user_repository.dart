@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/profile_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
@@ -10,6 +9,7 @@ import 'package:ecommerce_app_mobile/repository/product_repository/product_varia
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import '../../common/constant/cloudFieldName/user_model_field.dart';
 
@@ -47,6 +47,78 @@ class UserRepository extends GetxController {
     return userData.isNotEmpty;
   }
 
+  Future<void> removeUserAddress(
+      String id, BuildContext context, void Function() callback) async {
+    final userData = currentUserModel;
+    var listAddress = userData.address!;
+    final currentObj =
+        listAddress.singleWhere((element) => element['id'] == id);
+    final currentIndex = listAddress.indexOf(currentObj);
+    if (currentObj['isDefault'] == true && listAddress.length > 1) {
+      listAddress.remove(currentObj);
+      listAddress.first['isDefault'] = true;
+    } else {
+      listAddress.remove(currentObj);
+    }
+    userData.address = listAddress;
+    await _db
+        .collection('Users')
+        .doc(userData.id)
+        .update(userData.toMap())
+        .whenComplete(() async {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Successfully deleted'),
+          duration: const Duration(seconds: 3),
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () async {
+              if (currentObj['isDefault']) {
+                listAddress = listAddress
+                    .map(
+                      (e) => {...e, 'isDefault': false},
+                    )
+                    .toList();
+              }
+
+              listAddress.insert(currentIndex, currentObj);
+              userData.address = listAddress;
+              await _db
+                  .collection('Users')
+                  .doc(userData.id)
+                  .update(userData.toMap())
+                  .whenComplete(() async {
+                await updateUserDetails();
+                callback();
+              }).catchError((error, stacktrace) {
+                () => SmartDialog.showNotify(
+                      msg: 'Failed to undo operation!',
+                      notifyType: NotifyType.failure,
+                      displayTime: const Duration(seconds: 1),
+                    );
+                if (kDebugMode) {
+                  print(error.toString());
+                }
+              });
+            },
+          ),
+        ),
+      );
+
+      await updateUserDetails();
+    }).catchError((error, stacktrace) {
+      () => SmartDialog.showNotify(
+            msg: 'Có gì đó không đúng, thử lại',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
+          );
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
+  }
+
   Future<UserModel> getUserDetails(String email) async {
     final snapshot = await _db
         .collection('Users')
@@ -75,16 +147,13 @@ class UserRepository extends GetxController {
         .updatePassword(userModel.password!);
   }
 
-  Future<List<Map<String, dynamic>>> getAllUserAddress() async {
-    final userData =
-        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
-
+  List<Map<String, dynamic>> getAllUserAddress() {
+    final userData = currentUserModel;
     return userData.address!;
   }
 
   Future<void> setDefaultAddress(String addressId) async {
-    final userData =
-        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    final userData = currentUserModel;
     final listAddress = userData.address!.map(
       (e) {
         final addressModel = AddressModel(
@@ -114,21 +183,18 @@ class UserRepository extends GetxController {
         .collection('Users')
         .doc(userData.id)
         .update(userData.toMap())
-        .whenComplete(() => Get.snackbar(
-              "Thành công",
-              "Đặt địa chỉ mặc định thành công",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.green.withOpacity(0.1),
-              colorText: Colors.green,
-              duration: const Duration(seconds: 1),
-            ))
-        .catchError((error, stacktrace) {
-      () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
+        .whenComplete(() {
+      SmartDialog.showNotify(
+        msg: 'Đặt địa chỉ mặc định thành công',
+        notifyType: NotifyType.success,
+        displayTime: const Duration(seconds: 1),
+      );
+      currentUserModel = userData;
+    }).catchError((error, stacktrace) {
+      () => SmartDialog.showNotify(
+            msg: 'Có gì đó không đúng, thử lại',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
           );
       if (kDebugMode) {
         print(error.toString());
@@ -136,9 +202,8 @@ class UserRepository extends GetxController {
     });
   }
 
-  Future<Map<String, dynamic>> getDefaultAddress() async {
-    final userData =
-        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+  Map<String, dynamic> getDefaultAddress() {
+    final userData = currentUserModel;
     return userData.address!
         .singleWhere((element) => element['isDefault'] == true);
   }
@@ -156,28 +221,24 @@ class UserRepository extends GetxController {
   }
 
   Future<void> addUserAddress(AddressModel addressModel) async {
-    final userData =
-        await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    final userData = currentUserModel;
     userData.address!.add(addressModel.toMap());
     await _db
         .collection('Users')
         .doc(userData.id)
         .update(userData.toMap())
-        .whenComplete(() => Get.snackbar(
-              "Thành công",
-              "Địa chỉ đã được thêm thành công",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.green.withOpacity(0.1),
-              colorText: Colors.green,
-              duration: const Duration(seconds: 1),
-            ))
-        .catchError((error, stacktrace) {
-      () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
+        .whenComplete(() {
+      SmartDialog.showNotify(
+        msg: 'Địa chỉ đã được thêm thành công',
+        notifyType: NotifyType.success,
+        displayTime: const Duration(seconds: 1),
+      );
+      currentUserModel = userData;
+    }).catchError((error, stacktrace) {
+      () => SmartDialog.showNotify(
+            msg: 'Có gì đó không đúng, thử lại',
+            notifyType: NotifyType.success,
+            displayTime: const Duration(seconds: 1),
           );
       if (kDebugMode) {
         print(error.toString());
