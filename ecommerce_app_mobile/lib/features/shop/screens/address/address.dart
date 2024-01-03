@@ -1,6 +1,7 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/single_address.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/shop_address_controller/shop_address_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/address/edit_address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/address/new_address.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -20,17 +21,11 @@ class ShopAddressScreen extends StatefulWidget {
 class _ShopAddressScreenState extends State<ShopAddressScreen> {
   final controller = Get.put(ShopAddressController());
 
-  void didPop() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Get.to(() => NewShopAddressScreen(
-                didPop: didPop,
-              )),
+          onPressed: () => Get.to(() => const NewShopAddressScreen()),
           // onPressed: () async {
           //   print(await controller.getAllUserAddress());
           // },
@@ -93,7 +88,10 @@ class _ShopAddressScreenState extends State<ShopAddressScreen> {
                           motion: const StretchMotion(),
                           children: [
                             SlidableAction(
-                              onPressed: (context) {},
+                              onPressed: (context) {
+                                Get.to(() =>
+                                    ShopEditAddressScreen(addressIndex: index));
+                              },
                               icon: Iconsax.setting,
                               backgroundColor:
                                   Colors.blueAccent.withOpacity(0.8),

@@ -122,6 +122,34 @@ class ShopRepository extends GetxController {
     return shopDetail!.address!;
   }
 
+  Future<void> updateAddressInfo(
+      AddressModel currentAddressModel, index) async {
+    final shopData = currentShopModel;
+
+    shopData!.address![index] = currentAddressModel.toMap();
+    await _db
+        .collection('Shop')
+        .doc(shopData.id)
+        .update(shopData.toMap())
+        .whenComplete(() {
+      SmartDialog.showNotify(
+        msg: 'Thay đổi thông tin thành công',
+        notifyType: NotifyType.success,
+        displayTime: const Duration(seconds: 1),
+      );
+      currentShopModel = shopData;
+    }).catchError((error, stacktrace) {
+      () => SmartDialog.showNotify(
+            msg: 'Có gì đó không đúng, thử lại',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
+          );
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
+  }
+
   Future<void> setDefaultAddress(String addressId) async {
     final shopData = currentShopModel;
     final listAddress = shopData!.address!.map(
