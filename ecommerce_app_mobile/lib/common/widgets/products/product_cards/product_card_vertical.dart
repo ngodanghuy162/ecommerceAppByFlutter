@@ -19,7 +19,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TProductCardVertical extends StatefulWidget {
-  TProductCardVertical({super.key, required this.modelDetail});
+  const TProductCardVertical({super.key, required this.modelDetail});
 
   final DetailProductModel modelDetail;
 
@@ -65,118 +65,132 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                     borderRadius:
                         BorderRadius.circular(TSizes.productImageRadius),
                     color: dark ? TColors.darkerGrey : TColors.white),
-                child: Column(children: [
-                  // Thumbnail, Wishlist, Button, Discount Tag
-                  TRoundedContainer(
-                    height: 180,
-                    padding: const EdgeInsets.all(TSizes.sm),
-                    backgroundColor: dark ? TColors.dark : TColors.light,
-                    child: Stack(children: [
-                      // -- Thumbnail Image
-                      Center(
-                        child: TRoundedImage(
-                          imageUrl: widget.modelDetail.listVariants[0].imageURL,
-                          applyImageRadius: true,
-                          isNetworkImage: true,
-                        ),
-                      ),
-
-                      // -- Sale Tag
-                      Positioned(
-                        top: 12,
-                        child: TRoundedContainer(
-                          radius: TSizes.sm,
-                          backgroundColor: TColors.secondary.withOpacity(0.8),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: TSizes.sm, vertical: TSizes.xs),
-                          child: Text(
-                              '${widget.modelDetail.product.discount!}%',
-                              style:
-                                  Theme.of(context).textTheme.labelLarge!.apply(
-                                        color: TColors.black,
-                                      )),
-                        ),
-                      ),
-                      // -- Favourite Button
-
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Obx(() => TCircularIcon(
-                              backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-                              onPressed: () async {
-                                await userController
-                                    .addOrRemoveProductToWishlist(
-                                        widget.modelDetail.product);
-                                isInWishlist.value = !isInWishlist.value;
-                                ;
-                              },
-                              icon: isInWishlist.value
-                                  ? Iconsax.heart5
-                                  : Iconsax.heart_add,
-                              color: Color.fromARGB(255, 236, 19, 113),
-                            )),
-                      )
-                    ]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: TSizes.sm),
-                    child: Column(children: [
-                      TProductTitleText(
-                        title: widget.modelDetail.product.name,
-                        smallSize: true,
-                      ),
-                      const SizedBox(height: TSizes.spaceBtwItems / 2),
-                      TBrandTitleWithVerifiedIcon(
-                          title: widget.modelDetail.brand.name,
-                          showVerify: widget.modelDetail.brand.isVerified),
-                    ]),
-                  ),
-
-                  const Spacer(),
-
-                  /// Price Row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      /// Price
-                      Container(
-                        width: 150,
-                        padding: const EdgeInsets.only(left: TSizes.sm),
-                        child: TProductPriceText(
-                          price: minPrice == maxPrice
-                              ? priceAfterDis(minPrice,
-                                  widget.modelDetail.product.discount!)
-                              : " ${priceAfterDis(minPrice, widget.modelDetail.product.discount!)} - ${priceAfterDis(maxPrice, widget.modelDetail.product.discount!)}",
-                        ),
-                      ),
-                      //add to cart button
-                      Container(
-                        decoration: const BoxDecoration(
-                            color: TColors.dark,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(TSizes.cardRadiusMd),
-                              bottomRight:
-                                  Radius.circular(TSizes.productImageRadius),
-                            )),
-                        child: const SizedBox(
-                          width: TSizes.iconLg * 1.2,
-                          height: TSizes.iconLg * 1.2,
-                          child: Center(
-                            child: Icon(
-                              Iconsax.add,
-                              color: TColors.white,
-                            ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Thumbnail, Wishlist, Button, Discount Tag
+                    TRoundedContainer(
+                      height: 180,
+                      padding: const EdgeInsets.all(TSizes.sm),
+                      backgroundColor: dark ? TColors.dark : TColors.light,
+                      child: Stack(children: [
+                        // -- Thumbnail Image
+                        Center(
+                          child: TRoundedImage(
+                            imageUrl:
+                                widget.modelDetail.listVariants[0].imageURL,
+                            applyImageRadius: true,
+                            isNetworkImage: true,
                           ),
                         ),
-                      )
-                    ],
-                  )
-                ]),
+
+                        // -- Sale Tag
+                        Positioned(
+                          top: 10,
+                          child: TRoundedContainer(
+                            radius: TSizes.sm,
+                            backgroundColor: TColors.secondary.withOpacity(0.8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: TSizes.sm, vertical: TSizes.xs),
+                            child: Text(
+                                '${widget.modelDetail.product.discount!}%',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .apply(
+                                      color: TColors.black,
+                                    )),
+                          ),
+                        ),
+                        // -- Favourite Button
+
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Obx(() => TCircularIcon(
+                                backgroundColor:
+                                    const Color.fromARGB(0, 0, 0, 0),
+                                onPressed: () async {
+                                  await userController
+                                      .addOrRemoveProductToWishlist(
+                                          widget.modelDetail.product);
+                                  isInWishlist.value = !isInWishlist.value;
+                                },
+                                icon: isInWishlist.value
+                                    ? Iconsax.heart5
+                                    : Iconsax.heart_add,
+                                color: const Color.fromARGB(255, 236, 19, 113),
+                              )),
+                        )
+                      ]),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: TSizes.sm),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TProductTitleText(
+                            title: widget.modelDetail.product.name,
+                            smallSize: true,
+                          ),
+                          const SizedBox(height: TSizes.spaceBtwItems / 2),
+                          TBrandTitleWithVerifiedIcon(
+                            title: widget.modelDetail.brand.name,
+                            showVerify: widget.modelDetail.brand.isVerified,
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const Spacer(),
+
+                    /// Price Row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        /// Price
+                        Container(
+                          padding: const EdgeInsets.only(left: TSizes.sm),
+                          child: TProductPriceText(
+                            price: minPrice == maxPrice
+                                ? priceAfterDis(minPrice,
+                                    widget.modelDetail.product.discount!)
+                                : " ${priceAfterDis(minPrice, widget.modelDetail.product.discount!)} - ${priceAfterDis(maxPrice, widget.modelDetail.product.discount!)}",
+                          ),
+                        ),
+                        //add to cart button
+                        Container(
+                          decoration: const BoxDecoration(
+                              color: TColors.dark,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(TSizes.cardRadiusMd),
+                                bottomRight:
+                                    Radius.circular(TSizes.productImageRadius),
+                              )),
+                          child: const SizedBox(
+                            width: TSizes.iconLg * 1.2,
+                            height: TSizes.iconLg * 1.2,
+                            child: Center(
+                              child: Icon(
+                                Iconsax.add,
+                                color: TColors.white,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             );
           } else {
-            return const CircularProgressIndicator();
+            return Container(
+              height: THelperFunctions.screenHeight(),
+              alignment: Alignment.center,
+              child:
+                  const CircularProgressIndicator(), // you can add pre loader iamge as well to show loading.
+            );
           }
         });
   }

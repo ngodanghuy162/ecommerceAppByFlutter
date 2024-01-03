@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
@@ -44,12 +45,33 @@ class TRoundedImage extends StatelessWidget {
           borderRadius: applyImageRadius
               ? BorderRadius.circular(borderRadius)
               : BorderRadius.zero,
-          child: Image(
-            image: isNetworkImage
-                ? NetworkImage(imageUrl)
-                : AssetImage(imageUrl) as ImageProvider,
-            fit: fit,
-          ),
+          child: isNetworkImage
+              ? CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  imageBuilder: (context, imageProvider) => Container(
+                    height: height,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        //image size fill
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  placeholder: (context, url) => Container(
+                    height: height,
+                    alignment: Alignment.center,
+                    child:
+                        const CircularProgressIndicator(), // you can add pre loader iamge as well to show loading.
+                  ), //show progress  while loading image
+                  errorWidget: (context, url, error) =>
+                      Image.asset("assets/error/image-error-placeholder.png"),
+                  //show no image available image on error loading
+                )
+              : Image(
+                  image: AssetImage(imageUrl),
+                  fit: fit,
+                ),
         ),
       ),
     );
