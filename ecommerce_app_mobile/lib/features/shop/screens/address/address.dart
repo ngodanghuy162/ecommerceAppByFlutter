@@ -19,6 +19,7 @@ class ShopAddressScreen extends StatefulWidget {
 
 class _ShopAddressScreenState extends State<ShopAddressScreen> {
   final controller = Get.put(ShopAddressController());
+
   void didPop() {
     setState(() {});
   }
