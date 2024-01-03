@@ -1,76 +1,122 @@
-import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
-import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
-import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
-import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/wishlist/ItemWishlist.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/wishlist/wishlist_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+import 'dart:developer' show log;
 
-class WishlistScreen extends StatelessWidget {
+class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    String hexColor = "00B225"; // Chuỗi HEX từ cơ sở dữ liệu
-    Color color = getColorFromHex(hexColor);
-
-// Hàm chuyển đổi chuỗi HEX sang đối tượng màu
-    Get.put(CartController());
-    return Scaffold(
-        appBar: TAppBar(
-          showBackArrow: false,
-          title: Text("Wishlist",
-              style: Theme.of(context).textTheme.headlineMedium),
-          actions: [
-            TCircularIcon(
-              icon: Iconsax.add,
-              onPressed: () => Get.to(const UserAddressScreen()),
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(TSizes.defaultSpace),
-            child: Column(
-              children:
-                  // TGridLayout(
-                  //   itemCount: 4,
-                  //   itemBuilder: (_, index) =>
-                  //       TProductCardVertical(), //TODO - query and add
-                  // )
-                  // Container(
-                  //   width: 50, // Đặt kích thước của hình tròn
-                  //   height: 50,
-                  //   decoration: BoxDecoration(
-                  //     shape: BoxShape.circle,
-                  //     color: getColorFromHex(
-                  //         hexColor), // Màu từ chuỗi HEX trong cơ sở dữ liệu
-                  //   ),
-                  // ),
-                  List.generate(
-                CartController.instance.listVariantInCart
-                    .length, // Thay "yourList" bằng danh sách thực tế của bạn
-                (index) => Container(
-                  width: 50,
-                  height: 50,
-                  margin: EdgeInsets.all(8), // Khoảng cách giữa các hình tròn
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: getColorFromHex(CartController
-                        .instance
-                        .listVariantInCart[index]
-                        .color), // Màu từ chuỗi HEX trong cơ sở dữ liệu
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ));
-  }
+  State<WishlistScreen> createState() => _WishlistScreenState();
 }
 
-Color getColorFromHex(String hexColor) {
-  hexColor = hexColor.replaceAll("#", ""); // Loại bỏ ký tự '#' nếu có
-  return Color(int.parse("0xFF$hexColor"));
+class _WishlistScreenState extends State<WishlistScreen> {
+  @override
+  void initState() {
+    Get.put(WishlistController());
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+// Hàm chuyển đổi chuỗi HEX sang đối tượng màu
+    return FutureBuilder(
+        future: WishlistController.instance.getWishlist(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            print("done connection");
+            if (snapshot.hasData) {
+              List<String>? listProductInWlid = snapshot.data as List<String>;
+              if (WishlistController.instance.listProduct.isEmpty) {
+                return const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 50.0), // Adjust the height as needed
+                    Center(
+                      child: Text(
+                        "Empty Wishlist",
+                        style: TextStyle(
+                          fontSize: 20.0, // Adjust the font size as needed
+                          fontWeight: FontWeight.bold,
+                          fontFamily: '',
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(TSizes.defaultSpace),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Your Wishlist Screen',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+                        Obx(() => ListView.builder(
+                              physics: const ClampingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: WishlistController
+                                  .instance.listProductSize.value,
+                              itemBuilder: (context, index) {
+                                ProductModel product = WishlistController
+                                    .instance.listProduct[index];
+                                // o day lay listVariantInCart thi no se van hien thi dung so san pham, nhung thuc te la no co rat nhieu san pham roi va bi lap moi lan vao lai cảt.
+                                List<ProductVariantModel> listVariant =
+                                    WishlistController.instance.listVariant[
+                                        index]; // lay list cart mới chuẩn
+                                BrandModel brand = WishlistController
+                                    .instance.listBrand[index];
+                                return Column(
+                                  children: [
+                                    TWishListItem(
+                                      brand: brand,
+                                      product: product,
+                                      listVariants: listVariant,
+                                    ),
+                                    IconButton(
+                                        onPressed: () async {
+                                          await UserRepository.instance
+                                              .removeProductFromWishlist(
+                                                  product);
+                                          WishlistController
+                                              .instance.listProductSize.value--;
+                                          WishlistController
+                                              .instance.listProduct
+                                              .remove(product);
+                                        },
+                                        icon: const Icon(Icons.delete_forever))
+                                  ],
+                                );
+                              },
+                            )),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            } else {
+              return Text("Snap shot has no data");
+            }
+          } else {
+            return Text("Waiting pls");
+          }
+        });
+  }
 }

@@ -170,4 +170,10 @@ class ProductRepository extends GetxController {
         snapshot.docs.map((e) => ProductReviewModel.fromSnapShot(e)).toList();
     return productData;
   }
+
+  Future<ProductModel> getProductById(String id) async {
+    final snapshot = await productCollection.doc(id).get();
+    final productModel = ProductModel.fromSnapShot(snapshot);
+    return productModel;
+  }
 }

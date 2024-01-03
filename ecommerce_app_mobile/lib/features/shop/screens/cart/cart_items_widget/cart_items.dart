@@ -34,8 +34,8 @@ class TCartItems extends StatelessWidget {
             if (snapshot.hasData) {
               List<ProductVariantModel>? listCart =
                   snapshot.data as List<ProductVariantModel>;
-              if (listCart.length == 0) {
-                return Text("Empty Cart");
+              if (listCart.isEmpty) {
+                return const Text("Empty Cart");
               } else {
                 return SingleChildScrollView(
                   child: Padding(
@@ -47,11 +47,11 @@ class TCartItems extends StatelessWidget {
                       itemBuilder: (context, index) {
                         ProductModel product =
                             CartController.instance.listProduct[index];
+                        // o day lay listVariantInCart thi no se van hien thi dung so san pham, nhung thuc te la no co rat nhieu san pham roi va bi lap moi lan vao lai cảt.
                         ProductVariantModel productVariant =
-                            CartController.instance.listVariantInCart[index];
+                            listCart[index]; // lay list cart mới chuẩn
                         int num = CartController.instance.listQuantity[index];
-                        var color = getColorFromHex(CartController
-                            .instance.listVariantInCart[index].color);
+                        var color = getColorFromHex(listCart[index].color);
 
                         return Column(
                           children: [

@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/profile_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
@@ -439,6 +438,81 @@ class UserRepository extends GetxController {
         }
       } else {
         print('Không tìm thấy ng dùng phù hợp.');
+        return false;
+      }
+    } catch (e) {
+      e.printError();
+      return false;
+    }
+  }
+
+  Future<void> removeProductFromWishlist(ProductModel productModel) async {
+    final usersCollection = _db.collection('Users');
+    try {
+      Get.put(ProductRepository());
+      /*String currentUserId =
+          await currentCloudUser.then((value) => value.userId);*/
+      final snapshot = await usersCollection
+          .where(
+            emailFieldName,
+            isEqualTo: FirebaseAuth.instance.currentUser!.email,
+          )
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        var firstDocument = snapshot.docs[0];
+        var documentId = firstDocument.id;
+        if (productModel.id!.isNotEmpty) {
+          bool isProductInWishlist =
+              firstDocument[wishlistFieldName].contains(productModel.id);
+          if (isProductInWishlist) {
+            await usersCollection.doc(documentId).update({
+              wishlistFieldName: FieldValue.arrayRemove([productModel.id]),
+            });
+            print("Da xoa 1");
+          }
+        } else {
+          String? productId = await ProductRepository.instance
+              .getDocumentIdForProduct(productModel);
+          bool isProductInWishlist =
+              firstDocument[wishlistFieldName].contains(productId);
+          if (isProductInWishlist) {
+            await usersCollection.doc(documentId).update({
+              wishlistFieldName: FieldValue.arrayRemove([productId]),
+            });
+          }
+          print("Da xoa 2");
+        }
+      } else {
+        print('Không tìm thấy ng dùng phù hợp.');
+      }
+    } catch (e) {
+      e.printError();
+    }
+  }
+
+  Future<bool> isProductInWishList(ProductModel product) async {
+    final usersCollection = _db.collection('Users');
+    try {
+      Get.put(ProductRepository());
+      /*String currentUserId =
+          await currentCloudUser.then((value) => value.userId);*/
+      final snapshot = await usersCollection
+          .where(
+            emailFieldName,
+            isEqualTo: FirebaseAuth.instance.currentUser!.email,
+          )
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        var firstDocument = snapshot.docs[0];
+        //  var documentId = firstDocument.id;
+        if (product.id!.isNotEmpty) {
+          return firstDocument[wishlistFieldName].contains(product.id);
+        } else {
+          String? productId =
+              await ProductRepository.instance.getDocumentIdForProduct(product);
+          return firstDocument[wishlistFieldName].contains(productId);
+        }
+      } else {
         return false;
       }
     } catch (e) {

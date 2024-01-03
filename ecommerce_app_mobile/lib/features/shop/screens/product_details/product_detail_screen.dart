@@ -21,7 +21,7 @@ import 'package:readmore/readmore.dart';
 import '../../../../Service/repository/user_repository.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  ProductDetailScreen({
+  const ProductDetailScreen({
     super.key,
     required this.product,
     required this.brand,
@@ -36,6 +36,7 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+
   final brandController = Get.put(BrandController());
   final productController = Get.put(ProductController());
   final reviewController = Get.put(ProductReviewController());

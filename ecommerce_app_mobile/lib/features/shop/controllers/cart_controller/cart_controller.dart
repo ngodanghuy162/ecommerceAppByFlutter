@@ -37,6 +37,10 @@ class CartController extends GetxController {
   Future<List<ProductVariantModel>> getCartList() async {
     final listCart = await UserRepository.instance.getUserCart();
     List<ProductVariantModel> productVariantList = [];
+    listProduct = [];
+    listQuantity = [];
+    eachPriceInCart = [];
+    listVariantInCart = [];
     if (listCart != null && listCart.isNotEmpty) {
       await Future.forEach(listCart, (entry) async {
         await Future.wait(entry.keys.map((key) async {
