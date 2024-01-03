@@ -73,43 +73,44 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                       height: 180,
                       padding: const EdgeInsets.all(TSizes.sm),
                       backgroundColor: dark ? TColors.dark : TColors.light,
-                      child: Stack(children: [
-                        // -- Thumbnail Image
-                        Center(
-                          child: TRoundedImage(
-                            imageUrl:
-                                widget.modelDetail.listVariants[0].imageURL,
-                            applyImageRadius: true,
-                            isNetworkImage: true,
+                      child: Stack(
+                        children: [
+                          // -- Thumbnail Image
+                          Center(
+                            child: TRoundedImage(
+                              imageUrl:
+                                  widget.modelDetail.listVariants[0].imageURL,
+                              applyImageRadius: true,
+                              isNetworkImage: true,
+                            ),
                           ),
-                        ),
 
-                        // -- Sale Tag
-                        Positioned(
-                          top: 10,
-                          child: TRoundedContainer(
-                            radius: TSizes.sm,
-                            backgroundColor: TColors.secondary.withOpacity(0.8),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: TSizes.sm, vertical: TSizes.xs),
-                            child: Text(
-                                '${widget.modelDetail.product.discount!}%',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge!
-                                    .apply(
-                                      color: TColors.black,
-                                    )),
+                          // -- Sale Tag
+                          Positioned(
+                            top: 10,
+                            child: TRoundedContainer(
+                              radius: TSizes.sm,
+                              backgroundColor:
+                                  TColors.secondary.withOpacity(0.8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: TSizes.sm, vertical: TSizes.xs),
+                              child: Text(
+                                  '${widget.modelDetail.product.discount!}%',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .apply(
+                                        color: TColors.black,
+                                      )),
+                            ),
                           ),
-                        ),
-                        // -- Favourite Button
+                          // -- Favourite Button
 
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Obx(() => TCircularIcon(
-                                backgroundColor:
-                                    const Color.fromARGB(0, 0, 0, 0),
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Obx(
+                              () => TCircularIcon(
                                 onPressed: () async {
                                   await userController
                                       .addOrRemoveProductToWishlist(
@@ -119,10 +120,12 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                                 icon: isInWishlist.value
                                     ? Iconsax.heart5
                                     : Iconsax.heart_add,
-                                color: const Color.fromARGB(255, 236, 19, 113),
-                              )),
-                        )
-                      ]),
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: TSizes.sm),
@@ -161,12 +164,13 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
                         //add to cart button
                         Container(
                           decoration: const BoxDecoration(
-                              color: TColors.dark,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(TSizes.cardRadiusMd),
-                                bottomRight:
-                                    Radius.circular(TSizes.productImageRadius),
-                              )),
+                            color: TColors.dark,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(TSizes.cardRadiusMd),
+                              bottomRight:
+                                  Radius.circular(TSizes.productImageRadius),
+                            ),
+                          ),
                           child: const SizedBox(
                             width: TSizes.iconLg * 1.2,
                             height: TSizes.iconLg * 1.2,

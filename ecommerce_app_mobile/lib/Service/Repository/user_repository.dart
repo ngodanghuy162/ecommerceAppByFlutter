@@ -203,6 +203,34 @@ class UserRepository extends GetxController {
     });
   }
 
+  Future<void> updateAddressInfo(
+      AddressModel currentAddressModel, index) async {
+    final userData = currentUserModel;
+
+    userData.address![index] = currentAddressModel.toMap();
+    await _db
+        .collection('Users')
+        .doc(userData.id)
+        .update(userData.toMap())
+        .whenComplete(() {
+      SmartDialog.showNotify(
+        msg: 'Thay đổi thông tin thành công',
+        notifyType: NotifyType.success,
+        displayTime: const Duration(seconds: 1),
+      );
+      currentUserModel = userData;
+    }).catchError((error, stacktrace) {
+      () => SmartDialog.showNotify(
+            msg: 'Có gì đó không đúng, thử lại',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
+          );
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
+  }
+
   Map<String, dynamic> getDefaultAddress() {
     final userData = currentUserModel;
     return userData.address!

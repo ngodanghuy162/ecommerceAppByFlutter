@@ -10,8 +10,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class NewAddressScreen extends StatefulWidget {
-  const NewAddressScreen({Key? key, required this.didPop}) : super(key: key);
-  final void Function() didPop;
+  const NewAddressScreen({Key? key}) : super(key: key);
 
   @override
   State<NewAddressScreen> createState() => _NewAddressScreenState();
@@ -34,10 +33,6 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
       appBar: TAppBar(
         showBackArrow: true,
         title: const Text('Add new address'),
-        backOnPress: () {
-          Get.back();
-          widget.didPop();
-        },
       ),
       body: SingleChildScrollView(
         child: Padding(
