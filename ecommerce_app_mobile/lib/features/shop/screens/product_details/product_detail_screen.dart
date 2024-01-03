@@ -21,7 +21,7 @@ import 'package:readmore/readmore.dart';
 import '../../../../Service/repository/user_repository.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  ProductDetailScreen({
+  const ProductDetailScreen({
     super.key,
     required this.product,
     required this.brand,

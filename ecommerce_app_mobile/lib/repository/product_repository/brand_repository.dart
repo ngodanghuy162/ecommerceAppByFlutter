@@ -26,12 +26,13 @@ class BrandRepository extends GetxController {
   }
 
   Future<String> checkDuplicatedBrand(String name) async {
-    var queryBrand =
-        await _db.collection('Brand').where('name', isEqualTo: name).get();
+    var queryBrand = await _db.collection('Brand').get();
 
-    if (queryBrand.docs.isNotEmpty) {
-      // Nếu có tài liệu thì trả về ID của tài liệu đầu tiên
-      return queryBrand.docs.first.id;
+    for(var document in queryBrand.docs) {
+      var documentName = document['name'].toLowerCase();
+      if(documentName == name.trim().replaceAll(RegExp(r'\s+'), ' ').toLowerCase()) {
+        return document.id;
+      }
     }
     return 'false';
   }
