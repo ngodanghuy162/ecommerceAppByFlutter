@@ -6,8 +6,8 @@ class ReplyReviewController extends GetxController {
   static ReplyReviewController get instance => Get.find();
   final _replyReviewRepo = Get.put(ReplyReviewRepository());
 
-  createReplyReview(ReplyReviewModel replyReviewModel) async {
-    await _replyReviewRepo.createReplyReview(replyReviewModel);
+  Future<void> createReplyReview(ReplyReviewModel replyReviewModel, String productId) async {
+    await _replyReviewRepo.createReplyReview(replyReviewModel, productId);
   }
 
   Future<List<ReplyReviewModel>> getAllReplyReview(String productId) async {

@@ -33,7 +33,7 @@ class StoreScreen extends StatelessWidget {
               Text('Store', style: Theme.of(context).textTheme.headlineMedium),
           actions: [
             TCartCounterIcon(
-              onPressed: () => Get.to(const CartScreen()),
+              onPressed: () => Get.to(CartScreen()),
               iconColor: null,
             )
           ],

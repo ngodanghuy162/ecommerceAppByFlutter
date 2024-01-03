@@ -4,7 +4,7 @@ import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 
 class ShopModel {
   String? id;
-  Map<String, dynamic>? address;
+  List<Map<String, dynamic>>? address;
   final String name;
   final String owner;
   String? image;
@@ -23,7 +23,7 @@ class ShopModel {
     this.order,
     this.product,
     this.voucher,
-  })  : image = image ?? TImages.darkAppLogo;
+  }) : image = image ?? TImages.darkAppLogo;
 
   toJson() {
     return {
@@ -58,7 +58,9 @@ class ShopModel {
     return ShopModel(
       id: snapshot.id,
       name: data?["name"],
-      address: data?['address'],
+      address: (data?['address'] as List)
+          .map((item) => item as Map<String, dynamic>)
+          .toList(),
       owner: data?['owner'] ?? '',
       income: data?['income'] ?? 0,
       image: data?[shopImageField],

@@ -1,7 +1,7 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
-import 'package:ecommerce_app_mobile/features/personalization/controllers/address_controller.dart';
-import 'package:ecommerce_app_mobile/features/personalization/screens/address/new_address.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/single_address.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/shop_address_controller/shop_address_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/address/new_address.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -10,25 +10,24 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class UserAddressScreen extends StatefulWidget {
-  const UserAddressScreen({Key? key}) : super(key: key);
+class ShopAddressScreen extends StatefulWidget {
+  const ShopAddressScreen({Key? key}) : super(key: key);
 
   @override
-  State<UserAddressScreen> createState() => _UserAddressScreenState();
+  State<ShopAddressScreen> createState() => _ShopAddressScreenState();
 }
 
-class _UserAddressScreenState extends State<UserAddressScreen> {
-  final controller = Get.put(AddressController());
+class _ShopAddressScreenState extends State<ShopAddressScreen> {
+  final controller = Get.put(ShopAddressController());
   void didPop() {
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    print(controller.listUserAddress);
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Get.to(() => NewAddressScreen(
+          onPressed: () => Get.to(() => NewShopAddressScreen(
                 didPop: didPop,
               )),
           // onPressed: () async {
@@ -59,16 +58,16 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
                       onTap: () async {
                         SmartDialog.showLoading();
                         await controller.setDefaultAddress(
-                            controller.listUserAddress[index]['id']);
+                            controller.listShopAddress[index]['id']);
                         SmartDialog.dismiss();
                       },
                       child: Slidable(
-                        key: ValueKey(controller.listUserAddress[index]),
+                        key: ValueKey(controller.listShopAddress[index]),
                         endActionPane: ActionPane(
                           dismissible: DismissiblePane(
                             onDismissed: () {
-                              controller.removeUserAddress(
-                                  controller.listUserAddress[index]['id'],
+                              controller.removeShopAddress(
+                                  controller.listShopAddress[index]['id'],
                                   context);
                             },
                           ),
@@ -76,8 +75,8 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
                           children: [
                             SlidableAction(
                               onPressed: (context) {
-                                controller.removeUserAddress(
-                                    controller.listUserAddress[index]['id'],
+                                controller.removeShopAddress(
+                                    controller.listShopAddress[index]['id'],
                                     context);
                               },
                               icon: Iconsax.trash,
@@ -104,25 +103,25 @@ class _UserAddressScreenState extends State<UserAddressScreen> {
                           ],
                         ),
                         child: TSingleAddress(
-                            optional: controller.listUserAddress[index]
+                            optional: controller.listShopAddress[index]
                                 ['optional'],
-                            id: controller.listUserAddress[index]['id'],
-                            isSelectedAddress: controller.listUserAddress[index]
+                            id: controller.listShopAddress[index]['id'],
+                            isSelectedAddress: controller.listShopAddress[index]
                                 ['isDefault'],
-                            province: controller.listUserAddress[index]
+                            province: controller.listShopAddress[index]
                                 ['province'],
-                            district: controller.listUserAddress[index]
+                            district: controller.listShopAddress[index]
                                 ['district'],
-                            name: controller.listUserAddress[index]['name'],
-                            phoneNumber: controller.listUserAddress[index]
+                            name: controller.listShopAddress[index]['name'],
+                            phoneNumber: controller.listShopAddress[index]
                                 ['phoneNumber'],
-                            street: controller.listUserAddress[index]['street'],
-                            ward: controller.listUserAddress[index]['ward']),
+                            street: controller.listShopAddress[index]['street'],
+                            ward: controller.listShopAddress[index]['ward']),
                       ),
                     ),
                 separatorBuilder: (ctx, index) =>
                     const SizedBox(height: TSizes.spaceBtwItems),
-                itemCount: controller.listUserAddress.length),
+                itemCount: controller.listShopAddress.length),
           ),
         )
 
