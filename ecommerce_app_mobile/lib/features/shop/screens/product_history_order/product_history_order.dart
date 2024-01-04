@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_review_model.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
+import 'package:ecommerce_app_mobile/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_review_controller/product_review_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/widgets/product_history_card.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/widgets/product_history_item.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +16,9 @@ import 'package:get/get.dart';
 import '../../../../Service/repository/authentication_repository.dart';
 
 class ProductHistoryOrder extends StatefulWidget {
-  const ProductHistoryOrder({super.key});
+  const ProductHistoryOrder({super.key, required this.initialIndex});
+
+  final int initialIndex;
 
   @override
   State<ProductHistoryOrder> createState() => _ProductHistoryOrderState();
@@ -42,105 +49,103 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const TAppBar(
-        backgroundColor: TColors.primary,
-        title: Text("History Order", style: TextStyle(color: TColors.white),),
         showBackArrow: true,
+        title: Text("Delivery Order", style: TextStyle(color: Colors.black)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(TSizes.spaceBtwItems),
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: 2,
-          itemBuilder: (context, index) {
-            return _buildProductOrderCard(
-            );
-          },
+      body: ContainedTabBarView(
+        tabBarProperties: TabBarProperties(
+          labelColor: TColors.primary,
+          indicatorColor: TColors.primary,
+          height: MediaQuery.of(context).size.height * 0.06,
+          labelStyle: const TextStyle(
+            color: Colors.black,
+          ),
         ),
-      )
-    );
-  }
-
-  Widget _buildProductOrderCard() {
-    return InkWell(
-      onTap: () {
-        // Add logic to navigate to the detailed order screen
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16.0),
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.grey[400],
-          borderRadius: BorderRadius.circular(8.0),
-          border: Border.all(color: TColors.black, width: 1.0),
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Image.network(
-                  'https://firebasestorage.googleapis.com/v0/b/e-commerce-uet-project.appspot.com/o/images%2F1702698393117.jpg?alt=media&token=24a5b3a4-db59-4251-ab3c-e5e4e4ae72d9',
-                  width: 90.0,
-                  height: 90.0,
-                  fit: BoxFit.cover,
-                ),
-                const SizedBox(width: 16.0),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Sữa rửa mặt dưỡng ẩm',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 4.0),
-                      Text(
-                        'Phân loại hàng: ',
-                        style: TextStyle(color: Colors.grey[850]),
-                      ),
-                      const SizedBox(height: 4.0),
-                      Text(
-                        'x1 ',
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 1),
-                Text(
-                  '155000VND',
-                  style: const TextStyle(color: Colors.deepOrange, fontSize: 12),
-                )
-              ],
+        initialIndex: widget.initialIndex,
+        tabs: const [
+          Text("Confirmation",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          Text("Delivering",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          Text("Completed",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          Text("Cancelled",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+        ],
+        views: [
+          Padding(
+            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                return ProductOrderCard();
+              },
+              separatorBuilder: (ctx, index) =>
+                  const SizedBox(height: TSizes.sm),
             ),
-
-            const Divider(color: TColors.black),
-            const SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Add logic to navigate to the review screen
-                    _showBottomModal(context);
-                  },
-                  child: Text('Đánh Giá'),
-                  style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.deepOrange),
-                    padding: MaterialStatePropertyAll<EdgeInsetsGeometry>(EdgeInsets.all(14)),
-                  ),
-                ),
-                Text(
-                  'Tổng: 200000VND',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, color: Colors.deepOrange),
-                ),
-              ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                return ProductOrderCard();
+              },
+              separatorBuilder: (ctx, index) =>
+                  const SizedBox(height: TSizes.sm),
             ),
-
-          ],
-        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                return ProductOrderCard();
+              },
+              separatorBuilder: (ctx, index) =>
+                  const SizedBox(height: TSizes.sm),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: 2,
+              itemBuilder: (context, index) {
+                return ProductOrderCard(
+                  showReviewModal: _showBottomModal,
+                );
+              },
+              separatorBuilder: (ctx, index) =>
+                  const SizedBox(height: TSizes.sm),
+            ),
+          ),
+        ],
       ),
     );
+    // return Scaffold(
+    //     appBar: const TAppBar(
+    //       backgroundColor: TColors.primary,
+    //       title: Text(
+    //         "History Order",
+    //         style: TextStyle(color: TColors.white),
+    //       ),
+    //       showBackArrow: true,
+    //     ),
+    // body: Padding(
+    //   padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+    //   child: ListView.separated(
+    //     shrinkWrap: true,
+    //     itemCount: 2,
+    //     itemBuilder: (context, index) {
+    //       return ProductOrderCard();
+    //     },
+    //     separatorBuilder: (ctx, index) => const SizedBox(height: TSizes.sm),
+    //   ),
+    // ));
   }
 
   void _showBottomModal(BuildContext context) {
@@ -154,7 +159,10 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
             children: [
               // Star ratings widget (you can use your own star rating widget)
               // Replace the following line with your actual star rating widget
-              const Text('Tên sản phẩm', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+              const Text(
+                'Tên sản phẩm',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
               const SizedBox(
                 height: TSizes.spaceBtwSections,
               ),

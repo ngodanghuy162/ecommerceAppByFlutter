@@ -6,13 +6,13 @@ import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
-class TCartItem extends StatelessWidget {
+class ProductOrderItem extends StatelessWidget {
   final String? brand;
   final String? imgUrl;
   final String? title;
   final Color? color;
   final String? size;
-  const TCartItem({
+  const ProductOrderItem({
     this.brand,
     this.title,
     this.imgUrl,
@@ -52,37 +52,43 @@ class TCartItem extends StatelessWidget {
                   maxLines: 1,
                 ),
               ),
-              Text.rich(
-                TextSpan(
-                  children: [
+              Row(
+                children: [
+                  Text.rich(
                     TextSpan(
-                      text: 'Color ',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    WidgetSpan(
-                      child: Container(
-                        width: 16,
-                        height: 16,
-                        margin: const EdgeInsets.only(
-                          bottom: 2,
-                          right: 5,
+                      children: [
+                        TextSpan(
+                          text: 'Color ',
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: color ?? Colors.lightBlue,
+                        WidgetSpan(
+                          child: Container(
+                            width: 16,
+                            height: 16,
+                            margin: const EdgeInsets.only(
+                              bottom: 2,
+                              right: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: color ?? Colors.lightBlue,
+                            ),
+                          ),
                         ),
-                      ),
+                        TextSpan(
+                          text: 'Sizes ',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        TextSpan(
+                          text: size ?? "",
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
                     ),
-                    TextSpan(
-                      text: 'Sizes ',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    TextSpan(
-                      text: size ?? "",
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                ),
+                  ),
+                  const Spacer(),
+                  const Text('x1'),
+                ],
               ),
             ],
           ),

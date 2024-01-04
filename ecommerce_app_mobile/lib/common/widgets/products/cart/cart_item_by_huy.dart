@@ -8,12 +8,12 @@ import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class TCartItemByHuy extends StatelessWidget {
- final String? brand;
+  final String? brand;
   final String? imgUrl;
- final String? title;
- final Color? color;
- final String? size;
- const TCartItemByHuy({
+  final String? title;
+  final Color? color;
+  final String? size;
+  const TCartItemByHuy({
     this.brand,
     this.title,
     this.imgUrl,
@@ -29,8 +29,8 @@ class TCartItemByHuy extends StatelessWidget {
         //Image
         TRoundedImage(
           imageUrl: imgUrl ?? TImages.productImage1,
-          width: 60,
-          height: 60,
+          width: 80,
+          height: 80,
           isNetworkImage: true,
           padding: const EdgeInsets.all(TSizes.sm),
           backgroundColor: THelperFunctions.isDarkMode(context)

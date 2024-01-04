@@ -11,11 +11,12 @@ import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart'
 import 'package:ecommerce_app_mobile/features/personalization/controllers/settings_controller.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
-import 'package:ecommerce_app_mobile/features/shop/screens/order/order.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/product_history_order.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/shop/create_shop_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/shop/shop_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
+import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -80,13 +81,19 @@ class SettingsScreen extends StatelessWidget {
               padding: const EdgeInsets.all(TSizes.defaultSpace),
               child: Column(
                 children: [
-                  /// Account Setting
                   const TSectionHeading(
-                    title: "Account Settings",
+                    title: "Order History",
                     showActionButton: false,
                   ),
                   const SizedBox(
                     height: TSizes.spaceBtwItems,
+                  ),
+                  const ProductOrderHistoryBar(),
+
+                  /// Account Setting
+                  const TSectionHeading(
+                    title: "Account Settings",
+                    showActionButton: false,
                   ),
                   FutureBuilder<bool>(
                       future: UserRepository.instance.isSeller(),
@@ -112,8 +119,8 @@ class SettingsScreen extends StatelessWidget {
                                         title: "Are you sure?",
                                         description:
                                             "Are you sure to be a seller??",
-                                        onOkPressed: () =>
-                                            Get.to(() => CreateShopScreen()),
+                                        onOkPressed: () => Get.to(
+                                            () => const CreateShopScreen()),
                                       );
                                     },
                                   );
@@ -137,12 +144,13 @@ class SettingsScreen extends StatelessWidget {
                     icon: Iconsax.bag_tick,
                     title: 'My Orders',
                     subTitle: 'In-progress and Completed Orders',
-                    onTap: () => Get.to(const OrderScreen()),
+                    onTap: () => Get.to(
+                        () => const ProductHistoryOrder(initialIndex: 0)),
                   ),
                   const TSettingsMenuTile(
                     icon: Iconsax.bank,
-                    title: 'Bank Account',
-                    subTitle: 'Withdraw balance to registered bank account',
+                    title: 'Khanh check',
+                    subTitle: 'Dat09',
                   ),
                   const TSettingsMenuTile(
                     icon: Iconsax.discount_shape,
@@ -224,6 +232,103 @@ class SettingsScreen extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ProductOrderHistoryBar extends StatelessWidget {
+  const ProductOrderHistoryBar({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Color color = TColors.darkerGrey;
+    return Row(
+      children: [
+        Expanded(
+          child: InkWell(
+            onTap: () =>
+                Get.to(() => const ProductHistoryOrder(initialIndex: 0)),
+            child: ProductOrderHistoryBarItem(
+              color: color,
+              icon: Iconsax.card_tick_1,
+              label: 'Confirmation',
+            ),
+          ),
+        ),
+        Expanded(
+          child: InkWell(
+            onTap: () =>
+                Get.to(() => const ProductHistoryOrder(initialIndex: 1)),
+            child: ProductOrderHistoryBarItem(
+              color: color,
+              icon: Iconsax.truck_fast,
+              label: 'Delivering',
+            ),
+          ),
+        ),
+        Expanded(
+          child: InkWell(
+            onTap: () =>
+                Get.to(() => const ProductHistoryOrder(initialIndex: 2)),
+            child: ProductOrderHistoryBarItem(
+              color: color,
+              icon: Iconsax.truck_tick,
+              label: 'Completed',
+            ),
+          ),
+        ),
+        Expanded(
+          child: InkWell(
+            onTap: () =>
+                Get.to(() => const ProductHistoryOrder(initialIndex: 3)),
+            child: ProductOrderHistoryBarItem(
+              color: color,
+              icon: Iconsax.truck_remove,
+              label: 'Cancelled',
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ProductOrderHistoryBarItem extends StatelessWidget {
+  const ProductOrderHistoryBarItem({
+    super.key,
+    required this.color,
+    required this.label,
+    required this.icon,
+  });
+
+  final Color color;
+  final String label;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 60,
+      width: 60,
+      // color: Colors.orange,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: color,
+          ),
+          const SizedBox(height: TSizes.sm),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                  color: color,
+                ),
+          ),
+        ],
       ),
     );
   }

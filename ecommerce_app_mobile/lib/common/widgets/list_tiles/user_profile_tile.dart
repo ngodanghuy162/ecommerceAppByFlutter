@@ -40,7 +40,7 @@ class _TUserProfileTitleState extends State<TUserProfileTitle> {
       ),
       subtitle: Text(
         widget.email,
-        style: Theme.of(context).textTheme.bodyMedium!.apply(
+        style: Theme.of(context).textTheme.labelLarge!.apply(
               color: TColors.white,
             ),
       ),
