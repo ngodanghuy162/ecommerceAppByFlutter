@@ -467,7 +467,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                     /// Liên kết với category
                     final categoryResult = await ProductCategoryController
                         .instance
-                        .getCategoryDocumentIdByName(selectedCategory);
+                        .getCategoryByName(selectedCategory);
 
                     /// Tao bien the va cap nhat anh
                     for (int i = 0; i < variants.length; i++) {
@@ -484,7 +484,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                     if (brandId == 'false') {
                       BrandModel brandModel = BrandModel(
                         name: brandName.trim().replaceAll(RegExp(r'\s+'), ' '),
-                        imageUrl: '',
+                        imageUrl: categoryResult.imageUrl,
                         userId: authRepo.firebaseUser.value!.uid,
                       );
                       brandId =
@@ -497,7 +497,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                       description: description,
                       discount: discount,
                       name: name,
-                      product_category_id: categoryResult,
+                      product_category_id: categoryResult.id!,
                       variants_path: variants_path,
                       shopEmail: authRepo.firebaseUser.value!.email,
                     );
