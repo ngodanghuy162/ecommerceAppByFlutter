@@ -3,13 +3,14 @@ import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/shop_controller/shop_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/shop_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/shop/shop_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class CreateShopScreen extends StatefulWidget {
-  CreateShopScreen();
+  const CreateShopScreen({super.key});
 
   @override
   _CreateShopScreenState createState() => _CreateShopScreenState();
@@ -27,8 +28,8 @@ class _CreateShopScreenState extends State<CreateShopScreen> {
   void initState() {
     super.initState();
     Get.put(ShopController());
-    shopNameController = new TextEditingController();
-    voucherController = new TextEditingController();
+    shopNameController = TextEditingController();
+    voucherController = TextEditingController();
   }
 
   @override
@@ -116,21 +117,17 @@ class _CreateShopScreenState extends State<CreateShopScreen> {
                     height: 100,
                   )
                 : Container(),
-            TextFormField(
-              controller: voucherController,
-              decoration: InputDecoration(labelText: 'Voucher'),
-            ),
+          
             TextButton(onPressed: () {}, child: Text("Add your shop address")),
             ElevatedButton(
                 onPressed: () async {
                   String rs = await ShopController.instance.createShop(
                       ShopModel(
                           name: shopNameController.text,
-                          owner: await UserRepository.instance
-                              .getCurrentUserDocId(),
+                          owner: FirebaseAuth.instance.currentUser!.email!,
                           image: _imageUrl));
                   print("Dong 134 file create +Day la ket qua: $rs");
-                  Get.to(MyShopScreen());
+                  Get.to(() => const MyShopScreen());
                 },
                 child: const Row(
                   children: [

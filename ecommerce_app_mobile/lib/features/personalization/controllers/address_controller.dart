@@ -105,6 +105,45 @@ class AddressController extends GetxController {
     updateUserDetails();
   }
 
+  Future<void> updateAddressInfo(index) async {
+    await _userRepo.updateAddressInfo(
+        AddressModel(
+          phoneNumber: phoneNumber.text,
+          name: name.text,
+          province: province.text,
+          district: district.text,
+          street: street.text,
+          ward: ward.text,
+          id: listUserAddress[index]['id'],
+          isDefault: listUserAddress[index]['isDefault'],
+          districtId: districtid!,
+          wardCode: wardCode!,
+          provinceId: provinceId!,
+          lat: lat,
+          lng: lng,
+          optional: optional.text,
+        ),
+        index);
+    await updateUserDetails();
+  }
+
+  void fillFullField(Map<String, dynamic> addressInfo) {
+    name.text = addressInfo['name'];
+    phoneNumber.text = addressInfo['phoneNumber'];
+    province.text = addressInfo['province'];
+    district.text = addressInfo['district'];
+    ward.text = addressInfo['ward'];
+    street.text = addressInfo['street'];
+    optional.text = addressInfo['optional'];
+    lat = addressInfo['lat'];
+    lng = addressInfo['lng'];
+    districtid = addressInfo['districtId'];
+    provinceId = addressInfo['provinceId'];
+    wardCode = addressInfo['wardCode'];
+
+    address.text = '${province.text}/${district.text}/${ward.text}';
+  }
+
   Future<void> addUserAddress() async {
     final addressId = const Uuid().v1();
     await _userRepo.addUserAddress(

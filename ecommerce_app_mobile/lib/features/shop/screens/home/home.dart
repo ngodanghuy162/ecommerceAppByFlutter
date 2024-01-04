@@ -32,129 +32,134 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Column(
-        children: [
-          /// Header
-          TPrimaryHeaderContainer(
-            child: Column(
-              children: [
-                /// -- Appbar
-                THomeAppBar(),
-                const SizedBox(height: TSizes.spaceBtwSections),
+        body: RefreshIndicator(
+      onRefresh: () async => (context as Element).reassemble(),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            /// Headerø
+            TPrimaryHeaderContainer(
+              child: Column(
+                children: [
+                  /// -- Appbar
+                  THomeAppBar(),
+                  const SizedBox(height: TSizes.spaceBtwSections),
 
-                /// -- SearchBar
-                const TSearchContainer(text: 'Search in Store'),
-                const SizedBox(height: TSizes.spaceBtwSections),
+                  /// -- SearchBar
+                  const TSearchContainer(text: 'Search in Store'),
+                  const SizedBox(height: TSizes.spaceBtwSections),
 
-                /// -- Categories
-                Padding(
-                  padding: const EdgeInsets.only(left: TSizes.defaultSpace),
-                  child: Column(
-                    children: [
-                      /// -- Heading
-                      const TSectionHeading(
-                        title: 'Popular Categories',
-                        showActionButton: false,
-                        textColor: TColors.white,
-                      ),
-                      const SizedBox(height: TSizes.spaceBtwItems),
+                  /// -- Categories
+                  Padding(
+                    padding: const EdgeInsets.only(left: TSizes.defaultSpace),
+                    child: Column(
+                      children: [
+                        /// -- Heading
+                        const TSectionHeading(
+                          title: 'Popular Categories',
+                          showActionButton: false,
+                          textColor: TColors.white,
+                        ),
+                        const SizedBox(height: TSizes.spaceBtwItems),
 
-                      /// Categories
-                      THomeCategories(),
-                    ],
+                        /// Categories
+                        THomeCategories(),
+                      ],
+                    ),
                   ),
-                ),
 
-                const SizedBox(height: TSizes.spaceBtwSections),
-              ],
+                  const SizedBox(height: TSizes.spaceBtwSections),
+                ],
+              ),
             ),
-          ),
 
-          /// Body
-          Padding(
-            padding: const EdgeInsets.all(TSizes.defaultSpace),
-            child: Column(
-              children: [
-                const TPromoSlider(banners: [
-                  TImages.promoBanner1,
-                  TImages.promoBanner2,
-                  TImages.promoBanner3
-                ]),
-                const SizedBox(
-                  height: TSizes.spaceBtwSections,
-                ),
+            /// Body
+            Padding(
+              padding: const EdgeInsets.all(TSizes.defaultSpace),
+              child: Column(
+                children: [
+                  const TPromoSlider(banners: [
+                    TImages.promoBanner1,
+                    TImages.promoBanner2,
+                    TImages.promoBanner3
+                  ]),
+                  const SizedBox(
+                    height: TSizes.spaceBtwSections,
+                  ),
 
-                /// -- Heading
-                TSectionHeading(
-                  title: "Popular Products",
-                  onPressed: () {
-                    Get.to(() => const AllProductsScreen());
-                  },
-                ),
-                const SizedBox(height: TSizes.spaceBtwItems),
-                FutureBuilder(
-                    future: productController.getListPopularProduct(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.hasData) {
-                          List<ProductModel> listProducts = snapshot.data!;
-                          int lenghtShow = snapshot.data!.length > 4
-                              ? 4
-                              : snapshot.data!.length;
-                          productController.listPopular = [];
-                          return TGridLayout(
-                            itemCount: lenghtShow,
-                            itemBuilder: (_, index) => FutureBuilder(
-                                future: Future.wait([
-                                  brandController.getBrandById(
-                                      listProducts[index].brand_id),
-                                  variantController.getVariantByIDs(
-                                      listProducts[index].variants_path),
-                                ]),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    if (snapshot.hasData) {
-                                      var brand =
-                                          snapshot.data![0] as BrandModel;
-                                      var listVariants = snapshot.data![1]
-                                          as List<ProductVariantModel>;
-                                      DetailProductModel model =
-                                          DetailProductModel(
-                                              brand: brand,
-                                              product: listProducts[index],
-                                              listVariants: listVariants);
-                                      productController.listPopular.add(model);
-                                      return TProductCardVertical(
-                                          modelDetail: model);
-                                      // return Container();
-                                    } else if (snapshot.hasError) {
-                                      return Center(
-                                          child:
-                                              Text(snapshot.error.toString()));
+                  /// -- Heading
+                  TSectionHeading(
+                    title: "Popular Products",
+                    onPressed: () {
+                      Get.to(() => const AllProductsScreen());
+                    },
+                  ),
+                  const SizedBox(height: TSizes.spaceBtwItems),
+                  FutureBuilder(
+                      future: productController.getListPopularProduct(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData) {
+                            List<ProductModel> listProducts = snapshot.data!;
+                            int lenghtShow = snapshot.data!.length > 4
+                                ? 4
+                                : snapshot.data!.length;
+                            productController.listPopular = [];
+                            return TGridLayout(
+                              itemCount: lenghtShow,
+                              itemBuilder: (_, index) => FutureBuilder(
+                                  future: Future.wait([
+                                    brandController.getBrandById(
+                                        listProducts[index].brand_id),
+                                    variantController.getVariantByIDs(
+                                        listProducts[index].variants_path),
+                                  ]),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      if (snapshot.hasData) {
+                                        var brand =
+                                            snapshot.data![0] as BrandModel;
+                                        var listVariants = snapshot.data![1]
+                                            as List<ProductVariantModel>;
+                                        DetailProductModel model =
+                                            DetailProductModel(
+                                                brand: brand,
+                                                product: listProducts[index],
+                                                listVariants: listVariants);
+                                        productController.listPopular
+                                            .add(model);
+                                        return TProductCardVertical(
+                                            modelDetail: model);
+                                        // return Container();
+                                      } else if (snapshot.hasError) {
+                                        return Center(
+                                            child: Text(
+                                                snapshot.error.toString()));
+                                      } else {
+                                        return const Center(
+                                            child: Text("smt went wrong"));
+                                      }
                                     } else {
-                                      return const Center(
-                                          child: Text("smt went wrong"));
+                                      return const CircularProgressIndicator();
                                     }
-                                  } else {
-                                    return const CircularProgressIndicator();
-                                  }
-                                }),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Center(child: Text(snapshot.error.toString()));
+                                  }),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text(snapshot.error.toString()));
+                          } else {
+                            return const Center(child: Text("smt went wrong"));
+                          }
                         } else {
-                          return const Center(child: Text("smt went wrong"));
+                          return const CircularProgressIndicator();
                         }
-                      } else {
-                        return const CircularProgressIndicator();
-                      }
-                    })
-              ],
+                      })
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ));
   }

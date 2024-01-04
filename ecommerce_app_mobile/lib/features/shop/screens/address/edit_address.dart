@@ -1,38 +1,36 @@
-import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
-import 'package:ecommerce_app_mobile/features/personalization/controllers/address_controller.dart';
-import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/address_bottom_sheet.dart';
-import 'package:ecommerce_app_mobile/features/personalization/screens/address/widgets/custom.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/shop_address_controller/shop_address_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/address/widgets/address_bottom_sheet.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/address/widgets/custom.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:iconsax/iconsax.dart';
 
-class NewAddressScreen extends StatefulWidget {
-  const NewAddressScreen({Key? key}) : super(key: key);
+class ShopEditAddressScreen extends StatefulWidget {
+  ShopEditAddressScreen({Key? key, required this.addressIndex})
+      : super(key: key);
+  int addressIndex;
 
   @override
-  State<NewAddressScreen> createState() => _NewAddressScreenState();
+  State<ShopEditAddressScreen> createState() => _ShopEditAddressScreenState();
 }
 
-class _NewAddressScreenState extends State<NewAddressScreen> {
-  final controller = Get.put(AddressController());
-  final userRepository = Get.put(UserRepository());
-
-  @override
-  void initState() {
-    super.initState();
-    // controller.address.text = 'Province/District/Ward';
-  }
-
+class _ShopEditAddressScreenState extends State<ShopEditAddressScreen> {
+  final controller = Get.put(ShopAddressController());
   @override
   Widget build(BuildContext context) {
     final popContext = context;
+    controller.fillFullField(controller.listShopAddress[widget.addressIndex]);
     return Scaffold(
       appBar: TAppBar(
         showBackArrow: true,
-        title: const Text('Add new address'),
+        title: const Text('Edit address'),
+        backOnPress: () {
+          Get.back();
+          controller.clearTextField();
+        },
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -103,7 +101,7 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      await controller.addUserAddress();
+                      await controller.updateAddressInfo(widget.addressIndex);
                       controller.clearTextField();
                       // ignore: use_build_context_synchronously
                       Navigator.of(popContext).pop();

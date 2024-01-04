@@ -52,4 +52,15 @@ class BrandRepository extends GetxController {
         snapshot.docs.map((e) => BrandModel.fromSnapShot(e)).toList();
     return brandData;
   }
+
+  Future<BrandModel> getBrandById(String id) async {
+    final snapshot = await _db.collection('Brand').doc(id).get();
+    if (snapshot.exists) {
+      // Nếu document tồn tại, lấy dữ liệu từ snapshot và trả về đối tượng ProductVariantModel
+      return BrandModel.fromSnapShot(snapshot);
+    } else {
+      // Nếu document không tồn tại, có thể xử lý theo ý bạn, ví dụ, ném một ngoại lệ
+      throw Exception('Brand with id $id not found');
+    }
+  }
 }

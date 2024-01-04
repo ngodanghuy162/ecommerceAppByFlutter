@@ -12,7 +12,7 @@ class ShopRepository extends GetxController {
   // Static instance variable
   static ShopRepository get instance => Get.find();
   final userRepo = Get.put(UserRepository());
-  late ShopModel currentShopModel;
+  ShopModel? currentShopModel;
   final _db = FirebaseFirestore.instance;
 
   @override
@@ -24,7 +24,7 @@ class ShopRepository extends GetxController {
   Future<void> removeShopAddress(
       String id, BuildContext context, void Function() callback) async {
     final shopData = currentShopModel;
-    var listAddress = shopData.address!;
+    var listAddress = shopData!.address!;
     final currentObj =
         listAddress.singleWhere((element) => element['id'] == id);
     final currentIndex = listAddress.indexOf(currentObj);
@@ -101,7 +101,7 @@ class ShopRepository extends GetxController {
         .collection('Shop')
         .where(
           ownerField,
-          isEqualTo: userRepo.currentUserModel.id,
+          isEqualTo: userRepo.currentUserModel.email,
         )
         .get()
         .catchError(
@@ -119,12 +119,40 @@ class ShopRepository extends GetxController {
   List<Map<String, dynamic>> getAllShopAddress() {
     final shopDetail = currentShopModel;
 
-    return shopDetail.address!;
+    return shopDetail!.address!;
+  }
+
+  Future<void> updateAddressInfo(
+      AddressModel currentAddressModel, index) async {
+    final shopData = currentShopModel;
+
+    shopData!.address![index] = currentAddressModel.toMap();
+    await _db
+        .collection('Shop')
+        .doc(shopData.id)
+        .update(shopData.toMap())
+        .whenComplete(() {
+      SmartDialog.showNotify(
+        msg: 'Thay đổi thông tin thành công',
+        notifyType: NotifyType.success,
+        displayTime: const Duration(seconds: 1),
+      );
+      currentShopModel = shopData;
+    }).catchError((error, stacktrace) {
+      () => SmartDialog.showNotify(
+            msg: 'Có gì đó không đúng, thử lại',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
+          );
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
   }
 
   Future<void> setDefaultAddress(String addressId) async {
     final shopData = currentShopModel;
-    final listAddress = shopData.address!.map(
+    final listAddress = shopData!.address!.map(
       (e) {
         final addressModel = AddressModel(
             id: e['id'],
@@ -174,13 +202,13 @@ class ShopRepository extends GetxController {
 
   Map<String, dynamic> getDefaultAddress() {
     final userData = currentShopModel;
-    return userData.address!
+    return userData!.address!
         .singleWhere((element) => element['isDefault'] == true);
   }
 
   Future<void> addShopAddress(AddressModel addressModel) async {
     final shopData = currentShopModel;
-    shopData.address!.add(addressModel.toMap());
+    shopData!.address!.add(addressModel.toMap());
     await _db
         .collection('Shop')
         .doc(shopData.id)
@@ -209,7 +237,7 @@ class ShopRepository extends GetxController {
 
   Future<void> addVoucher(String voucher) async {
     try {
-      String? shopId = currentShopModel.id;
+      String? shopId = currentShopModel!.id;
       await shopCollection
           .doc(shopId)
           .update({voucherField: FieldValue.arrayUnion(voucher as List)});
@@ -220,7 +248,7 @@ class ShopRepository extends GetxController {
 
   Future<void> addProduct(String productId) async {
     try {
-      String? shopId = currentShopModel.id;
+      String? shopId = currentShopModel!.id;
       await shopCollection
           .doc(shopId)
           .update({productField: FieldValue.arrayUnion(productId as List)});

@@ -9,30 +9,30 @@ import 'package:get/get.dart';
 
 import 'package:iconsax/iconsax.dart';
 
-class NewAddressScreen extends StatefulWidget {
-  const NewAddressScreen({Key? key}) : super(key: key);
+class EditAddressScreen extends StatefulWidget {
+  EditAddressScreen({Key? key, required this.addressIndex}) : super(key: key);
+  int addressIndex;
 
   @override
-  State<NewAddressScreen> createState() => _NewAddressScreenState();
+  State<EditAddressScreen> createState() => _EditAddressScreenState();
 }
 
-class _NewAddressScreenState extends State<NewAddressScreen> {
+class _EditAddressScreenState extends State<EditAddressScreen> {
   final controller = Get.put(AddressController());
   final userRepository = Get.put(UserRepository());
 
   @override
-  void initState() {
-    super.initState();
-    // controller.address.text = 'Province/District/Ward';
-  }
-
-  @override
   Widget build(BuildContext context) {
     final popContext = context;
+    controller.fillFullField(controller.listUserAddress[widget.addressIndex]);
     return Scaffold(
       appBar: TAppBar(
         showBackArrow: true,
-        title: const Text('Add new address'),
+        title: const Text('Edit address'),
+        backOnPress: () {
+          Get.back();
+          controller.clearTextField();
+        },
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -103,7 +103,7 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      await controller.addUserAddress();
+                      await controller.updateAddressInfo(widget.addressIndex);
                       controller.clearTextField();
                       // ignore: use_build_context_synchronously
                       Navigator.of(popContext).pop();

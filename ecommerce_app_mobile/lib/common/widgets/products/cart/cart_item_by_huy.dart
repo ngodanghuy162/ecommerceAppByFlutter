@@ -8,12 +8,12 @@ import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class TCartItemByHuy extends StatelessWidget {
-  String? brand;
-  String? imgUrl;
-  String? title;
-  Color? color;
-  String? size;
-  TCartItemByHuy({
+ final String? brand;
+  final String? imgUrl;
+ final String? title;
+ final Color? color;
+ final String? size;
+ const TCartItemByHuy({
     this.brand,
     this.title,
     this.imgUrl,

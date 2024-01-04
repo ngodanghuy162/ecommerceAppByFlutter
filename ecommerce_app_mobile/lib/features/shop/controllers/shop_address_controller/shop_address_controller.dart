@@ -47,6 +47,45 @@ class ShopAddressController extends GetxController {
         .text = ward.text = street.text = optional.text = address.text = '';
   }
 
+  void fillFullField(Map<String, dynamic> addressInfo) {
+    name.text = addressInfo['name'];
+    phoneNumber.text = addressInfo['phoneNumber'];
+    province.text = addressInfo['province'];
+    district.text = addressInfo['district'];
+    ward.text = addressInfo['ward'];
+    street.text = addressInfo['street'];
+    optional.text = addressInfo['optional'];
+    lat = addressInfo['lat'];
+    lng = addressInfo['lng'];
+    districtid = addressInfo['districtId'];
+    provinceId = addressInfo['provinceId'];
+    wardCode = addressInfo['wardCode'];
+
+    address.text = '${province.text}/${district.text}/${ward.text}';
+  }
+
+  Future<void> updateAddressInfo(index) async {
+    await _shopRepo.updateAddressInfo(
+        AddressModel(
+          phoneNumber: phoneNumber.text,
+          name: name.text,
+          province: province.text,
+          district: district.text,
+          street: street.text,
+          ward: ward.text,
+          id: listShopAddress[index]['id'],
+          isDefault: listShopAddress[index]['isDefault'],
+          districtId: districtid!,
+          wardCode: wardCode!,
+          provinceId: provinceId!,
+          lat: lat,
+          lng: lng,
+          optional: optional.text,
+        ),
+        index);
+    await updateShopDetails();
+  }
+
   Future<void> getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -134,8 +173,10 @@ class ShopAddressController extends GetxController {
   // }
 
   Future<void> updateShopDetails() async {
-    await _shopRepo.getShopDetails();
-    listShopAddress.value = (_shopRepo.currentShopModel.address as List);
+    do {
+      await _shopRepo.updateShopDetails();
+    } while (_shopRepo.currentShopModel == null);
+    listShopAddress.value = (_shopRepo.currentShopModel!.address as List);
   }
 
   Map<String, dynamic> getDefaultAddress() {
