@@ -16,7 +16,7 @@ import 'package:ecommerce_app_mobile/features/shop/screens/shop/create_shop_scre
 import 'package:ecommerce_app_mobile/features/shop/screens/shop/shop_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
-import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -255,6 +255,7 @@ class ProductOrderHistoryBar extends StatelessWidget {
               color: color,
               icon: Iconsax.card_tick_1,
               label: 'Confirmation',
+              badgeLabel: '5',
             ),
           ),
         ),
@@ -266,6 +267,7 @@ class ProductOrderHistoryBar extends StatelessWidget {
               color: color,
               icon: Iconsax.truck_fast,
               label: 'Delivering',
+              badgeLabel: '4',
             ),
           ),
         ),
@@ -277,6 +279,7 @@ class ProductOrderHistoryBar extends StatelessWidget {
               color: color,
               icon: Iconsax.truck_tick,
               label: 'Completed',
+              badgeLabel: '3',
             ),
           ),
         ),
@@ -288,6 +291,7 @@ class ProductOrderHistoryBar extends StatelessWidget {
               color: color,
               icon: Iconsax.truck_remove,
               label: 'Cancelled',
+              badgeLabel: '9',
             ),
           ),
         ),
@@ -302,11 +306,13 @@ class ProductOrderHistoryBarItem extends StatelessWidget {
     required this.color,
     required this.label,
     required this.icon,
+    required this.badgeLabel,
   });
 
   final Color color;
   final String label;
   final IconData icon;
+  final String badgeLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -317,9 +323,24 @@ class ProductOrderHistoryBarItem extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            color: color,
+          badges.Badge(
+            badgeContent: Text(
+              badgeLabel,
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    color: TColors.light,
+                  ),
+            ),
+            position: badges.BadgePosition.topEnd(top: -12, end: -12),
+            badgeStyle: badges.BadgeStyle(
+              shape: badges.BadgeShape.circle,
+              badgeColor: Colors.blue,
+              borderRadius: BorderRadius.circular(4),
+              elevation: 0,
+            ),
+            child: Icon(
+              icon,
+              color: color,
+            ),
           ),
           const SizedBox(height: TSizes.sm),
           Text(
