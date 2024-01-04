@@ -36,7 +36,6 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-
   final brandController = Get.put(BrandController());
   final productController = Get.put(ProductController());
   final reviewController = Get.put(ProductReviewController());
@@ -57,7 +56,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
 
     return Scaffold(
-      bottomNavigationBar: TBottomAddToCart(),
+      bottomNavigationBar: TBottomAddToCart(
+        product: widget.product,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

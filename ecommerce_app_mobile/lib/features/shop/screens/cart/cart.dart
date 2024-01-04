@@ -1,5 +1,6 @@
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/cart/list_shop.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart_items_widget/cart_items.dart';
@@ -26,7 +27,7 @@ class CartScreen extends StatelessWidget {
           ),
           showBackArrow: true,
         ),
-        body: const TCartItems(),
+        body: const ListShop(),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: ElevatedButton(

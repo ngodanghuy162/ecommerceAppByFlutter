@@ -1,3 +1,4 @@
+
 import 'package:ecommerce_app_mobile/features/shop/models/shop_model.dart';
 import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
 import 'package:get/get.dart';
@@ -15,5 +16,13 @@ class ShopController extends GetxController {
 
   Future<String> createShop(ShopModel shopModel) async {
     return await ShopRepository.instance.createShop(shopModel);
+  }
+
+  Future<ShopModel> findShopByEmail(String email) async {
+    return await ShopRepository.instance.getShopByEmail(email);
+  }
+
+  Future<ShopModel> findShopByName(String name) async {
+    return await ShopRepository.instance.getShopByName(name);
   }
 }

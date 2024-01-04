@@ -1,62 +1,180 @@
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/shop_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_variant_repository.dart';
+import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController {
   static CartController get instance => Get.find();
 
-  RxInt quantity = 1.obs;
+  RxInt quantityShop = 1.obs;
+
+  RxList eachQuantity = [].obs;
 
   RxDouble totalAmount = 0.0.obs;
 
-  void updateTotalAmount() {
-    // Tính tổng của mảng eachPriceInCart
-    double sum =
-        eachPriceInCart.fold(0, (previous, current) => previous + current);
-    // Cập nhật giá trị của biến totalAmount
-    totalAmount.value = sum;
-    print("Sum: ${sum.toString()}");
-  }
+  // void updateTotalAmount() {
+  //   // Tính tổng của mảng eachPriceInCart
+  //   double sum =
+  //       eachPriceInCart.fold(0, (previous, current) => previous + current);
+  //   // Cập nhật giá trị của biến totalAmount
+  //   totalAmount.value = sum;
+  //   print("Sum: ${sum.toString()}");
+  // }
+
+  Map<String, Map<String, int>> chooSenShopAndProduct = {};
 
   ProductVariantModel? chosenVariant;
 
   RxInt totalPrice = 1.obs;
 
-  List<double> eachPriceInCart = [];
+  RxInt chosenShopInex = 0.obs;
 
-  List<ProductVariantModel> listVariantInCart = [];
+  List<int> chosenIndex = [];
 
-  List<ProductModel> listProduct = [];
+  List<List<double>> listPrice = [];
 
-  List<int> listQuantity = [];
+  List<List<ProductVariantModel>> listVariant = [];
+
+  List<ShopModel> listShop = [];
+
+  List<List<ProductModel>> listProduct = [];
+
+  List<List<int>> listQuantity = [];
 
   //get cart list vao bien de chia se vs wiget
-  Future<List<ProductVariantModel>> getCartList() async {
+  Future<bool> getCartList() async {
+    Get.put(ShopRepository());
     final listCart = await UserRepository.instance.getUserCart();
-    List<ProductVariantModel> productVariantList = [];
     listProduct = [];
     listQuantity = [];
-    eachPriceInCart = [];
-    listVariantInCart = [];
+    listPrice = [];
+    listVariant = [];
+    listShop = [];
     if (listCart != null && listCart.isNotEmpty) {
       await Future.forEach(listCart, (entry) async {
-        await Future.wait(entry.keys.map((key) async {
+        //tao cac list ung voi mo ishop moi vong lap
+        List<ProductVariantModel> listVariantTMp = [];
+        List<double> ecchPriceTmp = [];
+        List<ProductModel> listProductTmp = [];
+        List<int> listQuantityTmp = [];
+        //moi vong lap lay 1 shop model ra
+        final shopModel =
+            await ShopRepository.instance.getShopByEmail(entry["shopemail"]);
+        listShop.add(shopModel);
+
+        await Future.forEach(entry["listvariant"].keys, (dynamic key) async {
+          dynamic value = entry["listvariant"][key];
+
           ProductVariantModel productVariantModel =
               await ProductVariantRepository.instance.getVariantById(key);
           ProductModel? productModel =
               await ProductRepository.instance.getProductByVariantId(key);
-          listProduct.add(productModel!);
-          productVariantList.add(productVariantModel);
-          listVariantInCart.add(productVariantModel);
-          listQuantity.add(entry[key]!);
-          eachPriceInCart.add(entry[key]! * productVariantModel.price);
-        }));
+          listProductTmp.add(productModel!);
+          listVariantTMp.add(productVariantModel);
+          listQuantityTmp.add(value);
+          ecchPriceTmp.add(value * productVariantModel.price);
+        });
+        listProduct.add(listProductTmp);
+        listQuantity.add(listQuantityTmp);
+        listVariant.add(listVariantTMp);
+        listPrice.add(ecchPriceTmp);
       });
     }
-    updateTotalAmount();
-    return productVariantList;
+    return true;
   }
+
+  addChoosenListClickProduct(int indexInCart, int indexInShop) {
+    // Example of adding a key-value pair to your map
+    String key = listShop[indexInCart].owner;
+    Map<String, int> value = {
+      listVariant[indexInCart][indexInShop].id!: listQuantity[indexInCart]
+          [indexInShop]
+    };
+    if (!chooSenShopAndProduct.containsKey(key)) {
+      Map<String, Map<String, int>> tmp = {key: value};
+      chooSenShopAndProduct.addAll(tmp);
+    } else {
+      chooSenShopAndProduct[key]!.addAll(value);
+    }
+  }
+
+  deleteChoosenListClickProduct(int indexInCart, int indexInShop) {
+    // Example of adding a key-value pair to your map
+    String keyShop = listShop[indexInCart].owner;
+    if (chooSenShopAndProduct.containsKey(keyShop)) {
+      chooSenShopAndProduct[keyShop]!
+          .remove(listVariant[indexInCart][indexInShop].id!);
+      if (chooSenShopAndProduct[keyShop]!.isEmpty) {
+        chooSenShopAndProduct.remove(keyShop);
+      }
+    }
+  }
+
+  //them vao ds da chon bang shop email + variant id + quantity
+  addChoosenListByVariantId(String shopEmail, String variantId, int quantity) {
+    // Example of adding a key-value pair to your map
+    String keyShop = shopEmail;
+    Map<String, int> value = {variantId: quantity};
+    if (chooSenShopAndProduct.containsKey(keyShop)) {
+      chooSenShopAndProduct[keyShop]!.addIf(true, variantId, quantity);
+    } else {
+      chooSenShopAndProduct[keyShop]!.addAll(value);
+    }
+    print(chooSenShopAndProduct);
+  }
+
+//them vao ds da chon bang shop email + variant id
+  deleteChoosenListByVariantId(String shopEmail, String variantId) {
+    // Example of adding a key-value pair to your map
+    String keyShop = shopEmail;
+    if (chooSenShopAndProduct.containsKey(keyShop)) {
+      if (chooSenShopAndProduct.containsKey(keyShop)) {
+        chooSenShopAndProduct[keyShop]!.remove(variantId);
+        if (chooSenShopAndProduct[keyShop]!.isEmpty) {
+          chooSenShopAndProduct.remove(keyShop);
+        }
+      }
+    }
+    print(chooSenShopAndProduct);
+  }
+
+  addUpdateChoosenListClickShop(int indexInCart) {
+    if (chooSenShopAndProduct.containsKey(listShop[indexInCart].owner)) {
+      chooSenShopAndProduct.remove(listShop[indexInCart].owner);
+    }
+    // Example of adding a key-value pair to your map
+    String shopKey = listShop[indexInCart].owner;
+    int size = listProduct[indexInCart].length;
+    Map<String, int> tmp = {};
+    for (int i = 0; i < size; i++) {
+      // chooSenShopAndProduct[shopKey]![listVariant[indexInCart][i].id!] =
+      //     listQuantity[indexInCart][i];
+      tmp.addIf(
+          true, listVariant[indexInCart][i].id!, listQuantity[indexInCart][i]);
+    }
+    chooSenShopAndProduct.addIf(true, shopKey, tmp);
+  }
+
+  deleteUpdateChoosenListClickShop(int indexInCart) {
+    chooSenShopAndProduct.remove(listShop[indexInCart].owner);
+  }
+
+  bool isShopChecked(int indexInCart) {
+    if (chooSenShopAndProduct.containsKey(listShop[indexInCart].owner)) {
+      return false;
+    }
+    if (chooSenShopAndProduct[listShop[indexInCart].owner]!.isEmpty) {
+      return false;
+    }
+    int sizeShop = listProduct[indexInCart].length;
+    int sizeChosen = chooSenShopAndProduct[listShop[indexInCart].owner]!.length;
+    return (sizeChosen == sizeShop);
+  }
+  // getTotalPrice() {
+  //   totalAmount.value++;
+  // }
 }
