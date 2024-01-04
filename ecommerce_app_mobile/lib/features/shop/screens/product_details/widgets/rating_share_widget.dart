@@ -60,8 +60,8 @@ class TRatingAndShare extends StatelessWidget {
               minPrice: minPrice,
               discount: discount,
             )), icon: const Icon(Icons.chat, size: TSizes.iconMd,)),
-            /// Share Button
-            IconButton(onPressed: () {}, icon: const Icon(Icons.share, size: TSizes.iconMd,))
+            // Share Button
+            // IconButton(onPressed: () {}, icon: const Icon(Icons.share, size: TSizes.iconMd,))
           ],
         ),
       ],
