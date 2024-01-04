@@ -60,7 +60,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
-              const TCartItems(showAddRemoveButton: false),
+              //  const TCartItems(showAddRemoveButton: false),
               const SizedBox(height: TSizes.spaceBtwSections),
               const TCouponCode(),
               const SizedBox(

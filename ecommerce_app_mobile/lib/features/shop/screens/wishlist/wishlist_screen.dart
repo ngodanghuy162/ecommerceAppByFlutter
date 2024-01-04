@@ -4,6 +4,7 @@ import 'package:ecommerce_app_mobile/features/shop/controllers/wishlist/wishlist
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
+import 'package:ecommerce_app_mobile/navigation_menu.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,7 +38,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
           if (snapshot.connectionState == ConnectionState.done) {
             print("done connection");
             if (snapshot.hasData) {
-              List<String>? listProductInWlid = snapshot.data as List<String>;
+              // List<String>? listProductInWlid = snapshot.data as List<String>;
               if (WishlistController.instance.listProduct.isEmpty) {
                 return const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -56,57 +57,60 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   ],
                 );
               } else {
-                return SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(TSizes.defaultSpace),
-                    child: Column(
-                      children: [
-                        const Text(
-                          'Your Wishlist Screen',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0,
+                return Scaffold(
+                  body: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(TSizes.defaultSpace),
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Your Wishlist Screen',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 16.0),
-                        Obx(() => ListView.builder(
-                              physics: const ClampingScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: WishlistController
-                                  .instance.listProductSize.value,
-                              itemBuilder: (context, index) {
-                                ProductModel product = WishlistController
-                                    .instance.listProduct[index];
-                                // o day lay listVariantInCart thi no se van hien thi dung so san pham, nhung thuc te la no co rat nhieu san pham roi va bi lap moi lan vao lai cảt.
-                                List<ProductVariantModel> listVariant =
-                                    WishlistController.instance.listVariant[
-                                        index]; // lay list cart mới chuẩn
-                                BrandModel brand = WishlistController
-                                    .instance.listBrand[index];
-                                return Column(
-                                  children: [
-                                    TWishListItem(
-                                      brand: brand,
-                                      product: product,
-                                      listVariants: listVariant,
-                                    ),
-                                    IconButton(
-                                        onPressed: () async {
-                                          await UserRepository.instance
-                                              .removeProductFromWishlist(
-                                                  product);
-                                          WishlistController
-                                              .instance.listProductSize.value--;
-                                          WishlistController
-                                              .instance.listProduct
-                                              .remove(product);
-                                        },
-                                        icon: const Icon(Icons.delete_forever))
-                                  ],
-                                );
-                              },
-                            )),
-                      ],
+                          const SizedBox(height: 16.0),
+                          Obx(() => ListView.builder(
+                                physics: const ClampingScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: WishlistController
+                                    .instance.listProductSize.value,
+                                itemBuilder: (context, index) {
+                                  ProductModel product = WishlistController
+                                      .instance.listProduct[index];
+                                  // o day lay listVariantInCart thi no se van hien thi dung so san pham, nhung thuc te la no co rat nhieu san pham roi va bi lap moi lan vao lai cảt.
+                                  List<ProductVariantModel> listVariant =
+                                      WishlistController.instance.listVariant[
+                                          index]; // lay list cart mới chuẩn
+                                  BrandModel brand = WishlistController
+                                      .instance.listBrand[index];
+                                  return Column(
+                                    children: [
+                                      TWishListItem(
+                                        brand: brand,
+                                        product: product,
+                                        listVariants: listVariant,
+                                      ),
+                                      IconButton(
+                                          onPressed: () async {
+                                            await UserRepository.instance
+                                                .removeProductFromWishlist(
+                                                    product);
+                                            WishlistController.instance
+                                                .listProductSize.value--;
+                                            WishlistController
+                                                .instance.listProduct
+                                                .remove(product);
+                                          },
+                                          icon:
+                                              const Icon(Icons.delete_forever))
+                                    ],
+                                  );
+                                },
+                              )),
+                        ],
+                      ),
                     ),
                   ),
                 );

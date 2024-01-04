@@ -22,7 +22,7 @@ class WishlistController extends GetxController {
     List<String>? listProductId =
         await UserRepository.instance.getUserWishlist();
     listProductSize.value = listProductId!.length;
-    await Future.forEach(listProductId ?? [], (entry) async {
+    await Future.forEach(listProductId, (entry) async {
       ProductModel product =
           await ProductRepository.instance.getProductById(entry);
       listProduct.add(product);
@@ -38,7 +38,6 @@ class WishlistController extends GetxController {
           await BrandRepository.instance.getBrandById(product.brand_id);
       listBrand.add(brand);
     });
-    //listRxProduct.value = 
     return listProductId;
   }
 }

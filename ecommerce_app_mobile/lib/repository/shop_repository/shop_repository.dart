@@ -14,7 +14,7 @@ class ShopRepository extends GetxController {
   final userRepo = Get.put(UserRepository());
   late ShopModel currentShopModel;
   final _db = FirebaseFirestore.instance;
-
+  final shopCollection = FirebaseFirestore.instance.collection("Shop");
   @override
   Future<void> onReady() async {
     super.onReady();
@@ -101,10 +101,11 @@ class ShopRepository extends GetxController {
         .collection('Shop')
         .where(
           ownerField,
-          isEqualTo: userRepo.currentUserModel.id,
+          isEqualTo: userRepo.currentUserModel.email,
         )
         .get()
         .catchError(
+      // ignore: body_might_complete_normally_catch_error
       (error) {
         if (kDebugMode) {
           print(error);
@@ -198,14 +199,11 @@ class ShopRepository extends GetxController {
             notifyType: NotifyType.success,
             displayTime: const Duration(seconds: 1),
           );
-      ;
       if (kDebugMode) {
         print(error.toString());
       }
     });
   }
-
-  final shopCollection = FirebaseFirestore.instance.collection("Shop");
 
   Future<void> addVoucher(String voucher) async {
     try {
@@ -236,15 +234,54 @@ class ShopRepository extends GetxController {
       }
       DocumentReference documentReference =
           await shopCollection.add(shopModel.toMap());
-
-      print("dong 79 ok");
       await UserRepository.instance.registerSellUser();
-      print("dong 83 ok");
       return documentReference.id;
     } catch (e) {
       e.printError();
-      print("Error create shop");
       throw Exception('Failed to create shop');
+    }
+  }
+
+  //  Future<ShopModel> getShopByProduct(ProductModel product) async{
+  //     try {
+  //         shopCollection.where(
+  //           "product"
+  //         )
+  //     }
+  //  }
+
+  Future<ShopModel> getShopByEmail(String email) async {
+    try {
+      final snapshot =
+          await shopCollection.where("owner", isEqualTo: email).get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // Assuming ShopModel has a named constructor that takes a Map<String, dynamic>
+        return ShopModel.fromSnapshot(snapshot.docs.first);
+      } else {
+        throw Exception('Shop not found for email: $email');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to retrieve shop');
+    }
+  }
+
+  Future<ShopModel> getShopByName(String name) async {
+    try {
+      final snapshot =
+          await shopCollection.where("owner", isEqualTo: name).get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // Assuming ShopModel has a named constructor that takes a Map<String, dynamic>
+        return ShopModel.fromSnapshot(
+            snapshot.docs.first.data() as DocumentSnapshot<Object?>);
+      } else {
+        throw Exception('Shop not found for email: $name');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to retrieve shop');
     }
   }
 }

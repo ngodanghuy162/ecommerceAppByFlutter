@@ -1,6 +1,7 @@
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_variant_repository.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -10,7 +11,9 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TBottomAddToCart extends StatefulWidget {
-  const TBottomAddToCart({Key? key}) : super(key: key);
+  const TBottomAddToCart({Key? key, required this.product}) : super(key: key);
+
+  final ProductModel product;
 
   @override
   State<TBottomAddToCart> createState() => _TBottomAddToCartState();
@@ -95,7 +98,7 @@ class _TBottomAddToCartState extends State<TBottomAddToCart> {
               String? variantId = await ProductVariantRepository.instance
                   .getVariantId(CartController.instance.chosenVariant!);
               await UserRepository.instance
-                  .addProductToCart(null, number, variantId);
+                  .addProductToCart(number, variantId!, widget.product);
             },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.all(TSizes.md),
