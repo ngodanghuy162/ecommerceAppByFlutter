@@ -12,6 +12,7 @@ import 'package:ecommerce_app_mobile/features/personalization/controllers/settin
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/product_history_order.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/product_order_details.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/shop/create_shop_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/shop/shop_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
@@ -147,10 +148,11 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () => Get.to(
                         () => const ProductHistoryOrder(initialIndex: 0)),
                   ),
-                  const TSettingsMenuTile(
+                  TSettingsMenuTile(
                     icon: Iconsax.bank,
                     title: 'Khanh check',
                     subTitle: 'Dat09',
+                    onTap: () => Get.to(() => const ProductOrderDetails()),
                   ),
                   const TSettingsMenuTile(
                     icon: Iconsax.discount_shape,

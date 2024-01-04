@@ -44,7 +44,7 @@ class _TCartItemByHuyState extends State<TCartItemByHuy> {
           value: isChecked,
           onChanged: (newValue) {
             setState(() {
-              isChecked = !isChecked!;
+              isChecked = !isChecked;
               if (isChecked) {
                 print('Đã tích');
                 CartController.instance.addChoosenListClickProduct(

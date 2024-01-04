@@ -15,7 +15,7 @@ import '../../common/constant/cloudFieldName/user_model_field.dart';
 
 class UserRepository extends GetxController {
   static UserRepository get instance => Get.find();
-  late UserModel currentUserModel;
+  UserModel? currentUserModel;
   @override
   Future<void> onReady() async {
     super.onReady();
@@ -54,7 +54,7 @@ class UserRepository extends GetxController {
   Future<void> removeUserAddress(
       String id, BuildContext context, void Function() callback) async {
     final userData = currentUserModel;
-    var listAddress = userData.address!;
+    var listAddress = userData!.address!;
     final currentObj =
         listAddress.singleWhere((element) => element['id'] == id);
     final currentIndex = listAddress.indexOf(currentObj);
@@ -154,12 +154,12 @@ class UserRepository extends GetxController {
 
   List<Map<String, dynamic>> getAllUserAddress() {
     final userData = currentUserModel;
-    return userData.address!;
+    return userData!.address!;
   }
 
   Future<void> setDefaultAddress(String addressId) async {
     final userData = currentUserModel;
-    final listAddress = userData.address!.map(
+    final listAddress = userData!.address!.map(
       (e) {
         final addressModel = AddressModel(
             id: e['id'],
@@ -211,7 +211,7 @@ class UserRepository extends GetxController {
       AddressModel currentAddressModel, index) async {
     final userData = currentUserModel;
 
-    userData.address![index] = currentAddressModel.toMap();
+    userData!.address![index] = currentAddressModel.toMap();
     await _db
         .collection('Users')
         .doc(userData.id)
@@ -237,7 +237,7 @@ class UserRepository extends GetxController {
 
   Map<String, dynamic> getDefaultAddress() {
     final userData = currentUserModel;
-    return userData.address!
+    return userData!.address!
         .singleWhere((element) => element['isDefault'] == true);
   }
 
@@ -255,7 +255,7 @@ class UserRepository extends GetxController {
 
   Future<void> addUserAddress(AddressModel addressModel) async {
     final userData = currentUserModel;
-    userData.address!.add(addressModel.toMap());
+    userData!.address!.add(addressModel.toMap());
     await _db
         .collection('Users')
         .doc(userData.id)
@@ -424,7 +424,7 @@ class UserRepository extends GetxController {
       //     .map((entry) => {'${entry.key}': entry.value})
       //     .toList();
       var myCart =
-          ProfileController.instance.crtUser!.cart ?? currentUserModel.cart;
+          ProfileController.instance.crtUser!.cart ?? currentUserModel!.cart;
       // Expected a value of type 'List<dynamic>', but got one of type 'IdentityMap<String, int>
       final shop =
           await ShopRepository.instance.getShopByEmail(productModel!.shopEmail);
@@ -456,11 +456,11 @@ class UserRepository extends GetxController {
         print(
             'Đã thêm sản phẩm vào cart thành công dong 422 voi chua co shop.');
       }
-      userData.cart = myCart;
+      userData!.cart = myCart;
       await _db
           .collection('Users')
           .doc(ProfileController.instance.crtUser!.id)
-          .update(userData.toMap())
+          .update(userData!.toMap())
           .whenComplete(() => Get.snackbar(
                 "Thành công",
                 "Them sp vao gio hang thanh cong",
@@ -500,7 +500,7 @@ class UserRepository extends GetxController {
       final userData = currentUserModel;
 
       var myCart =
-          ProfileController.instance.crtUser!.cart ?? currentUserModel.cart;
+          ProfileController.instance.crtUser!.cart ?? currentUserModel!.cart;
       // Expected a value of type 'List<dynamic>', but got one of type 'IdentityMap<String, int>
       int index = myCart
               ?.indexWhere((item) => item['shopemail'] == product.shopEmail) ??
@@ -525,7 +525,7 @@ class UserRepository extends GetxController {
         return isDeleteShop;
       }
 
-      userData.cart = myCart;
+      userData!.cart = myCart;
       await _db
           .collection('Users')
           .doc(ProfileController.instance.crtUser!.id)
@@ -572,7 +572,7 @@ class UserRepository extends GetxController {
       //     .map((entry) => {'${entry.key}': entry.value})
       //     .toList();
       var myCart =
-          ProfileController.instance.crtUser!.cart ?? currentUserModel.cart;
+          ProfileController.instance.crtUser!.cart ?? currentUserModel!.cart;
       // Expected a value of type 'List<dynamic>', but got one of type 'IdentityMap<String, int>
       int index = myCart?.indexWhere(
               (item) => item['shopemail'] == productModel!.shopEmail) ??
@@ -592,7 +592,7 @@ class UserRepository extends GetxController {
       } else {
         return;
       }
-      userData.cart = myCart;
+      userData!.cart = myCart;
       await _db
           .collection('Users')
           .doc(ProfileController.instance.crtUser!.id)

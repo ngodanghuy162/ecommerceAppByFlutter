@@ -68,7 +68,7 @@ class _TProductPriceTextState extends State<TProductInCart> {
                               widget.productVariantId!, widget.productModel!);
                         }
                         CartController.instance.listPrice[widget.indexInCart]
-                                [widget.indexInShop!] =
+                                [widget.indexInShop] =
                             (widget.quantity! * double.tryParse(widget.price)!);
                       });
                     },
@@ -87,7 +87,7 @@ class _TProductPriceTextState extends State<TProductInCart> {
                       setState(() {
                         widget.quantity = (widget.quantity! + 1);
                         CartController.instance.listPrice[widget.indexInCart]
-                                [widget.indexInShop!] =
+                                [widget.indexInShop] =
                             (widget.quantity! * double.tryParse(widget.price)!);
                       });
                     },

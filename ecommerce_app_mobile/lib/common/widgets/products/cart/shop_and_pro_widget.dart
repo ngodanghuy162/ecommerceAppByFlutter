@@ -44,7 +44,7 @@ class _ShopAndProductState extends State<ShopAndProduct> {
                 value: isChecked,
                 onChanged: (newValue) {
                   setState(() {
-                    isChecked = !isChecked!;
+                    isChecked = !isChecked;
                     if (isChecked) {
                       print('Đã tích');
                       CartController.instance

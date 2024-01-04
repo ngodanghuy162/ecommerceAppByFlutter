@@ -32,12 +32,18 @@ class CartScreen extends StatelessWidget {
           padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: ElevatedButton(
             onPressed: () {
-              if (currentUserModel.address!.isEmpty) {
+              if (currentUserModel!.address!.isEmpty) {
                 SmartDialog.showToast('Please add address to continue',
                     alignment: Alignment.center);
                 Get.to(() => const UserAddressScreen());
               } else {
-                Get.to(() => CheckoutScreen());
+                print(CartController.instance.chooSenShopAndProduct);
+                Get.to(
+                  () => CheckoutScreen(
+                    shopAndProductVariantQuantity:
+                        CartController.instance.chooSenShopAndProduct,
+                  ),
+                );
               }
             },
             child: Obx(

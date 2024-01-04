@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/common/styles/product_price_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/t_brand_title_text_with_verified_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/widgets/product_history_item.dart';
@@ -42,10 +43,12 @@ class ProductOrderCard extends StatelessWidget {
                   Chip(
                     label: Text(
                       'Processing',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .apply(color: TColors.primary, fontWeightDelta: 1),
+                      style: Theme.of(context).textTheme.bodyLarge!.apply(
+                            color: TColors.primary.withOpacity(
+                              0.7,
+                            ),
+                            fontWeightDelta: 1,
+                          ),
                     ),
                   ),
                 ],
@@ -57,7 +60,7 @@ class ProductOrderCard extends StatelessWidget {
               imgUrl:
                   'https://cdn.thewirecutter.com/wp-content/media/2023/05/running-shoes-2048px-9718.jpg',
               size: 'ÚK',
-              title: 'Day la title cua san pham.',
+              title: 'Day la title cua san pham Day la title cua san pham .',
             ),
             const SizedBox(height: TSizes.sm),
             const Divider(
@@ -67,11 +70,9 @@ class ProductOrderCard extends StatelessWidget {
               endIndent: 0,
               color: TColors.divider,
             ),
-            const Text(
+            Text(
               'Xem them san pham',
-              style: TextStyle(
-                fontSize: 12,
-              ),
+              style: Theme.of(context).textTheme.labelMedium,
             ),
             const Divider(
               height: 10,
@@ -80,42 +81,50 @@ class ProductOrderCard extends StatelessWidget {
               endIndent: 0,
               color: TColors.divider,
             ),
-            const Row(
+            Row(
               children: [
-                Text('2 san pham'),
-                Spacer(),
-                Text('Thanh tien: 100.000'),
+                Text('2 products',
+                    style: Theme.of(context).textTheme.bodyMedium),
+                const Spacer(),
+                Text(
+                  'Total: ',
+                  style: Theme.of(context).textTheme.titleMedium!,
+                ),
+                TProductPriceText(
+                  price: '60',
+                  color: TColors.primary.withOpacity(0.7),
+                ),
               ],
             ),
-            const Divider(
-              height: 10,
-              thickness: 1,
-              indent: 0,
-              endIndent: 0,
-              color: TColors.divider,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Row(
-                children: [
-                  const Spacer(),
-                  ElevatedButton(
-                    onPressed: showReviewModal != null
-                        ? () => showReviewModal!(context)
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16.0,
-                        horizontal: 24.0,
-                      ), // Đặt khoảng cách giữa chữ và viền
-                    ),
-                    child: const Text(
-                      'Danh gia',
-                    ),
-                  )
-                ],
+            if (showReviewModal != null)
+              const Divider(
+                height: 10,
+                thickness: 1,
+                indent: 0,
+                endIndent: 0,
+                color: TColors.divider,
               ),
-            )
+            if (showReviewModal != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Row(
+                  children: [
+                    const Spacer(),
+                    ElevatedButton(
+                      onPressed: () => showReviewModal!(context),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16.0,
+                          horizontal: 24.0,
+                        ), // Đặt khoảng cách giữa chữ và viền
+                      ),
+                      child: const Text(
+                        'Danh gia',
+                      ),
+                    )
+                  ],
+                ),
+              )
           ],
         ),
       ),

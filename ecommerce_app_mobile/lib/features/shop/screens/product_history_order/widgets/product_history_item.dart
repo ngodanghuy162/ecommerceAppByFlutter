@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/common/styles/product_price_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/product_title_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/t_brand_title_text_with_verified_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/images/t_rounded_image.dart';
@@ -12,6 +13,9 @@ class ProductOrderItem extends StatelessWidget {
   final String? title;
   final Color? color;
   final String? size;
+  final int? quantity;
+  final double? price;
+  final int? discount;
   const ProductOrderItem({
     this.brand,
     this.title,
@@ -19,7 +23,14 @@ class ProductOrderItem extends StatelessWidget {
     this.color,
     this.size,
     super.key,
+    this.quantity,
+    this.price,
+    this.discount,
   });
+  String priceAfterDis(double price, int discount) {
+    double res = price * ((100 - discount) / 100);
+    return res.toStringAsFixed(1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +49,6 @@ class ProductOrderItem extends StatelessWidget {
         ),
         const SizedBox(width: TSizes.spaceBtwItems),
 
-        //Title, price, sizes
-        //Branch title with verified
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +58,7 @@ class ProductOrderItem extends StatelessWidget {
               Flexible(
                 child: TProductTitleText(
                   title: title!,
-                  maxLines: 1,
+                  maxLines: 2,
                 ),
               ),
               Row(
@@ -87,7 +96,24 @@ class ProductOrderItem extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  const Text('x1'),
+                  Text('x$quantity'),
+                ],
+              ),
+              Row(
+                children: [
+                  const Spacer(),
+                  TProductPriceText(
+                    price: price!.toString(),
+                    lineThrough: true,
+                    color: Colors.grey,
+                  ),
+                  const SizedBox(
+                    width: TSizes.sm,
+                  ),
+                  TProductPriceText(
+                    price: priceAfterDis(price!, discount!),
+                    color: TColors.primary.withOpacity(0.7),
+                  ),
                 ],
               ),
             ],

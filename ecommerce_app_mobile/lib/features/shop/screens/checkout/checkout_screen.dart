@@ -8,11 +8,14 @@ import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart/coupon_widget.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/shop_and_products.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/cart/t_cart_item.dart';
 import 'package:ecommerce_app_mobile/common/widgets/success_screen/success_screen.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/address_controller.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart_items_widget/cart_items.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_address_section.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_amout_section.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_payment_section.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/statistics/controllers/statistics_controller.dart';
 import 'package:ecommerce_app_mobile/navigation_menu.dart';
@@ -28,10 +31,14 @@ import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:get/get.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  CheckoutScreen({super.key});
+  const CheckoutScreen({
+    super.key,
+    required this.shopAndProductVariantQuantity,
+  });
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
+  final Map<String, Map<String, int>> shopAndProductVariantQuantity;
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
@@ -48,8 +55,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final dark = THelperFunctions.isDarkMode(context);
 
     final currentUserModel = userController.currentUserModel;
-    Map<String, dynamic> currentUserAddress = currentUserModel.address!
+    Map<String, dynamic> currentUserAddress = currentUserModel!.address!
         .singleWhere((element) => element['isDefault']);
+
     return Scaffold(
       appBar: TAppBar(
           showBackArrow: true,
@@ -60,9 +68,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
-              //  const TCartItems(showAddRemoveButton: false),
-              const SizedBox(height: TSizes.spaceBtwSections),
-              const TCouponCode(),
+              ...widget.shopAndProductVariantQuantity.keys
+                  .map((e) => Container(
+                        margin: const EdgeInsets.only(
+                          bottom: TSizes.md,
+                        ),
+                        child: Column(
+                          children: [
+                            ShopAndProducts(
+                              shop: {
+                                e: widget.shopAndProductVariantQuantity[e]!
+                              },
+                            ),
+                            const SizedBox(height: TSizes.spaceBtwItems),
+                            const TCouponCode(),
+                          ],
+                        ),
+                      ))
+                  .toList(),
               const SizedBox(
                 height: TSizes.spaceBtwSections,
               ),
@@ -78,21 +101,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   child: Column(
                     children: [
+                      const TBillingAmountSection(),
+                      const SizedBox(
+                        height: TSizes.spaceBtwItems,
+                      ),
+                      const Divider(),
                       const TBillingPaymentSection(),
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
                       const Divider(),
                       TBillingAddressSection(
-                        name: currentUserModel.firstName +
-                            currentUserModel.lastName,
-                        phoneNumber: currentUserModel.phoneNumber,
+                        name: currentUserAddress['name'],
+                        phoneNumber: currentUserAddress['phoneNumber'],
                         fullAddress: currentUserAddress != null
                             ? '${currentUserAddress['province']}, ${currentUserAddress['district']}, ${currentUserAddress['ward']}, ${currentUserAddress['street']}'
                             : '',
-                      ),
-                      const SizedBox(
-                        height: TSizes.spaceBtwItems,
                       ),
                     ],
                   ),

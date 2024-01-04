@@ -19,7 +19,7 @@ class AddressController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    listUserAddress.value = (_userRepo.currentUserModel.address as List);
+    listUserAddress.value = (_userRepo.currentUserModel!.address as List);
   }
 
   RxList<dynamic> listUserAddress = [].obs;
@@ -169,7 +169,7 @@ class AddressController extends GetxController {
 
   Future<void> updateUserDetails() async {
     await _userRepo.updateUserDetails();
-    listUserAddress.value = (_userRepo.currentUserModel.address as List);
+    listUserAddress.value = (_userRepo.currentUserModel!.address as List);
   }
 
   List<Map<String, dynamic>> getAllUserAddress() {

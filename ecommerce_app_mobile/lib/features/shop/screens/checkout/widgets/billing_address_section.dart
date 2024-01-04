@@ -19,12 +19,13 @@ class TBillingAddressSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         TSectionHeading(
           title: "Shipping Address",
           buttonTitle: "Change",
           onPressed: () {
-            Get.to(UserAddressScreen());
+            Get.to(() => UserAddressScreen);
           },
         ),
         Text(

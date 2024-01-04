@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 
 class TProductPriceText extends StatelessWidget {
-  const TProductPriceText(
-      {super.key,
-      this.currencySign = '\$',
-      required this.price,
-      this.maxLines = 1,
-      this.isLarge = false,
-      this.lineThrough = false});
+  const TProductPriceText({
+    super.key,
+    this.currencySign = '\$',
+    required this.price,
+    this.maxLines = 1,
+    this.isLarge = false,
+    this.lineThrough = false,
+    this.color,
+  });
 
   final String currencySign, price;
   final int maxLines;
   final bool isLarge, lineThrough;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +24,13 @@ class TProductPriceText extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       style: isLarge
           ? Theme.of(context).textTheme.headlineMedium!.apply(
-              decoration: lineThrough ? TextDecoration.lineThrough : null)
-          : Theme.of(context).textTheme.titleLarge!.apply(
-              decoration: lineThrough ? TextDecoration.lineThrough : null),
+                decoration: lineThrough ? TextDecoration.lineThrough : null,
+                color: color,
+              )
+          : Theme.of(context).textTheme.bodyMedium!.apply(
+                decoration: lineThrough ? TextDecoration.lineThrough : null,
+                color: color,
+              ),
     );
   }
 }
