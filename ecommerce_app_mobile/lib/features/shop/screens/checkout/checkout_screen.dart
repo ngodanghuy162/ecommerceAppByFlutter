@@ -114,17 +114,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       Obx(
                         () => TBillingAmountSection(
                           subTotal: controller.listCost.fold(
-                            0,
+                            0.0,
                             (previousValue, element) =>
                                 previousValue! + element['cost']['subTotal'],
                           ),
                           total: controller.listCost.fold(
-                            0,
+                            0.0,
                             (previousValue, element) =>
                                 previousValue! + element['cost']['total'],
                           ),
                           shippingFee: controller.listCost.fold(
-                            0,
+                            0.0,
                             (previousValue, element) =>
                                 previousValue! + element['cost']['shippingFee'],
                           ),
@@ -271,7 +271,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
             ); */
           },
-          child: const Text("Checkout \$256"),
+          child: Obx(() {
+            final total = controller.listCost.fold(
+              0.0,
+              (previousValue, element) =>
+                  previousValue + element['cost']['total'],
+            );
+            return Text("Checkout \$$total");
+          }),
         ),
       ),
     );
