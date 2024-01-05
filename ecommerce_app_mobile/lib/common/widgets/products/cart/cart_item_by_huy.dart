@@ -17,12 +17,16 @@ class TCartItemByHuy extends StatefulWidget {
   final String? size;
   final int indexInShop;
   final int indexinCart;
-  const TCartItemByHuy({
+  final ValueChanged<bool> onCheckboxChanged;
+  bool? checkboxValue;
+  TCartItemByHuy({
     this.brand,
     this.title,
     this.imgUrl,
     this.color,
     this.size,
+    required this.onCheckboxChanged,
+    this.checkboxValue,
     required this.indexInShop,
     required this.indexinCart,
     super.key,
@@ -33,7 +37,6 @@ class TCartItemByHuy extends StatefulWidget {
 }
 
 class _TCartItemByHuyState extends State<TCartItemByHuy> {
-  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
     Get.put(CartController());
@@ -41,19 +44,20 @@ class _TCartItemByHuyState extends State<TCartItemByHuy> {
       children: [
         // Checkbox
         Checkbox(
-          value: isChecked,
+          value: widget.checkboxValue,
           onChanged: (newValue) {
             setState(() {
-              isChecked = !isChecked;
-              if (isChecked) {
-                print('Đã tích');
-                CartController.instance.addChoosenListClickProduct(
+              widget.checkboxValue = newValue!;
+              if (widget.checkboxValue!) {
+                print('Đã tích product');
+                CartController.instance.addChoosenListByIndexProduct(
                     widget.indexinCart, widget.indexInShop);
               } else {
-                print('Chưa tích');
-                CartController.instance.deleteChoosenListClickProduct(
+                CartController.instance.deleteChoosenListByIndexProduct(
                     widget.indexinCart, widget.indexInShop);
+                print('Chưa tích product');
               }
+              widget.onCheckboxChanged(widget.checkboxValue!);
             });
           },
         ),

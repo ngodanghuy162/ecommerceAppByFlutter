@@ -67,9 +67,13 @@ class _TProductPriceTextState extends State<TProductInCart> {
                           UserRepository.instance.deleteProductFromCart(
                               widget.productVariantId!, widget.productModel!);
                         }
+                        CartController.instance.listQuantity[widget.indexInCart]
+                            [widget.indexInShop]--;
                         CartController.instance.listPrice[widget.indexInCart]
                                 [widget.indexInShop] =
                             (widget.quantity! * double.tryParse(widget.price)!);
+                        CartController.instance.updateTotalAmount(
+                            widget.indexInCart, widget.indexInShop, false);
                       });
                     },
                   ),
@@ -86,9 +90,13 @@ class _TProductPriceTextState extends State<TProductInCart> {
                     onPressed: () {
                       setState(() {
                         widget.quantity = (widget.quantity! + 1);
+                        CartController.instance.listQuantity[widget.indexInCart]
+                            [widget.indexInShop]++;
                         CartController.instance.listPrice[widget.indexInCart]
                                 [widget.indexInShop] =
                             (widget.quantity! * double.tryParse(widget.price)!);
+                        CartController.instance.updateTotalAmount(
+                            widget.indexInCart, widget.indexInShop, true);
                       });
                     },
                   ),

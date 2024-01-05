@@ -87,7 +87,7 @@ class CartController extends GetxController {
     return true;
   }
 
-  addChoosenListClickProduct(int indexInCart, int indexInShop) {
+  addChoosenListByIndexProduct(int indexInCart, int indexInShop) {
     // Example of adding a key-value pair to your map
     String key = listShop[indexInCart].owner;
     Map<String, int> value = {
@@ -100,16 +100,24 @@ class CartController extends GetxController {
     } else {
       chooSenShopAndProduct[key]!.addAll(value);
     }
+    totalAmount.value += listVariant[indexInCart][indexInShop].price *
+        listQuantity[indexInCart][indexInShop];
   }
 
-  deleteChoosenListClickProduct(int indexInCart, int indexInShop) {
+  deleteChoosenListByIndexProduct(int indexInCart, int indexInShop) {
     // Example of adding a key-value pair to your map
     String keyShop = listShop[indexInCart].owner;
     if (chooSenShopAndProduct.containsKey(keyShop)) {
-      chooSenShopAndProduct[keyShop]!
-          .remove(listVariant[indexInCart][indexInShop].id!);
-      if (chooSenShopAndProduct[keyShop]!.isEmpty) {
-        chooSenShopAndProduct.remove(keyShop);
+      if (chooSenShopAndProduct[keyShop]!
+          .containsKey(listVariant[indexInCart][indexInShop].id!)) {
+        totalAmount.value -= listVariant[indexInCart][indexInShop].price *
+            listQuantity[indexInCart][indexInShop];
+        print("Da tru");
+        chooSenShopAndProduct[keyShop]!
+            .remove(listVariant[indexInCart][indexInShop].id!);
+        if (chooSenShopAndProduct[keyShop]!.isEmpty) {
+          chooSenShopAndProduct.remove(keyShop);
+        }
       }
     }
   }
@@ -124,7 +132,6 @@ class CartController extends GetxController {
     } else {
       chooSenShopAndProduct[keyShop]!.addAll(value);
     }
-    print(chooSenShopAndProduct);
   }
 
 //them vao ds da chon bang shop email + variant id
@@ -139,28 +146,38 @@ class CartController extends GetxController {
         }
       }
     }
-    print(chooSenShopAndProduct);
   }
 
-  addUpdateChoosenListClickShop(int indexInCart) {
-    if (chooSenShopAndProduct.containsKey(listShop[indexInCart].owner)) {
-      chooSenShopAndProduct.remove(listShop[indexInCart].owner);
+  addChoosenListClickShop(int indexInCart) {
+    for (int i = 0; i < listVariant[indexInCart].length; i++) {
+      deleteChoosenListByIndexProduct(indexInCart, i);
     }
-    // Example of adding a key-value pair to your map
-    String shopKey = listShop[indexInCart].owner;
     int size = listProduct[indexInCart].length;
-    Map<String, int> tmp = {};
     for (int i = 0; i < size; i++) {
       // chooSenShopAndProduct[shopKey]![listVariant[indexInCart][i].id!] =
       //     listQuantity[indexInCart][i];
-      tmp.addIf(
-          true, listVariant[indexInCart][i].id!, listQuantity[indexInCart][i]);
+      addChoosenListByIndexProduct(indexInCart, i);
     }
-    chooSenShopAndProduct.addIf(true, shopKey, tmp);
   }
 
-  deleteUpdateChoosenListClickShop(int indexInCart) {
-    chooSenShopAndProduct.remove(listShop[indexInCart].owner);
+  deleteChoosenListClickShop(int indexInCart) {
+    for (int i = 0; i < listVariant[indexInCart].length; i++) {
+      deleteChoosenListByIndexProduct(indexInCart, i);
+    }
+  }
+
+  updateTotalAmount(int indexInCart, int indexInShop, bool isAdd) {
+    if (chooSenShopAndProduct.containsKey(listShop[indexInCart].owner)) {
+      String keyShop = listShop[indexInCart].owner;
+      if (chooSenShopAndProduct[keyShop]!
+          .containsKey(listVariant[indexInCart][indexInShop].id)) {
+        if (isAdd) {
+          totalAmount.value += listVariant[indexInCart][indexInShop].price;
+        } else {
+          totalAmount.value -= listVariant[indexInCart][indexInShop].price;
+        }
+      }
+    }
   }
 
   bool isShopChecked(int indexInCart) {
