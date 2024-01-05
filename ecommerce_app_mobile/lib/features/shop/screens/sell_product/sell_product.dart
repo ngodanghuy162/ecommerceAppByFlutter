@@ -386,6 +386,58 @@ class _SellProductScreenState extends State<SellProductScreen> {
                         const SizedBox(height: 8),
                         TextField(
                           decoration: const InputDecoration(
+                            labelText: 'Height',
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              variants[index].height = int.parse(value);
+                            });
+                          },
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          decoration: const InputDecoration(
+                            labelText: 'Length',
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              variants[index].length = int.parse(value);
+                            });
+                          },
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          decoration: const InputDecoration(
+                            labelText: 'Width',
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              variants[index].width = int.parse(value);
+                            });
+                          },
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          decoration: const InputDecoration(
+                            labelText: 'Weight',
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              variants[index].weight = int.parse(value);
+                            });
+                          },
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          decoration: const InputDecoration(
                             labelText: 'Variant Description',
                             border: OutlineInputBorder(),
                           ),
@@ -439,7 +491,12 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           imageURL: '',
                           id: '',
                           quantity: 0,
-                          descriptionVariant: ''));
+                          descriptionVariant: '',
+                          height: 0,
+                          width: 0,
+                          length: 0,
+                          weight: 0,
+                      ));
                       _imageList.add(null);
                     });
                   },
