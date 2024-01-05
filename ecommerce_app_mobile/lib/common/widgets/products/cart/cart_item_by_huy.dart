@@ -47,12 +47,12 @@ class _TCartItemByHuyState extends State<TCartItemByHuy> {
               isChecked = !isChecked!;
               if (isChecked) {
                 print('Đã tích');
-                CartController.instance.addChoosenListClickProduct(
+                CartController.instance.addChoosenListByIndexProduct(
                     widget.indexinCart, widget.indexInShop);
               } else {
-                print('Chưa tích');
-                CartController.instance.deleteChoosenListClickProduct(
+                CartController.instance.deleteChoosenListByIndexProduct(
                     widget.indexinCart, widget.indexInShop);
+                print('Chưa tích');
               }
             });
           },

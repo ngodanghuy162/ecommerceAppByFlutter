@@ -48,11 +48,11 @@ class _ShopAndProductState extends State<ShopAndProduct> {
                     if (isChecked) {
                       print('Đã tích');
                       CartController.instance
-                          .addUpdateChoosenListClickShop(widget.indexInCart);
+                          .addChoosenListClickShop(widget.indexInCart);
                     } else {
                       print('Chưa tích');
                       CartController.instance
-                          .deleteUpdateChoosenListClickShop(widget.indexInCart);
+                          .deleteChoosenListClickShop(widget.indexInCart);
                     }
                   });
                 }),
