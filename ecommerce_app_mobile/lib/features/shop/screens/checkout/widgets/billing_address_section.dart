@@ -25,7 +25,9 @@ class TBillingAddressSection extends StatelessWidget {
           title: "Shipping Address",
           buttonTitle: "Change",
           onPressed: () {
-            Get.to(() => UserAddressScreen);
+            Future.delayed(const Duration(seconds: 0), () {
+              Get.to(() => const UserAddressScreen());
+            });
           },
         ),
         Text(

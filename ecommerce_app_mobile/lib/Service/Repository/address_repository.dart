@@ -5,18 +5,22 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 class AddressRepository extends GetxController {
-  Future<Map<String, dynamic>> shippingCostEstimate() async {
+  Future<Map<String, dynamic>> shippingCostEstimate(
+    String serviceId,
+    String fromDistrictId,
+    String toDistrictId,
+    String toWardCode,
+    List<Map> items,
+  ) async {
     final body = jsonEncode({
-      "service_id": 53321,
-      "insurance_value": 500000,
+      "service_id": int.parse(serviceId),
+      "insurance_value": 0,
       "coupon": null,
-      "from_district_id": 1542,
-      "to_district_id": 1444,
-      "to_ward_code": "20314",
-      "height": 15,
-      "length": 15,
-      "weight": 1000,
-      "width": 15
+      "from_district_id": int.parse(fromDistrictId),
+      "to_district_id": int.parse(toDistrictId),
+      "to_ward_code": toWardCode,
+      "weight": 500,
+      "items": [...items]
     });
     try {
       var url = Uri.https(
@@ -37,11 +41,12 @@ class AddressRepository extends GetxController {
     } finally {}
   }
 
-  Future<List<dynamic>> getShippingServiceAvailable() async {
+  Future<List<dynamic>> getShippingServiceAvailable(
+      String shopId, String fromDistrict, String toDistrict) async {
     final body = jsonEncode({
-      "shop_id": 4683322,
-      "from_district": 1542,
-      "to_district": 1444,
+      "shop_id": int.parse(shopId),
+      "from_district": int.parse(fromDistrict),
+      "to_district": int.parse(toDistrict),
     });
     try {
       var url = Uri.https('online-gateway.ghn.vn',

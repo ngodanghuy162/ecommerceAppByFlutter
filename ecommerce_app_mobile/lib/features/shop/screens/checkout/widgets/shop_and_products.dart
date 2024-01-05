@@ -1,3 +1,5 @@
+import 'package:ecommerce_app_mobile/Service/repository/address_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/styles/t_brand_title_text_with_verified_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/checkout/checkout_controller.dart';
@@ -5,10 +7,8 @@ import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_mo
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/shop_model.dart';
-import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_amout_section.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_shipment_section.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/widgets/product_history_item.dart';
-import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
-import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/enums.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -23,6 +23,10 @@ class ShopAndProducts extends StatelessWidget {
   });
 
   final controller = Get.put(CheckoutController());
+  final addressRepository = Get.put(AddressRepository());
+  final userRepository = Get.put(UserRepository());
+
+  Map? currentShipmentService;
 
   final Map<String, Map<String, int>> shop;
 
@@ -51,6 +55,10 @@ class ShopAndProducts extends StatelessWidget {
             if (snapshot.hasData) {
               final shopModel = snapshot.data!['shopModel'] as ShopModel;
               final List products = snapshot.data!['products'];
+
+              final defaultShopAddress = shopModel.address!
+                  .singleWhere((element) => element['isDefault']);
+
               return TRoundedContainer(
                 width: double.infinity,
                 showBorder: true,
@@ -105,7 +113,52 @@ class ShopAndProducts extends StatelessWidget {
                       endIndent: 0,
                       color: TColors.divider,
                     ),
-                    TBillingAmountSection()
+                    FutureBuilder(
+                      future: addressRepository.getShippingServiceAvailable(
+                        '4683322',
+                        defaultShopAddress['districtId'],
+                        userRepository.getDefaultAddress()['districtId'],
+                      ),
+                      builder: (context, snapshot_) {
+                        if (snapshot_.connectionState == ConnectionState.done) {
+                          if (snapshot_.hasData) {
+                            return TBillingShipmentSection(
+                              shipmentServiceAvailable: snapshot_.data!,
+                              subTotal: snapshot.data!['subTotal'],
+                              defaultShopAddress: defaultShopAddress,
+                              shopEmail: shopModel.owner,
+                              items: products.map(
+                                (e) {
+                                  // final brandModel = e['brand'] as BrandModel;
+                                  final productModel =
+                                      e['product'] as ProductModel;
+                                  // final productVariantModel =
+                                  //     e['productVariant']
+                                  //         as ProductVariantModel;
+
+                                  final quantity = e['quantity'] as int;
+                                  return {
+                                    'name': productModel.name,
+                                    'quantity': quantity,
+                                    'height': 20,
+                                    "weight": 750,
+                                    "length": 20,
+                                    "width": 20
+                                  };
+                                },
+                              ).toList(),
+                            );
+                          } else if (snapshot_.hasError) {
+                            return Center(
+                                child: Text(snapshot_.error.toString()));
+                          } else {
+                            return const Center(child: Text("smt went wrong"));
+                          }
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    ),
                   ],
                 ),
               );

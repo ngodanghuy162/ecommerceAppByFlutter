@@ -8,6 +8,7 @@ import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart/coupon_widget.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/checkout/checkout_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/shop_and_products.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart/t_cart_item.dart';
 import 'package:ecommerce_app_mobile/common/widgets/success_screen/success_screen.dart';
@@ -31,24 +32,33 @@ import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:get/get.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  const CheckoutScreen({
+  CheckoutScreen({
     super.key,
     required this.shopAndProductVariantQuantity,
   });
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
+
   final Map<String, Map<String, int>> shopAndProductVariantQuantity;
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final addressController = Get.put(AddressController());
+
   late Map<String, dynamic>? defaultAdress;
+
   var isSuccess = false;
-  final controller = Get.put(PaymentRepository());
+
+  final paymentController = Get.put(PaymentRepository());
+
   final userController = Get.put(UserRepository());
+
   final orderController = Get.put(OrderRepository());
+
   final addressRepository = Get.put(AddressRepository());
+
+  final controller = Get.put(CheckoutController());
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +87,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           children: [
                             ShopAndProducts(
                               shop: {
-                                e: widget.shopAndProductVariantQuantity[e]!
+                                e: widget.shopAndProductVariantQuantity[e]!,
                               },
                             ),
                             const SizedBox(height: TSizes.spaceBtwItems),
@@ -101,7 +111,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   child: Column(
                     children: [
-                      const TBillingAmountSection(),
+                      Obx(
+                        () => TBillingAmountSection(
+                          subTotal: controller.listCost.fold(
+                            0,
+                            (previousValue, element) =>
+                                previousValue! + element['cost']['subTotal'],
+                          ),
+                          total: controller.listCost.fold(
+                            0,
+                            (previousValue, element) =>
+                                previousValue! + element['cost']['total'],
+                          ),
+                          shippingFee: controller.listCost.fold(
+                            0,
+                            (previousValue, element) =>
+                                previousValue! + element['cost']['shippingFee'],
+                          ),
+                        ),
+                      ),
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
@@ -114,9 +142,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       TBillingAddressSection(
                         name: currentUserAddress['name'],
                         phoneNumber: currentUserAddress['phoneNumber'],
-                        fullAddress: currentUserAddress != null
-                            ? '${currentUserAddress['province']}, ${currentUserAddress['district']}, ${currentUserAddress['ward']}, ${currentUserAddress['street']}'
-                            : '',
+                        fullAddress:
+                            '${currentUserAddress['province']}, ${currentUserAddress['district']}, ${currentUserAddress['ward']}, ${currentUserAddress['street']}',
                       ),
                     ],
                   ),
@@ -144,7 +171,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             // print((await controller.getPaymentDetails(id)).toMap());
 
             // print(await addressRepository.shippingCostEstimate());
-            print(await addressRepository.getShippingServiceAvailable());
 
             // defaultAdress = await addressController.getDefaultAddress();
             // print(defaultAdress);

@@ -60,36 +60,38 @@ class TBrandCard extends StatelessWidget {
 
             /// Text
             Expanded(
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   TBrandTitleWithVerifiedIcon(
                     showVerify: brand.isVerified,
                     title: brand.name,
                     brandTextSize: TextSizes.large,
                   ),
                   FutureBuilder(
-                      future: productController.getAllProductbyBrand(brand.id!),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          if (snapshot.hasData) {
-                            return Text(
-                              "${snapshot.data!.length} products",
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.labelMedium,
-                            );
-                          } else if (snapshot.hasError) {
-                            return Center(
-                                child: Text(snapshot.error.toString()));
-                          } else {
-                            return Center(child: Text("smt went wrong"));
-                          }
+                    future: productController.getAllProductbyBrand(brand.id!),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            "${snapshot.data!.length} products",
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.labelMedium,
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(child: Text(snapshot.error.toString()));
                         } else {
-                          return const CircularProgressIndicator();
+                          return Center(child: Text("smt went wrong"));
                         }
-                      })
-                ]))
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    },
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
