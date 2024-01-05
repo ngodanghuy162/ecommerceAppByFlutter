@@ -32,7 +32,16 @@ class ShopAndProduct extends StatefulWidget {
 }
 
 class _ShopAndProductState extends State<ShopAndProduct> {
-  bool isChecked = false;
+  late List<bool> listCheckBoxProduct;
+  bool checkboxShop = false;
+
+  @override
+  void initState() {
+    super.initState();
+    listCheckBoxProduct =
+        List.generate(widget.listProductOneShop.length, (index) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     Get.put(CartController());
@@ -41,18 +50,22 @@ class _ShopAndProductState extends State<ShopAndProduct> {
         Row(
           children: [
             Checkbox(
-                value: isChecked,
+                value: checkboxShop,
                 onChanged: (newValue) {
                   setState(() {
-                    isChecked = !isChecked!;
-                    if (isChecked) {
+                    checkboxShop = newValue!;
+                    if (checkboxShop) {
                       print('Đã tích');
                       CartController.instance
                           .addChoosenListClickShop(widget.indexInCart);
+                      listCheckBoxProduct =
+                          List.filled(listCheckBoxProduct.length, newValue);
                     } else {
                       print('Chưa tích');
                       CartController.instance
                           .deleteChoosenListClickShop(widget.indexInCart);
+                      listCheckBoxProduct =
+                          List.filled(listCheckBoxProduct.length, newValue);
                     }
                   });
                 }),
@@ -76,13 +89,24 @@ class _ShopAndProductState extends State<ShopAndProduct> {
                 return Column(
                   children: [
                     TCartItemByHuy(
-                      title: product.name,
-                      imgUrl: productVariant.imageURL,
-                      color: color,
-                      size: productVariant.size,
-                      indexInShop: index,
-                      indexinCart: widget.indexInCart,
-                    ),
+                        title: product.name,
+                        imgUrl: productVariant.imageURL,
+                        color: color,
+                        size: productVariant.size,
+                        indexInShop: index,
+                        indexinCart: widget.indexInCart,
+                        checkboxValue: listCheckBoxProduct[index],
+                        onCheckboxChanged: (newValue) {
+                          // Kiểm tra xem tất cả checkbox sản phẩm đã được tích hay chưa
+                          setState(() {
+                            listCheckBoxProduct[index] = newValue;
+                            if (listCheckBoxProduct.every((value) => value)) {
+                              checkboxShop = true;
+                            } else {
+                              checkboxShop = false;
+                            }
+                          });
+                        }),
                     if (widget.showAddRemoveButton)
                       const SizedBox(height: TSizes.spaceBtwItems),
                     if (widget.showAddRemoveButton)

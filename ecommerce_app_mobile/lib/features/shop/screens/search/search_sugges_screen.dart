@@ -1,43 +1,57 @@
+import 'package:easy_autocomplete/easy_autocomplete.dart';
 import 'package:ecommerce_app_mobile/Controller/search_controller.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SearchingScreen extends StatelessWidget {
-  final _searchControllerX = Get.put(SearchControllerX());
-
   SearchingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Get.put(SearchControllerX());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search Suggest Screen'),
       ),
-      body: Column(
-        children: [
-          Text(
-              "KeySearch + Suggest:${SearchControllerX.instance.keySearch.text}"),
-          TSearchContainer(text: SearchControllerX.instance.keySearch.text),
-          Expanded(
-            child: Obx(
-              () => ListView.builder(
-                itemCount: _searchControllerX.suggestedKeywords.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(_searchControllerX.suggestedKeywords[index]),
-                    onTap: () {
-                      // Xử lý khi người dùng chọn từ khóa gợi ý
-                      _searchControllerX.handleKeywordSelection(
-                          _searchControllerX.suggestedKeywords[index]);
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
+      body: FutureBuilder(
+          future: SearchControllerX.instance.getSuggestList(),
+          builder: (context, snapshot) {
+            return Column(
+              children: [
+                Text(
+                    "KeySearch + Suggest:${SearchControllerX.instance.keySearch.text}"),
+                TSearchContainer(
+                    text: SearchControllerX.instance.keySearch.text),
+                Container(
+                    padding: EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    child: EasyAutocomplete(
+                        suggestions:
+                            SearchControllerX.instance.suggestedKeywords,
+                        onChanged: (value) => print('onChanged value: $value'),
+                        onSubmitted: (value) =>
+                            print('onSubmitted value: $value'))),
+                // Expanded(
+                //   child: Obx(
+                //     () => ListView.builder(
+                //       itemCount: _searchControllerX.suggestedKeywords.length,
+                //       itemBuilder: (context, index) {
+                //         return ListTile(
+                //           title: Text(_searchControllerX.suggestedKeywords[index]),
+                //           onTap: () {
+                //             // Xử lý khi người dùng chọn từ khóa gợi ý
+                //             _searchControllerX.handleKeywordSelection(
+                //                 _searchControllerX.suggestedKeywords[index]);
+                //           },
+                //         );
+                //       },
+                //     ),
+                //   ),
+                // ),
+              ],
+            );
+          }),
     );
   }
 }
