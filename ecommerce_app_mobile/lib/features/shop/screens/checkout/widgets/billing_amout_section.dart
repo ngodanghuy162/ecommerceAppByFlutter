@@ -5,9 +5,9 @@ class TBillingAmountSection extends StatelessWidget {
   const TBillingAmountSection(
       {super.key, this.subTotal, this.shippingFee, this.total});
 
-  final double? subTotal;
-  final double? shippingFee;
-  final double? total;
+  final String? subTotal;
+  final String? shippingFee;
+  final String? total;
 
   @override
   Widget build(BuildContext context) {

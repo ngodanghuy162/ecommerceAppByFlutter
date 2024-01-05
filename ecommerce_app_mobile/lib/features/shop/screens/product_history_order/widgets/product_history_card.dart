@@ -61,6 +61,9 @@ class ProductOrderCard extends StatelessWidget {
                   'https://cdn.thewirecutter.com/wp-content/media/2023/05/running-shoes-2048px-9718.jpg',
               size: 'ÚK',
               title: 'Day la title cua san pham Day la title cua san pham .',
+              discount: 20,
+              price: 50,
+              quantity: 5,
             ),
             const SizedBox(height: TSizes.sm),
             const Divider(

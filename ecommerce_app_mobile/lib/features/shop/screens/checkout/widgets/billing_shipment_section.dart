@@ -138,19 +138,24 @@ class _TBillingShipmentSectionState extends State<TBillingShipmentSection> {
                   controller.listCost.add({
                     'shopEmail': widget.shopEmail,
                     'cost': {
-                      'subTotal': widget.subTotal,
-                      'shippingFee': snapshot.data!['total'] / 25000,
+                      'subTotal': widget.subTotal!.toStringAsFixed(2),
+                      'shippingFee':
+                          ((snapshot.data!['total'] / 24375) as double)
+                              .toStringAsFixed(2),
                       'total':
-                          widget.subTotal! + snapshot.data!['total'] / 25000,
+                          (widget.subTotal! + snapshot.data!['total'] / 24375)
+                              .toStringAsFixed(2),
                     }
                   });
                 });
 
                 // print(controller.listCost);
                 return TBillingAmountSection(
-                  subTotal: widget.subTotal,
-                  shippingFee: snapshot.data!['total'] / 25000,
-                  total: widget.subTotal! + snapshot.data!['total'] / 25000,
+                  subTotal: widget.subTotal!.toStringAsFixed(2),
+                  shippingFee: ((snapshot.data!['total'] / 24375) as double)
+                      .toStringAsFixed(2),
+                  total: (widget.subTotal! + snapshot.data!['total'] / 24375)
+                      .toStringAsFixed(2),
                 );
               } else if (snapshot.hasError) {
                 return Center(child: Text(snapshot.error.toString()));

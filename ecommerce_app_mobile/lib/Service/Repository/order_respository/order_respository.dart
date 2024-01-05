@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/order_model/order_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/shop_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

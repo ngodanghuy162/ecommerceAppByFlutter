@@ -9,6 +9,7 @@ import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart/coupon_widget.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/checkout/checkout_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/shop_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/shop_and_products.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart/t_cart_item.dart';
 import 'package:ecommerce_app_mobile/common/widgets/success_screen/success_screen.dart';
@@ -20,6 +21,7 @@ import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/bill
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_payment_section.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/statistics/controllers/statistics_controller.dart';
 import 'package:ecommerce_app_mobile/navigation_menu.dart';
+import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/api_constants.dart'
     as api_constant;
@@ -46,8 +48,6 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final addressController = Get.put(AddressController());
 
-  late Map<String, dynamic>? defaultAdress;
-
   var isSuccess = false;
 
   final paymentController = Get.put(PaymentRepository());
@@ -57,6 +57,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final orderController = Get.put(OrderRepository());
 
   final addressRepository = Get.put(AddressRepository());
+  final shopRepository = Get.put(ShopRepository());
 
   final controller = Get.put(CheckoutController());
 
@@ -113,21 +114,31 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     children: [
                       Obx(
                         () => TBillingAmountSection(
-                          subTotal: controller.listCost.fold(
-                            0.0,
-                            (previousValue, element) =>
-                                previousValue! + element['cost']['subTotal'],
-                          ),
-                          total: controller.listCost.fold(
-                            0.0,
-                            (previousValue, element) =>
-                                previousValue! + element['cost']['total'],
-                          ),
-                          shippingFee: controller.listCost.fold(
-                            0.0,
-                            (previousValue, element) =>
-                                previousValue! + element['cost']['shippingFee'],
-                          ),
+                          subTotal: controller.listCost
+                              .fold(
+                                0.0,
+                                (previousValue, element) =>
+                                    previousValue +
+                                    double.parse(element['cost']['subTotal']),
+                              )
+                              .toStringAsFixed(2),
+                          total: controller.listCost
+                              .fold(
+                                0.0,
+                                (previousValue, element) =>
+                                    previousValue +
+                                    double.parse(element['cost']['total']),
+                              )
+                              .toStringAsFixed(2),
+                          shippingFee: controller.listCost
+                              .fold(
+                                0.0,
+                                (previousValue, element) =>
+                                    previousValue +
+                                    double.parse(
+                                        element['cost']['shippingFee']),
+                              )
+                              .toStringAsFixed(2),
                         ),
                       ),
                       const SizedBox(
@@ -157,42 +168,49 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: ElevatedButton(
           onPressed: () async {
-            // final String id = await controller.addPaymentSuccess(
-            //   PaymentModel(
-            //     paymentDate: Timestamp.now(),
-            //     userId: 'abc',
-            //     paymentMethod: 'paypal',
-            //     total: 10,
-            //   ),
-            // );
+            final userId = userController.currentUserModel!.id!;
+            for (var shopEmail in widget.shopAndProductVariantQuantity.keys) {
+              final cost = controller.listCost.singleWhere(
+                  (element) => element['shopEmail'] == shopEmail)['cost'];
+              final String paymentId =
+                  await paymentController.addPaymentSuccess(
+                PaymentModel(
+                  paymentDate: Timestamp.now(),
+                  userId: userId,
+                  shopEmail: shopEmail,
+                  paymentMethod: 'paypal',
+                  shipping: cost['shippingFee'],
+                  discount: 0,
+                  total: cost['total'],
+                  subTotal: cost['subTotal'],
+                ),
+              );
 
-            // print(userController.currentUserModel.id);
+              // print((await paymentController.getPaymentDetails(id)).toMap());
+              ShopModel shopData =
+                  await shopRepository.getShopByEmail(shopEmail);
 
-            // print((await controller.getPaymentDetails(id)).toMap());
+              orderController.addOrderSuccess(
+                OrderModel(
+                  shopEmail: shopEmail,
+                  package: widget.shopAndProductVariantQuantity[widget
+                      .shopAndProductVariantQuantity
+                      .keys
+                      .first] as Map<String, dynamic>,
+                  paymentId: paymentId,
+                  status: 'confirmation',
+                  userId: userId,
+                  shopAddress: shopData.address!.singleWhere(
+                    (element) => element['isDefault'],
+                  ),
+                  userAddress: currentUserAddress,
+                ),
+              );
+            }
 
-            // print(await addressRepository.shippingCostEstimate());
-
-            // defaultAdress = await addressController.getDefaultAddress();
-            // print(defaultAdress);
-            // orderController.addOrderSuccess(OrderModel(
-            //     shopId: '1',
-            //     package: [
-            //       {
-            //         'variant_id1': 'quantity1',
-            //         'arraytest': [
-            //           {'map1': 1, 'map2': 2}
-            //         ]
-            //       },
-            //       {
-            //         'variant_id2': 'quantity2',
-            //       }
-            //     ],
-            //     paymentId: '1',
-            //     status: 'pending',
-            //     userId: '1',
-            //     shopAddress: defaultAdress!,
-            //     userAddress: defaultAdress!));
             /*
+
+            
 
           
             Get.to(
@@ -275,9 +293,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             final total = controller.listCost.fold(
               0.0,
               (previousValue, element) =>
-                  previousValue + element['cost']['total'],
+                  previousValue + double.parse(element['cost']['total']),
             );
-            return Text("Checkout \$$total");
+            return Text("Checkout \$${total.toStringAsFixed(2)}");
           }),
         ),
       ),
