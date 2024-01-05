@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/chat/chatting_screen.dart';
@@ -30,6 +31,7 @@ class TRatingAndShare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productController = Get.put(ProductController());
+    final productVariantController = Get.put(ProductVariantController());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -60,8 +62,8 @@ class TRatingAndShare extends StatelessWidget {
               minPrice: minPrice,
               discount: discount,
             )), icon: const Icon(Icons.chat, size: TSizes.iconMd,)),
-            // Share Button
-            // IconButton(onPressed: () {}, icon: const Icon(Icons.share, size: TSizes.iconMd,))
+            // //Share Button
+            // IconButton(onPressed: () { productVariantController.addAllData();}, icon: const Icon(Icons.share, size: TSizes.iconMd,))
           ],
         ),
       ],

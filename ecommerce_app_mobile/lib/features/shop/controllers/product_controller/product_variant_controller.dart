@@ -20,4 +20,8 @@ class ProductVariantController extends GetxController {
       List<dynamic> variantsIDs) async {
     return await _productVariantRepo.queryVariants(variantsIDs);
   }
+
+  // addAllData() async {
+  //   await _productVariantRepo.addAllData();
+  // }
 }
