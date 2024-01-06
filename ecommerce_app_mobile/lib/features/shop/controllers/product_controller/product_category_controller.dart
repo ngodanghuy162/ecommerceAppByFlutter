@@ -17,4 +17,8 @@ class ProductCategoryController extends GetxController {
   getCategoryDocumentIdByName(String name) async {
     return await _productCategoryRepo.getCategoryDocumentIdByName(name);
   }
+
+  Future<ProductCategoryModel> getCategoryByName(String name) async {
+    return await _productCategoryRepo.getCategoryByName(name);
+  }
 }

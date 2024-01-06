@@ -22,4 +22,12 @@ class ProductCategoryRepository extends GetxController {
 
     return snapshot.docs.first.id;
   }
+
+  Future<ProductCategoryModel> getCategoryByName(String name) async {
+    final snapshot = await _db
+        .collection('ProductCategory')
+        .where('name', isEqualTo: name)
+        .get();
+    return snapshot.docs.map((e) => ProductCategoryModel.fromSnapShot(e)).first;
+  }
 }

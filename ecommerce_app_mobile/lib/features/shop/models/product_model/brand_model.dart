@@ -29,7 +29,7 @@ class BrandModel {
     final data = document.data()!;
     return BrandModel(
         id: document.id,
-        imageUrl: data['imageURL'],
+        imageUrl: data['image_url'],
         isVerified: data['is_verified'],
         name: data['name'],
         userId: data['user_id']);

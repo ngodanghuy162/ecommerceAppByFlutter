@@ -8,6 +8,10 @@ class ProductVariantModel {
   late String imageURL;
   late int quantity;
   late String descriptionVariant;
+  late int height;
+  late int length;
+  late int weight;
+  late int width;
 
   ProductVariantModel({
     this.id,
@@ -17,6 +21,10 @@ class ProductVariantModel {
     required this.imageURL,
     required this.quantity,
     required this.descriptionVariant,
+    required this.height,
+    required this.length,
+    required this.weight,
+    required this.width,
   });
 
   toJson() {
@@ -27,6 +35,10 @@ class ProductVariantModel {
       'imageURL': imageURL,
       'quantity': quantity,
       'descriptionVariant': descriptionVariant,
+      'height': height,
+      'weight': weight,
+      'length': length,
+      'width': width,
     };
   }
 
@@ -41,6 +53,10 @@ class ProductVariantModel {
       imageURL: data['imageURL'],
       quantity: data['quantity'],
       descriptionVariant: data['descriptionVariant'],
+      height: data['height'],
+      weight: data['weight'],
+      width: data['width'],
+      length: data['length'],
     );
   }
 }
