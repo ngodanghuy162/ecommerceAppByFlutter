@@ -9,23 +9,30 @@ class TBillingAddressSection extends StatelessWidget {
       {super.key,
       required this.name,
       required this.phoneNumber,
-      required this.fullAddress});
+      required this.fullAddress,
+      this.showChangeButton = true});
 
   final String name;
   final String phoneNumber;
   final String fullAddress;
+  final bool showChangeButton;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         TSectionHeading(
           title: "Shipping Address",
           buttonTitle: "Change",
-          onPressed: () {
-            Get.to(UserAddressScreen());
-          },
+          onPressed: showChangeButton
+              ? () {
+                  Future.delayed(const Duration(seconds: 0), () {
+                    Get.to(() => const UserAddressScreen());
+                  });
+                }
+              : null,
         ),
         Text(
           name,

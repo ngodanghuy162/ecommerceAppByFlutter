@@ -19,12 +19,14 @@ class TWishListItem extends StatelessWidget {
     required this.product,
     required this.brand,
     required this.listVariants,
+    this.isNetWorkImg,
     super.key,
   });
 
   final ProductModel product;
   final BrandModel brand;
   final List<ProductVariantModel> listVariants;
+  bool? isNetWorkImg = true;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,7 @@ class TWishListItem extends StatelessWidget {
             imageUrl: listVariants[0].imageURL ?? TImages.productImage1,
             width: 60,
             height: 60,
+            isNetworkImage: true,
             padding: const EdgeInsets.all(TSizes.sm),
             backgroundColor: THelperFunctions.isDarkMode(context)
                 ? TColors.darkerGrey

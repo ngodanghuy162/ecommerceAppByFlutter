@@ -2,7 +2,12 @@ import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class TBillingAmountSection extends StatelessWidget {
-  const TBillingAmountSection({super.key});
+  const TBillingAmountSection(
+      {super.key, this.subTotal, this.shippingFee, this.total});
+
+  final String? subTotal;
+  final String? shippingFee;
+  final String? total;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,7 @@ class TBillingAmountSection extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              "\$6.0",
+              "\$$subTotal",
               style: Theme.of(context).textTheme.labelLarge,
             )
           ],
@@ -33,7 +38,7 @@ class TBillingAmountSection extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              "\$6.0",
+              "\$$shippingFee",
               style: Theme.of(context).textTheme.labelLarge,
             )
           ],
@@ -42,13 +47,15 @@ class TBillingAmountSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Tax Fee",
+              "Voucher discount",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              "\$6.0",
-              style: Theme.of(context).textTheme.labelLarge,
-            )
+              "\$0",
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    decoration: TextDecoration.lineThrough,
+                  ),
+            ),
           ],
         ),
         Row(
@@ -59,7 +66,7 @@ class TBillingAmountSection extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              "\$6.0",
+              "\$$total",
               style: Theme.of(context).textTheme.titleMedium,
             )
           ],

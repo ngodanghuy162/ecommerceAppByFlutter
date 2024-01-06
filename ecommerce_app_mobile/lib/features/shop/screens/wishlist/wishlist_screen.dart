@@ -1,9 +1,8 @@
-import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_horizontal.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
-import 'package:ecommerce_app_mobile/common/widgets/products/wishlist/ItemWishlist.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/wishlist/wishlist_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_product_model.dart';
@@ -13,7 +12,6 @@ import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:developer' show log;
 
 import 'package:iconsax/iconsax.dart';
 

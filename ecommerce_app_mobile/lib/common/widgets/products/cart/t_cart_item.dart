@@ -2,13 +2,22 @@ import 'package:ecommerce_app_mobile/common/styles/product_title_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/t_brand_title_text_with_verified_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/images/t_rounded_image.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
-import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class TCartItem extends StatelessWidget {
+  final String? brand;
+  final String? imgUrl;
+  final String? title;
+  final Color? color;
+  final String? size;
   const TCartItem({
+    this.brand,
+    this.title,
+    this.imgUrl,
+    this.color,
+    this.size,
     super.key,
   });
 
@@ -18,9 +27,10 @@ class TCartItem extends StatelessWidget {
       children: [
         //Image
         TRoundedImage(
-          imageUrl: TImages.productImage1,
-          width: 60,
-          height: 60,
+          imageUrl: imgUrl!,
+          isNetworkImage: true,
+          width: 100,
+          height: 100,
           padding: const EdgeInsets.all(TSizes.sm),
           backgroundColor: THelperFunctions.isDarkMode(context)
               ? TColors.darkerGrey
@@ -35,10 +45,10 @@ class TCartItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const TBrandTitleWithVerifiedIcon(title: 'Nike'),
-              const Flexible(
+              TBrandTitleWithVerifiedIcon(title: brand!),
+              Flexible(
                 child: TProductTitleText(
-                  title: 'Black sport shoes',
+                  title: title!,
                   maxLines: 1,
                 ),
               ),
@@ -49,16 +59,26 @@ class TCartItem extends StatelessWidget {
                       text: 'Color ',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    TextSpan(
-                      text: 'Green ',
-                      style: Theme.of(context).textTheme.bodyLarge,
+                    WidgetSpan(
+                      child: Container(
+                        width: 16,
+                        height: 16,
+                        margin: const EdgeInsets.only(
+                          bottom: 2,
+                          right: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: color ?? Colors.lightBlue,
+                        ),
+                      ),
                     ),
                     TextSpan(
                       text: 'Sizes ',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     TextSpan(
-                      text: 'UK 08 ',
+                      text: size ?? "",
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],

@@ -47,7 +47,7 @@ class _TProductCardVerticalState extends State<TProductCardVertical> {
     }
     return FutureBuilder(
         future: UserRepository.instance
-            .isProductInWishList(widget.modelDetail.product!),
+            .isProductInWishList(widget.modelDetail.product),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             isInWishlist.value = snapshot.data as bool;

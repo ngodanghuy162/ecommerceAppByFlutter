@@ -56,7 +56,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
 
     return Scaffold(
-      bottomNavigationBar: TBottomAddToCart(),
+      bottomNavigationBar: TBottomAddToCart(
+        product: widget.product,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

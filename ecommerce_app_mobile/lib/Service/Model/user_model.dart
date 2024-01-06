@@ -15,7 +15,7 @@ class UserModel {
   List<Map<String, dynamic>>? address;
   List<String>? wishlist;
   List<String>? voucher;
-  List<Map<String, dynamic>>? cart;
+  List<dynamic>? cart;
   // double totalIncome;
   String? bankAccount;
   double? totalConsumption;
@@ -35,7 +35,7 @@ class UserModel {
     this.address,
     List<String>? wishlist,
     List<String>? voucher,
-    List<Map<String, dynamic>>? cart,
+    List<dynamic>? cart,
     String? bankAccount,
     double? totalConsumption,
   })  : wishlist = wishlist ?? [],
@@ -68,9 +68,9 @@ class UserModel {
         address: (data?[addressFieldName] as List)
             .map((item) => item as Map<String, dynamic>)
             .toList(),
-        cart: (data?[cartFieldName] as List)
-            .map((item) => item as Map<String, dynamic>)
-            .toList(),
+        cart: (data?[cartFieldName] as List),
+        // .map((item) => item as Map<String, dynamic>)
+        // .toList(),
         // wishlist: data?[wishlistFieldName],
         wishlist: (data?[wishlistFieldName] as List)
             .map((item) => item as String)

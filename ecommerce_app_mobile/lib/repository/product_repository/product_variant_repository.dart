@@ -97,4 +97,17 @@ class ProductVariantRepository extends GetxController {
         .map((e) => ProductVariantModel.fromSnapShot(e))
         .toList();
   }
+
+  // Future<void> addAllData () async {
+  //   const newData = {
+  //     'height': 20,
+  //     'weight': 750,
+  //     'length': 20,
+  //     'width': 20,
+  //   };
+  //   await _db.collection('ProductVariant').get().then((value) => value.docs.forEach((element) {
+  //     var docRef = _db.collection('ProductVariant').doc(element.id);
+  //     docRef.update(newData);
+  //   }));
+  // }
 }

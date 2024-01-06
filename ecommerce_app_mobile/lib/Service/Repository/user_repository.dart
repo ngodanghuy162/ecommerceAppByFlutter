@@ -4,9 +4,8 @@ import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/profile_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/shop_address_controller/shop_address_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
-import 'package:ecommerce_app_mobile/repository/product_repository/product_variant_repository.dart';
+import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,11 +15,14 @@ import '../../common/constant/cloudFieldName/user_model_field.dart';
 
 class UserRepository extends GetxController {
   static UserRepository get instance => Get.find();
-  late UserModel currentUserModel;
+  UserModel? currentUserModel;
   @override
   Future<void> onReady() async {
     super.onReady();
-    await updateUserDetails();
+    Get.put(ProfileController());
+    if (FirebaseAuth.instance.currentUser != null) {
+      await updateUserDetails();
+    }
   }
 
   final _db = FirebaseFirestore.instance;
@@ -38,6 +40,7 @@ class UserRepository extends GetxController {
         )
         .get()
         .catchError(
+      // ignore: body_might_complete_normally_catch_error
       (error) {
         if (kDebugMode) {
           print(error);
@@ -51,7 +54,7 @@ class UserRepository extends GetxController {
   Future<void> removeUserAddress(
       String id, BuildContext context, void Function() callback) async {
     final userData = currentUserModel;
-    var listAddress = userData.address!;
+    var listAddress = userData!.address!;
     final currentObj =
         listAddress.singleWhere((element) => element['id'] == id);
     final currentIndex = listAddress.indexOf(currentObj);
@@ -129,6 +132,7 @@ class UserRepository extends GetxController {
         )
         .get()
         .catchError(
+      // ignore: body_might_complete_normally_catch_error
       (error) {
         if (kDebugMode) {
           print(error);
@@ -150,12 +154,12 @@ class UserRepository extends GetxController {
 
   List<Map<String, dynamic>> getAllUserAddress() {
     final userData = currentUserModel;
-    return userData.address!;
+    return userData!.address!;
   }
 
   Future<void> setDefaultAddress(String addressId) async {
     final userData = currentUserModel;
-    final listAddress = userData.address!.map(
+    final listAddress = userData!.address!.map(
       (e) {
         final addressModel = AddressModel(
             id: e['id'],
@@ -207,7 +211,7 @@ class UserRepository extends GetxController {
       AddressModel currentAddressModel, index) async {
     final userData = currentUserModel;
 
-    userData.address![index] = currentAddressModel.toMap();
+    userData!.address![index] = currentAddressModel.toMap();
     await _db
         .collection('Users')
         .doc(userData.id)
@@ -233,7 +237,7 @@ class UserRepository extends GetxController {
 
   Map<String, dynamic> getDefaultAddress() {
     final userData = currentUserModel;
-    return userData.address!
+    return userData!.address!
         .singleWhere((element) => element['isDefault'] == true);
   }
 
@@ -243,7 +247,7 @@ class UserRepository extends GetxController {
     return userData.wishlist;
   }
 
-  Future<List<Map<String, dynamic>>?> getUserCart() async {
+  Future<List<dynamic>?> getUserCart() async {
     final userData =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
     return userData.cart;
@@ -251,7 +255,7 @@ class UserRepository extends GetxController {
 
   Future<void> addUserAddress(AddressModel addressModel) async {
     final userData = currentUserModel;
-    userData.address!.add(addressModel.toMap());
+    userData!.address!.add(addressModel.toMap());
     await _db
         .collection('Users')
         .doc(userData.id)
@@ -382,6 +386,7 @@ class UserRepository extends GetxController {
             colorText: Colors.green,
           ),
         )
+        // ignore: body_might_complete_normally_catch_error
         .catchError((error, stacktrace) {
       () => Get.snackbar(
             'Lỗi',
@@ -403,85 +408,216 @@ class UserRepository extends GetxController {
     return user.isSell;
   }
 
-  Future<void> addProductToCart(ProductVariantModel? productVariant,
-      int quantity, String? productVariantId) async {
-    final usersCollection = _db.collection('Users');
+  Future<void> addProductToCart(
+      int quantity, String productVariantId, ProductModel? productModel) async {
+    Get.put(ShopRepository());
     try {
-      /*  String currentUserId =
-          await currentCloudUser.then((value) => value.userId);*/
-      final snapshot = await usersCollection
-          .where(
-            "email",
-            isEqualTo: FirebaseAuth.instance.currentUser!.email,
-          )
-          .get();
-      if (snapshot.docs.isNotEmpty) {
-        var firstDocument = snapshot.docs[0];
-        var documentId = firstDocument.id;
-        if (productVariantId != null) {
-          Map<String, int> productVariantMap = {
-            productVariantId:
-                quantity // set your value here, it could be a number or any other data,
-          };
-          List<Map<String, dynamic>> productVariantList = productVariantMap
-              .entries
-              .map((entry) => {'${entry.key}': entry.value})
-              .toList();
-          await usersCollection.doc(documentId).update({
-            cartFieldName: FieldValue.arrayUnion(productVariantList),
-          });
-          // Expected a value of type 'List<dynamic>', but got one of type 'IdentityMap<String, int>
-          print("da them vao cart oke nhe");
-          return;
-        }
-        if (productVariant!.id!.isNotEmpty) {
-          bool isProductInCart =
-              firstDocument[cartFieldName].contains(productVariant.id);
-          if (!isProductInCart) {
-            Map<String, int> productVariantMap = {
-              productVariant.id!:
-                  quantity // set your value here, it could be a number or any other data,
-            };
-            List<Map<String, dynamic>> productVariantList = productVariantMap
-                .entries
-                .map((entry) => {'${entry.key}': entry.value})
-                .toList();
-            await usersCollection.doc(documentId).update({
-              cartFieldName: FieldValue.arrayUnion(productVariantList),
-            });
-            Get.snackbar('Ok', "Them vao cart ok");
-            return;
+      if (ProfileController.instance.crtUser == null) {
+        final currentUser =
+            await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+        ProfileController.instance.crtUser = currentUser;
+      }
+      final userData = currentUserModel;
+
+      Map<String, int> productVariantMap = {productVariantId: quantity};
+      // List<Map<String, dynamic>> productVariantList = productVariantMap.entries
+      //     .map((entry) => {'${entry.key}': entry.value})
+      //     .toList();
+      var myCart =
+          ProfileController.instance.crtUser!.cart ?? currentUserModel!.cart;
+      // Expected a value of type 'List<dynamic>', but got one of type 'IdentityMap<String, int>
+      final shop =
+          await ShopRepository.instance.getShopByEmail(productModel!.shopEmail);
+      int index =
+          myCart?.indexWhere((item) => item['shopemail'] == shop.owner) ?? -1;
+      if (index != -1) {
+        final listVariant = myCart![index]["listvariant"];
+        if (listVariant is Map<String, dynamic>) {
+          // Kiểm tra xem có key "productVariantId" không
+          if (listVariant.containsKey(productVariantId)) {
+            listVariant[productVariantId] =
+                listVariant[productVariantId] + quantity;
+            myCart[index]["listvariant"] = listVariant;
+            print('Updated value for "$productVariantId" in listVariant.');
           } else {
-            Get.snackbar('Error', "Product is already in cart");
-            return;
+            listVariant[productVariantId] = quantity;
+            myCart[index]["listvariant"] = listVariant;
+            print('Đã thêm sản phẩm vào cart thành công dong 416 voi co shop.');
           }
         } else {
-          String? productVariantId = await ProductVariantRepository.instance
-              .getVariantId(productVariant);
-          bool isProductInCart =
-              firstDocument[cartFieldName].contains(productVariantId);
-          if (!isProductInCart) {
-            Map<String, int> productVariantMap = {
-              productVariant.id!:
-                  quantity // set your value here, it could be a number or any other data,
-            };
-            List<Map<String, dynamic>> productVariantList = productVariantMap
-                .entries
-                .map((entry) => {'${entry.key}': entry.value})
-                .toList();
-            await usersCollection.doc(documentId).update({
-              cartFieldName: FieldValue.arrayUnion(productVariantList),
-            });
-            Get.snackbar('Ok', "Them vao cart ok");
-          } else {
-            Get.snackbar('Error', "Product is already in cart");
-            return;
-          }
+          print('listVariant is not a Map<String, dynamic>');
         }
       } else {
-        print('Không tìm thấy ng dùng phù hợp.');
+        Map<dynamic, dynamic> newCartItem = {
+          'shopemail': shop.owner,
+          'listvariant': productVariantMap,
+        };
+        myCart?.add(newCartItem);
+        print(
+            'Đã thêm sản phẩm vào cart thành công dong 422 voi chua co shop.');
       }
-      print('Đã thêm sản phẩm vào cart thành công.');
+      userData!.cart = myCart;
+      await _db
+          .collection('Users')
+          .doc(ProfileController.instance.crtUser!.id)
+          .update(userData!.toMap())
+          .whenComplete(() => Get.snackbar(
+                "Thành công",
+                "Them sp vao gio hang thanh cong",
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.green.withOpacity(0.1),
+                colorText: Colors.green,
+                duration: const Duration(seconds: 1),
+              ))
+          .catchError((error, stacktrace) {
+        () => Get.snackbar(
+              'Lỗi',
+              'Có gì đó không đúng, thử lại?',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.redAccent.withOpacity(0.1),
+              colorText: Colors.red,
+            );
+        if (kDebugMode) {
+          print(error.toString());
+        }
+      });
+      return;
+    } catch (e) {
+      print('Lỗi khi thêm sản phẩm vào cart: $e');
+    }
+  }
+
+  Future<bool> deleteProductFromCart(
+      String productVariantId, ProductModel product) async {
+    Get.put(ShopRepository());
+    bool isDeleteShop = false;
+    try {
+      if (ProfileController.instance.crtUser == null) {
+        final currentUser =
+            await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+        ProfileController.instance.crtUser = currentUser;
+      }
+      final userData = currentUserModel;
+
+      var myCart =
+          ProfileController.instance.crtUser!.cart ?? currentUserModel!.cart;
+      // Expected a value of type 'List<dynamic>', but got one of type 'IdentityMap<String, int>
+      int index = myCart
+              ?.indexWhere((item) => item['shopemail'] == product.shopEmail) ??
+          -1;
+      if (index != -1) {
+        final listVariant = myCart![index]["listvariant"];
+        if (listVariant is Map<String, dynamic>) {
+          // Kiểm tra xem có key "productVariantId" không
+          if (listVariant.containsKey(productVariantId)) {
+            listVariant.remove(productVariantId);
+            myCart[index]["listvariant"] = listVariant;
+            if (listVariant.isEmpty) {
+              myCart.removeAt(index);
+              isDeleteShop = true;
+            }
+            print('Delete "$productVariantId" in cart.');
+          }
+        } else {
+          print('listVariant is not a Map<String, dynamic>');
+        }
+      } else {
+        return isDeleteShop;
+      }
+
+      userData!.cart = myCart;
+      await _db
+          .collection('Users')
+          .doc(ProfileController.instance.crtUser!.id)
+          .update(userData.toMap())
+          .whenComplete(() => Get.snackbar(
+                "Sucesss",
+                "Delete from cart successfully",
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.green.withOpacity(0.1),
+                colorText: Colors.green,
+                duration: const Duration(seconds: 1),
+              ))
+          .catchError((error, stacktrace) {
+        () => Get.snackbar(
+              'Lỗi',
+              'Có gì đó không đúng, thử lại?',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.redAccent.withOpacity(0.1),
+              colorText: Colors.red,
+            );
+        if (kDebugMode) {
+          print(error.toString());
+        }
+      });
+      return isDeleteShop;
+    } catch (e) {
+      print('Lỗi khi xoa san pham khoi cart: $e');
+      return false;
+    }
+  }
+
+  Future<void> updateQuantityInCart(
+      int quantity, String productVariantId, ProductModel? productModel) async {
+    Get.put(ShopRepository());
+    try {
+      if (ProfileController.instance.crtUser == null) {
+        final currentUser =
+            await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+        ProfileController.instance.crtUser = currentUser;
+      }
+      final userData = currentUserModel;
+
+      // List<Map<String, dynamic>> productVariantList = productVariantMap.entries
+      //     .map((entry) => {'${entry.key}': entry.value})
+      //     .toList();
+      var myCart =
+          ProfileController.instance.crtUser!.cart ?? currentUserModel!.cart;
+      // Expected a value of type 'List<dynamic>', but got one of type 'IdentityMap<String, int>
+      int index = myCart?.indexWhere(
+              (item) => item['shopemail'] == productModel!.shopEmail) ??
+          -1;
+      if (index != -1) {
+        final listVariant = myCart![index]["listvariant"];
+        if (listVariant is Map<String, dynamic>) {
+          // Kiểm tra xem có key "productVariantId" không
+          if (listVariant.containsKey(productVariantId)) {
+            listVariant[productVariantId] = quantity;
+            myCart[index]["listvariant"] = listVariant;
+            print('Updated quantity for "$productVariantId" in cart.');
+          }
+        } else {
+          print('listVariant is not a Map<String, dynamic>');
+        }
+      } else {
+        return;
+      }
+      userData!.cart = myCart;
+      await _db
+          .collection('Users')
+          .doc(ProfileController.instance.crtUser!.id)
+          .update(userData.toMap())
+          .whenComplete(() => Get.snackbar(
+                "Thành công",
+                "Them sp vao gio hang thanh cong",
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Colors.green.withOpacity(0.1),
+                colorText: Colors.green,
+                duration: const Duration(seconds: 1),
+              ))
+          .catchError((error, stacktrace) {
+        () => Get.snackbar(
+              'Lỗi',
+              'Có gì đó không đúng, thử lại?',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.redAccent.withOpacity(0.1),
+              colorText: Colors.red,
+            );
+        if (kDebugMode) {
+          print(error.toString());
+        }
+      });
+      return;
     } catch (e) {
       print('Lỗi khi thêm sản phẩm vào cart: $e');
     }

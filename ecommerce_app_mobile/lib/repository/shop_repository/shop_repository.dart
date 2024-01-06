@@ -12,9 +12,9 @@ class ShopRepository extends GetxController {
   // Static instance variable
   static ShopRepository get instance => Get.find();
   final userRepo = Get.put(UserRepository());
-  ShopModel? currentShopModel;
+  late ShopModel currentShopModel;
   final _db = FirebaseFirestore.instance;
-
+  final shopCollection = FirebaseFirestore.instance.collection("Shop");
   @override
   Future<void> onReady() async {
     super.onReady();
@@ -24,7 +24,7 @@ class ShopRepository extends GetxController {
   Future<void> removeShopAddress(
       String id, BuildContext context, void Function() callback) async {
     final shopData = currentShopModel;
-    var listAddress = shopData!.address!;
+    var listAddress = shopData.address!;
     final currentObj =
         listAddress.singleWhere((element) => element['id'] == id);
     final currentIndex = listAddress.indexOf(currentObj);
@@ -97,14 +97,18 @@ class ShopRepository extends GetxController {
   }
 
   Future<ShopModel> getShopDetails() async {
+    do {
+      await userRepo.updateUserDetails();
+    } while (userRepo.currentUserModel != null);
     final snapshot = await _db
         .collection('Shop')
         .where(
           ownerField,
-          isEqualTo: userRepo.currentUserModel.email,
+          isEqualTo: userRepo.currentUserModel!.email,
         )
         .get()
         .catchError(
+      // ignore: body_might_complete_normally_catch_error
       (error) {
         if (kDebugMode) {
           print(error);
@@ -119,14 +123,14 @@ class ShopRepository extends GetxController {
   List<Map<String, dynamic>> getAllShopAddress() {
     final shopDetail = currentShopModel;
 
-    return shopDetail!.address!;
+    return shopDetail.address!;
   }
 
   Future<void> updateAddressInfo(
       AddressModel currentAddressModel, index) async {
     final shopData = currentShopModel;
 
-    shopData!.address![index] = currentAddressModel.toMap();
+    shopData.address![index] = currentAddressModel.toMap();
     await _db
         .collection('Shop')
         .doc(shopData.id)
@@ -152,7 +156,7 @@ class ShopRepository extends GetxController {
 
   Future<void> setDefaultAddress(String addressId) async {
     final shopData = currentShopModel;
-    final listAddress = shopData!.address!.map(
+    final listAddress = shopData.address!.map(
       (e) {
         final addressModel = AddressModel(
             id: e['id'],
@@ -202,13 +206,13 @@ class ShopRepository extends GetxController {
 
   Map<String, dynamic> getDefaultAddress() {
     final userData = currentShopModel;
-    return userData!.address!
+    return userData.address!
         .singleWhere((element) => element['isDefault'] == true);
   }
 
   Future<void> addShopAddress(AddressModel addressModel) async {
     final shopData = currentShopModel;
-    shopData!.address!.add(addressModel.toMap());
+    shopData.address!.add(addressModel.toMap());
     await _db
         .collection('Shop')
         .doc(shopData.id)
@@ -226,18 +230,15 @@ class ShopRepository extends GetxController {
             notifyType: NotifyType.success,
             displayTime: const Duration(seconds: 1),
           );
-      ;
       if (kDebugMode) {
         print(error.toString());
       }
     });
   }
 
-  final shopCollection = FirebaseFirestore.instance.collection("Shop");
-
   Future<void> addVoucher(String voucher) async {
     try {
-      String? shopId = currentShopModel!.id;
+      String? shopId = currentShopModel.id;
       await shopCollection
           .doc(shopId)
           .update({voucherField: FieldValue.arrayUnion(voucher as List)});
@@ -248,7 +249,7 @@ class ShopRepository extends GetxController {
 
   Future<void> addProduct(String productId) async {
     try {
-      String? shopId = currentShopModel!.id;
+      String? shopId = currentShopModel.id;
       await shopCollection
           .doc(shopId)
           .update({productField: FieldValue.arrayUnion(productId as List)});
@@ -264,15 +265,54 @@ class ShopRepository extends GetxController {
       }
       DocumentReference documentReference =
           await shopCollection.add(shopModel.toMap());
-
-      print("dong 79 ok");
       await UserRepository.instance.registerSellUser();
-      print("dong 83 ok");
       return documentReference.id;
     } catch (e) {
       e.printError();
-      print("Error create shop");
       throw Exception('Failed to create shop');
+    }
+  }
+
+  //  Future<ShopModel> getShopByProduct(ProductModel product) async{
+  //     try {
+  //         shopCollection.where(
+  //           "product"
+  //         )
+  //     }
+  //  }
+
+  Future<ShopModel> getShopByEmail(String email) async {
+    try {
+      final snapshot =
+          await shopCollection.where("owner", isEqualTo: email).get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // Assuming ShopModel has a named constructor that takes a Map<String, dynamic>
+        return ShopModel.fromSnapshot(snapshot.docs.first);
+      } else {
+        throw Exception('Shop not found for email: $email');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to retrieve shop');
+    }
+  }
+
+  Future<ShopModel> getShopByName(String name) async {
+    try {
+      final snapshot =
+          await shopCollection.where("owner", isEqualTo: name).get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // Assuming ShopModel has a named constructor that takes a Map<String, dynamic>
+        return ShopModel.fromSnapshot(
+            snapshot.docs.first.data() as DocumentSnapshot<Object?>);
+      } else {
+        throw Exception('Shop not found for email: $name');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to retrieve shop');
     }
   }
 }

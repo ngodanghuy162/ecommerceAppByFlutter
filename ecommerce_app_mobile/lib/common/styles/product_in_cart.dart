@@ -1,5 +1,7 @@
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+// ignore: must_be_immutable
 class TProductInCart extends StatefulWidget {
   TProductInCart(
       {super.key,
@@ -16,15 +19,21 @@ class TProductInCart extends StatefulWidget {
       this.maxLines = 1,
       this.quantity,
       this.isLarge = false,
-      this.index,
+      required this.indexInCart,
+      this.productModel,
+      this.productVariantId,
+      required this.indexInShop,
       this.lineThrough = false});
 
   final String currencySign, price;
   final int maxLines;
   final bool isLarge, lineThrough;
   final bool isShowQuantity;
+  final int indexInCart;
   int? quantity;
-  int? index;
+  final int indexInShop;
+  String? productVariantId;
+  ProductModel? productModel;
 
   @override
   State<TProductInCart> createState() => _TProductPriceTextState();
@@ -54,9 +63,17 @@ class _TProductPriceTextState extends State<TProductInCart> {
                     onPressed: () {
                       setState(() {
                         widget.quantity = (widget.quantity! - 1);
-                        CartController.instance.eachPriceInCart[widget.index!] =
+                        if (widget.quantity! <= 0) {
+                          UserRepository.instance.deleteProductFromCart(
+                              widget.productVariantId!, widget.productModel!);
+                        }
+                        CartController.instance.listQuantity[widget.indexInCart]
+                            [widget.indexInShop]--;
+                        CartController.instance.listPrice[widget.indexInCart]
+                                [widget.indexInShop] =
                             (widget.quantity! * double.tryParse(widget.price)!);
-                        CartController.instance.updateTotalAmount();
+                        CartController.instance.updateTotalAmount(
+                            widget.indexInCart, widget.indexInShop, false);
                       });
                     },
                   ),
@@ -73,9 +90,13 @@ class _TProductPriceTextState extends State<TProductInCart> {
                     onPressed: () {
                       setState(() {
                         widget.quantity = (widget.quantity! + 1);
-                        CartController.instance.eachPriceInCart[widget.index!] =
+                        CartController.instance.listQuantity[widget.indexInCart]
+                            [widget.indexInShop]++;
+                        CartController.instance.listPrice[widget.indexInCart]
+                                [widget.indexInShop] =
                             (widget.quantity! * double.tryParse(widget.price)!);
-                        CartController.instance.updateTotalAmount();
+                        CartController.instance.updateTotalAmount(
+                            widget.indexInCart, widget.indexInShop, true);
                       });
                     },
                   ),

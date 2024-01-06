@@ -44,11 +44,12 @@ dependencies:
   get_storage: ^2.1.1
 
   # Utility Packages
- 
+
   logger: ^2.0.2+1
   url_launcher: ^6.2.1
   flutter_native_splash: ^2.3.5
   smooth_page_indicator: ^1.1.0
+  easy_autocomplete: ^1.6.0
 
   # Product Specific
   readmore: ^2.2.0
@@ -61,7 +62,7 @@ dependencies:
   cloud_firestore: ^4.13.1
   firebase_auth: ^4.14.0
   google_sign_in: ^6.1.6
-  ##google icon 
+  ##google icon
   font_awesome_flutter: ^10.6.0
   universal_io: ^2.2.2
   flutter_facebook_auth: ^5.0.11
@@ -87,6 +88,7 @@ dependencies:
   flutter_bloc_pattern: ^2.3.0
   colornames: ^0.1.0
   flutter_slidable: ^3.0.1
+  badges: ^3.1.2
 
 dev_dependencies:
   flutter_test:

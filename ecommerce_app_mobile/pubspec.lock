@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  badges:
+    dependency: "direct main"
+    description:
+      name: badges
+      sha256: a7b6bbd60dce418df0db3058b53f9d083c22cdb5132a052145dc267494df0b84
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -241,6 +249,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.0"
+  easy_autocomplete:
+    dependency: "direct main"
+    description:
+      name: easy_autocomplete
+      sha256: e7ded95deb010daec41caf25f553b450fbdaa6769e7a6fdb7b8dce6764318406
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.0"
   equatable:
     dependency: transitive
     description:
