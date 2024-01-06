@@ -7,7 +7,9 @@ import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class TBillingPaymentSection extends StatelessWidget {
-  const TBillingPaymentSection({super.key});
+  const TBillingPaymentSection({super.key, this.showChangeButton = true});
+
+  final bool showChangeButton;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class TBillingPaymentSection extends StatelessWidget {
         TSectionHeading(
           title: "Payment Method",
           buttonTitle: "Change",
-          onPressed: () {},
+          onPressed: showChangeButton ? () {} : null,
         ),
         const SizedBox(
           height: TSizes.spaceBtwItems / 2,

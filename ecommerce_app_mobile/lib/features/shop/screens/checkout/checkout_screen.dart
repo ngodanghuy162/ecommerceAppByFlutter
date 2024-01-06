@@ -68,7 +68,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Scaffold(
       appBar: TAppBar(
           showBackArrow: true,
-          title: Text("Order Review",
+          title: Text("Checkout",
               style: Theme.of(context).textTheme.headlineSmall)),
       body: SingleChildScrollView(
         child: Padding(

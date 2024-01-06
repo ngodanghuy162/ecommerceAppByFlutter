@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_review_model.dart';
+import 'package:ecommerce_app_mobile/Service/repository/order_respository/order_respository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/texts/t_brand_title_text_with_verified_icon.dart';
@@ -28,6 +30,8 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
   TextEditingController commentController = TextEditingController();
   final reviewController = Get.put(ProductReviewController());
   final _authRepo = Get.put(AuthenticationRepository());
+  final _orderRepo = Get.put(OrderRepository());
+
   late double finalRating;
 
   void addReview() async {
@@ -77,46 +81,73 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
             padding: const EdgeInsets.all(TSizes.spaceBtwItems),
             child: ListView.separated(
               shrinkWrap: true,
-              itemCount: 2,
-              itemBuilder: (context, index) {
-                return ProductOrderCard();
-              },
-              separatorBuilder: (ctx, index) =>
-                  const SizedBox(height: TSizes.sm),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: 2,
-              itemBuilder: (context, index) {
-                return ProductOrderCard();
-              },
-              separatorBuilder: (ctx, index) =>
-                  const SizedBox(height: TSizes.sm),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: 2,
-              itemBuilder: (context, index) {
-                return ProductOrderCard();
-              },
-              separatorBuilder: (ctx, index) =>
-                  const SizedBox(height: TSizes.sm),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: 2,
+              itemCount: _orderRepo.userOrderList
+                  .where((p0) => p0['status'] == 'confirmation')
+                  .toList()
+                  .length,
               itemBuilder: (context, index) {
                 return ProductOrderCard(
-                  showReviewModal: _showBottomModal,
+                  shopAndProducts: _orderRepo.userOrderList
+                      .where((p0) => p0['status'] == 'confirmation')
+                      .toList()[index],
+                );
+              },
+              separatorBuilder: (ctx, index) =>
+                  const SizedBox(height: TSizes.sm),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: _orderRepo.userOrderList
+                  .where((p0) => p0['status'] == 'delivering')
+                  .toList()
+                  .length,
+              itemBuilder: (context, index) {
+                return ProductOrderCard(
+                  shopAndProducts: _orderRepo.userOrderList
+                      .where((p0) => p0['status'] == 'delivering')
+                      .toList()[index],
+                );
+              },
+              separatorBuilder: (ctx, index) =>
+                  const SizedBox(height: TSizes.sm),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: _orderRepo.userOrderList
+                  .where((p0) => p0['status'] == 'completed')
+                  .toList()
+                  .length,
+              itemBuilder: (context, index) {
+                return ProductOrderCard(
+                  shopAndProducts: _orderRepo.userOrderList
+                      .where((p0) => p0['status'] == 'completed')
+                      .toList()[index],
+                  showReviewModal: showBottomModal,
+                );
+              },
+              separatorBuilder: (ctx, index) =>
+                  const SizedBox(height: TSizes.sm),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: _orderRepo.userOrderList
+                  .where((p0) => p0['status'] == 'cancelled')
+                  .toList()
+                  .length,
+              itemBuilder: (context, index) {
+                return ProductOrderCard(
+                  shopAndProducts: _orderRepo.userOrderList
+                      .where((p0) => p0['status'] == 'cancelled')
+                      .toList()[index],
                 );
               },
               separatorBuilder: (ctx, index) =>
@@ -126,29 +157,9 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
         ],
       ),
     );
-    // return Scaffold(
-    //     appBar: const TAppBar(
-    //       backgroundColor: TColors.primary,
-    //       title: Text(
-    //         "History Order",
-    //         style: TextStyle(color: TColors.white),
-    //       ),
-    //       showBackArrow: true,
-    //     ),
-    // body: Padding(
-    //   padding: const EdgeInsets.all(TSizes.spaceBtwItems),
-    //   child: ListView.separated(
-    //     shrinkWrap: true,
-    //     itemCount: 2,
-    //     itemBuilder: (context, index) {
-    //       return ProductOrderCard();
-    //     },
-    //     separatorBuilder: (ctx, index) => const SizedBox(height: TSizes.sm),
-    //   ),
-    // ));
   }
 
-  void _showBottomModal(BuildContext context) {
+  void showBottomModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {

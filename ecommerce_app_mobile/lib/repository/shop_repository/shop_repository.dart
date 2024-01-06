@@ -97,6 +97,9 @@ class ShopRepository extends GetxController {
   }
 
   Future<ShopModel> getShopDetails() async {
+    do {
+      await userRepo.updateUserDetails();
+    } while (userRepo.currentUserModel != null);
     final snapshot = await _db
         .collection('Shop')
         .where(

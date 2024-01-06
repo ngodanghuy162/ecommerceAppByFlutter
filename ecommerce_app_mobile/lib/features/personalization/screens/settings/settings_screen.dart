@@ -1,5 +1,6 @@
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/Service/repository/authentication_repository.dart';
+import 'package:ecommerce_app_mobile/Service/repository/order_respository/order_respository.dart';
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/dialog/dialog.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
@@ -26,6 +27,7 @@ class SettingsScreen extends StatelessWidget {
   SettingsScreen({super.key});
 
   final settingsController = Get.put(SettingsController());
+  final orderRepository = Get.put(OrderRepository());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +91,18 @@ class SettingsScreen extends StatelessWidget {
                   const SizedBox(
                     height: TSizes.spaceBtwItems,
                   ),
-                  const ProductOrderHistoryBar(),
+                  Obx(
+                    () => ProductOrderHistoryBar(
+                      completed:
+                          orderRepository.getOrderHistoryBarInfo()['completed'],
+                      delivering: orderRepository
+                          .getOrderHistoryBarInfo()['delivering'],
+                      confirmation: orderRepository
+                          .getOrderHistoryBarInfo()['confirmation'],
+                      cancelled:
+                          orderRepository.getOrderHistoryBarInfo()['cancelled'],
+                    ),
+                  ),
 
                   /// Account Setting
                   const TSectionHeading(
@@ -147,12 +160,6 @@ class SettingsScreen extends StatelessWidget {
                     subTitle: 'In-progress and Completed Orders',
                     onTap: () => Get.to(
                         () => const ProductHistoryOrder(initialIndex: 0)),
-                  ),
-                  TSettingsMenuTile(
-                    icon: Iconsax.bank,
-                    title: 'Khanh check',
-                    subTitle: 'Dat09',
-                    onTap: () => Get.to(() => const ProductOrderDetails()),
                   ),
                   const TSettingsMenuTile(
                     icon: Iconsax.discount_shape,
@@ -242,7 +249,13 @@ class SettingsScreen extends StatelessWidget {
 class ProductOrderHistoryBar extends StatelessWidget {
   const ProductOrderHistoryBar({
     super.key,
+    required this.confirmation,
+    required this.delivering,
+    required this.completed,
+    required this.cancelled,
   });
+
+  final int confirmation, delivering, completed, cancelled;
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +270,7 @@ class ProductOrderHistoryBar extends StatelessWidget {
               color: color,
               icon: Iconsax.card_tick_1,
               label: 'Confirmation',
-              badgeLabel: '5',
+              badgeLabel: confirmation,
             ),
           ),
         ),
@@ -269,7 +282,7 @@ class ProductOrderHistoryBar extends StatelessWidget {
               color: color,
               icon: Iconsax.truck_fast,
               label: 'Delivering',
-              badgeLabel: '4',
+              badgeLabel: delivering,
             ),
           ),
         ),
@@ -281,7 +294,7 @@ class ProductOrderHistoryBar extends StatelessWidget {
               color: color,
               icon: Iconsax.truck_tick,
               label: 'Completed',
-              badgeLabel: '3',
+              badgeLabel: completed,
             ),
           ),
         ),
@@ -293,7 +306,7 @@ class ProductOrderHistoryBar extends StatelessWidget {
               color: color,
               icon: Iconsax.truck_remove,
               label: 'Cancelled',
-              badgeLabel: '9',
+              badgeLabel: cancelled,
             ),
           ),
         ),
@@ -314,7 +327,7 @@ class ProductOrderHistoryBarItem extends StatelessWidget {
   final Color color;
   final String label;
   final IconData icon;
-  final String badgeLabel;
+  final int badgeLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -327,7 +340,7 @@ class ProductOrderHistoryBarItem extends StatelessWidget {
         children: [
           badges.Badge(
             badgeContent: Text(
-              badgeLabel,
+              badgeLabel.toString(),
               style: Theme.of(context).textTheme.labelLarge!.copyWith(
                     color: TColors.light,
                   ),
@@ -335,7 +348,7 @@ class ProductOrderHistoryBarItem extends StatelessWidget {
             position: badges.BadgePosition.topEnd(top: -12, end: -12),
             badgeStyle: badges.BadgeStyle(
               shape: badges.BadgeShape.circle,
-              badgeColor: Colors.blue,
+              badgeColor: badgeLabel != 0 ? Colors.blue : TColors.darkGrey,
               borderRadius: BorderRadius.circular(4),
               elevation: 0,
             ),
