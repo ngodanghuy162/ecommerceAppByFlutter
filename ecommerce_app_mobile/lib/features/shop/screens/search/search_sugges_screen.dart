@@ -1,142 +1,105 @@
-import 'package:easy_autocomplete/easy_autocomplete.dart';
+import 'package:ecommerce_app_mobile/utils/device/device_utility.dart';
+import 'package:searchfield/searchfield.dart';
 import 'package:ecommerce_app_mobile/Controller/search_controller.dart';
-import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/search/search_result_screen.dart';
+import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
+import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class SearchingScreen extends StatelessWidget {
-  SearchingScreen({super.key});
+  const SearchingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(SearchControllerX());
+    final searchController = Get.put(SearchControllerX());
+    // ignore: unused_local_variable
+    final dark = THelperFunctions.isDarkMode(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search Suggest Screen'),
       ),
       body: FutureBuilder(
-          future: SearchControllerX.instance.getSuggestList(),
-          builder: (context, snapshot) {
-            return Column(
-              children: [
-                Text(
-                    "KeySearch + Suggest:${SearchControllerX.instance.keySearch.text}"),
-                TSearchContainer(
-                    text: SearchControllerX.instance.keySearch.text),
-                Container(
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.center,
-                    child: EasyAutocomplete(
-                        suggestions:
-                            SearchControllerX.instance.suggestedKeywords,
-                        onChanged: (value) => print('onChanged value: $value'),
-                        onSubmitted: (value) =>
-                            print('onSubmitted value: $value'))),
-                // Expanded(
-                //   child: Obx(
-                //     () => ListView.builder(
-                //       itemCount: _searchControllerX.suggestedKeywords.length,
-                //       itemBuilder: (context, index) {
-                //         return ListTile(
-                //           title: Text(_searchControllerX.suggestedKeywords[index]),
-                //           onTap: () {
-                //             // Xử lý khi người dùng chọn từ khóa gợi ý
-                //             _searchControllerX.handleKeywordSelection(
-                //                 _searchControllerX.suggestedKeywords[index]);
-                //           },
-                //         );
-                //       },
-                //     ),
-                //   ),
-                // ),
-              ],
-            );
-          }),
-    );
-  }
-}
+        future: SearchControllerX.instance.getSuggestList(),
+        builder: (context, snapshot) {
+          // Check for data loading or error
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          }
 
-class SearchWidget extends StatefulWidget {
-  const SearchWidget({super.key});
+          return Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+              child: Container(
+                width: TDeviceUtils.getScreenWidth(context),
+                padding: const EdgeInsets.all(TSizes.md),
+                decoration: BoxDecoration(
+                  color: true
+                      ? dark
+                          ? TColors.dark
+                          : TColors.light
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
+                  border: true ? Border.all(color: TColors.grey) : null,
+                ),
+                child:
+                    // Search input and submit button
+                    Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Iconsax.search_normal,
+                          color: TColors.darkerGrey),
+                      onPressed: () {
+                        if (searchController.keySearch.text.isNotEmpty) {
+                          searchController.isSearching = true;
+                          SearchControllerX.instance.updateSearchKey();
+                          Get.to(() => SearchResultScreen(
+                                keySearch: searchController.keySearch.text,
+                              ));
+                        }
+                      },
+                    ),
+                    // Autocomplete text field
+                    Expanded(
+                      child: SearchField(
+                        suggestions: SearchControllerX
+                            .instance.suggestedKeywords!
+                            .map((e) => SearchFieldListItem(e))
+                            .toList(),
+                        controller: searchController.keySearch,
+                        suggestionState: Suggestion.expand,
+                        textInputAction: TextInputAction.next,
+                        suggestionsDecoration: SuggestionDecoration(
+                            padding: const EdgeInsets.all(10),
+                            color: dark
+                                ? Color.fromARGB(255, 36, 34, 34)
+                                : Color.fromARGB(255, 252, 248, 247),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        maxSuggestionsInViewPort: 10,
+                        itemHeight: 50,
+                        onSuggestionTap: (SearchFieldListItem<dynamic> a) {
+                          // print(a.item);
+                          // print(a.searchKey);
+                          // return a;
+                          Get.to(
+                              () => SearchResultScreen(keySearch: a.searchKey));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              // Display key search + suggested keywords
 
-  @override
-  _SearchWidgetState createState() => _SearchWidgetState();
-}
-
-class _SearchWidgetState extends State<SearchWidget> {
-  final List<String> suggestions = [
-    "Channel",
-    "CodingLab",
-    "CodingNepal",
-    "YouTube",
-    "YouTuber",
-    "YouTube Channel",
-    "Blogger",
-    "Bollywood",
-    "Vlogger",
-    "Vechiles",
-    "Facebook",
-    "Freelancer",
-    "Facebook Page",
-    "Designer",
-    "Developer",
-    "Web Designer",
-    "Web Developer",
-    "Login Form in HTML & CSS",
-    "How to learn HTML & CSS",
-    "How to learn JavaScript",
-    "How to became Freelancer",
-    "How to became Web Designer",
-    "How to start Gaming Channel",
-    "How to start YouTube Channel",
-    "What does HTML stands for?",
-    "What does CSS stands for?",
-  ];
-
-  final TextEditingController _controller = TextEditingController();
-  List<String> _filteredSuggestions = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: _controller,
-            onChanged: (value) {
-              filterSuggestions(value);
-            },
-            decoration: const InputDecoration(
-              hintText: 'Search',
-              prefixIcon: Icon(Icons.search),
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: _filteredSuggestions.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(_filteredSuggestions[index]),
-                onTap: () {
-                  // Handle item selection here
-                  print("Selected: ${_filteredSuggestions[index]}");
-                },
               );
-            },
-          ),
-        ),
-      ],
+        },
+      ),
     );
-  }
-
-  void filterSuggestions(String query) {
-    setState(() {
-      _filteredSuggestions = suggestions
-          .where((suggestion) =>
-              suggestion.toLowerCase().startsWith(query.toLowerCase()))
-          .toList();
-    });
   }
 }
