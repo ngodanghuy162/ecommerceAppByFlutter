@@ -102,6 +102,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                             WishlistController
                                                 .instance.listProduct
                                                 .remove(product);
+                                            //them xoa variant luon
+                                            WishlistController
+                                                .instance.listVariant
+                                                .remove(listVariant);
+                                            // xoa brand luon
+                                            WishlistController
+                                                .instance.listBrand
+                                                .remove(brand);
                                           },
                                           icon:
                                               const Icon(Icons.delete_forever))

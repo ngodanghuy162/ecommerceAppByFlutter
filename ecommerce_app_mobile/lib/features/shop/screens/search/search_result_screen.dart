@@ -1,7 +1,9 @@
 import 'package:ecommerce_app_mobile/Controller/search_controller.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_product_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,8 +32,8 @@ class SearchResultScreen extends StatelessWidget {
           children: [
             Text(
                 "KeySearch la: ${SearchControllerX.instance.keySearchObs.value}"),
-            TSearchContainer(
-              text: "Testt TSEARCH TEXT",
+            const TSearchContainer(
+              text: "Test TSEARCH TEXT",
             ),
 
             /// Drop down
@@ -57,30 +59,36 @@ class SearchResultScreen extends StatelessWidget {
             ),
 
             /// Product
-            FutureBuilder(
-              future: productController.getAllProductByName(
-                  SearchControllerX.instance.keySearchObs.value),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasData) {
-                    print(SearchControllerX.instance.keySearchObs.value);
-                    return TGridLayout(
-                      itemCount: snapshot.data!.length,
-                      // itemBuilder: (_, index) => TProductCardVertical(
-                      //   product: snapshot.data![index],
-                      itemBuilder: (_, index) =>
-                          Text(snapshot.data![index].name.toString()),
-                      // ),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text(snapshot.error.toString()));
+            Expanded(
+              child: FutureBuilder(
+                future: productController.getAllProductBySearching(
+                    SearchControllerX.instance.keySearchObs.value),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasData) {
+                      List<DetailProductModel> listDetailProduct =
+                          snapshot.data!;
+                      print(
+                          "codata o search result: list size la: ${listDetailProduct.length}");
+                      return SingleChildScrollView(
+                        padding: const EdgeInsets.all(TSizes.defaultSpace),
+                        child: TGridLayout(
+                          itemCount: listDetailProduct.length,
+                          itemBuilder: (context, index) => TProductCardVertical(
+                              modelDetail: listDetailProduct[index]),
+                          // ),
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text(snapshot.error.toString()));
+                    } else {
+                      return const Center(child: Text("Something went wrong"));
+                    }
                   } else {
-                    return const Center(child: Text("Something went wrong"));
+                    return const CircularProgressIndicator();
                   }
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              },
+                },
+              ),
             ),
           ],
         ),

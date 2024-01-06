@@ -30,22 +30,23 @@ class ListShop extends StatelessWidget {
               return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(TSizes.defaultSpace),
-                  child: ListView.builder(
-                    physics: const ClampingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: CartController.instance.listShop.length,
-                    itemBuilder: (context, index) {
-                      return ShopAndProduct(
-                          shopModel: CartController.instance.listShop[index],
-                          listProductOneShop:
-                              CartController.instance.listProduct[index],
-                          listVariantInOneShop:
-                              CartController.instance.listVariant[index],
-                          indexInCart: index,
-                          listQuantityOneShop:
-                              CartController.instance.listQuantity[index]);
-                    },
-                  ),
+                  child: Obx(() => ListView.builder(
+                        physics: const ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: CartController.instance.numberOfShop.value,
+                        itemBuilder: (context, index) {
+                          return ShopAndProduct(
+                              shopModel:
+                                  CartController.instance.listShop[index],
+                              listProductOneShop:
+                                  CartController.instance.listProduct[index],
+                              listVariantInOneShop:
+                                  CartController.instance.listVariant[index],
+                              indexInCart: index,
+                              listQuantityOneShop:
+                                  CartController.instance.listQuantity[index]);
+                        },
+                      )),
                 ),
               );
             }

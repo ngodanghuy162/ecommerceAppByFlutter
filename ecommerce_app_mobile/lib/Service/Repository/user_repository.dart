@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/profile_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
 import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
@@ -461,6 +462,7 @@ class UserRepository extends GetxController {
   Future<bool> deleteProductFromCart(
       String productVariantId, ProductModel product) async {
     Get.put(ShopRepository());
+    Get.put(CartController());
     bool isDeleteShop = false;
     try {
       if (ProfileController.instance.crtUser == null) {
@@ -487,6 +489,7 @@ class UserRepository extends GetxController {
               myCart.removeAt(index);
               isDeleteShop = true;
             }
+            CartController.instance.getCartList();
             print('Delete "$productVariantId" in cart.');
           }
         } else {
@@ -521,6 +524,7 @@ class UserRepository extends GetxController {
           print(error.toString());
         }
       });
+      //    await CartController.instance.getCartList();
       return isDeleteShop;
     } catch (e) {
       print('Lỗi khi xoa san pham khoi cart: $e');
@@ -528,11 +532,13 @@ class UserRepository extends GetxController {
     }
   }
 
-  Future<void> updateQuantityInCart(
+  updateQuantityInCart(
       int quantity, String productVariantId, ProductModel? productModel) async {
     Get.put(ShopRepository());
+    Get.put(CartController());
     try {
-      if (ProfileController.instance.crtUser == null) {
+      if (ProfileController.instance.crtUser == null &&
+          currentUserModel == null) {
         final currentUser =
             await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
         ProfileController.instance.crtUser = currentUser;
@@ -564,18 +570,10 @@ class UserRepository extends GetxController {
         return;
       }
       userData.cart = myCart;
-      await _db
+      _db
           .collection('Users')
           .doc(ProfileController.instance.crtUser!.id)
           .update(userData.toMap())
-          .whenComplete(() => Get.snackbar(
-                "Thành công",
-                "Them sp vao gio hang thanh cong",
-                snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: Colors.green.withOpacity(0.1),
-                colorText: Colors.green,
-                duration: const Duration(seconds: 1),
-              ))
           .catchError((error, stacktrace) {
         () => Get.snackbar(
               'Lỗi',
@@ -588,9 +586,10 @@ class UserRepository extends GetxController {
           print(error.toString());
         }
       });
+      //await CartController.instance.getCartList();
       return;
     } catch (e) {
-      print('Lỗi khi thêm sản phẩm vào cart: $e');
+      print('Lỗi khiupdate quantity in cart: $e');
     }
   }
 

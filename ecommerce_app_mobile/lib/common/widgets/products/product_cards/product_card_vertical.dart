@@ -19,7 +19,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TProductCardVertical extends StatefulWidget {
-  TProductCardVertical({super.key, required this.modelDetail});
+ const TProductCardVertical({super.key, required this.modelDetail});
 
   final DetailProductModel modelDetail;
 
