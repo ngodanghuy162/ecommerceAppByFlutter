@@ -36,7 +36,6 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-
   final brandController = Get.put(BrandController());
   final productController = Get.put(ProductController());
   final reviewController = Get.put(ProductReviewController());
@@ -62,10 +61,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child: Column(
           children: [
             /// Product Image Slider
-            TProductImageSlider(
-              listVariant: widget.listVariants,
-              productModel: widget.product,
-            ),
+            ///
+            FutureBuilder<Object>(
+                future:
+                    UserRepository.instance.isProductInWishList(widget.product),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasData) {
+                      productController.inWishList.value =
+                          snapshot.data as bool;
+                      return TProductImageSlider(
+                        listVariant: widget.listVariants,
+                        productModel: widget.product,
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text(snapshot.error.toString()));
+                    } else {
+                      return Center(child: Text("smt went wrong"));
+                    }
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                }),
 
             /// Product Details
             Padding(
