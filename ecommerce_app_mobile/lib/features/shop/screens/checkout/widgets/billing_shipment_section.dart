@@ -124,18 +124,18 @@ class _TBillingShipmentSectionState extends State<TBillingShipmentSection> {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData) {
                 WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                  final prev = controller.listCost
+                  final prev = controller.costList
                       .where((p0) => ((p0 as Map).keys.contains('shopEmail') &&
                           p0['shopEmail'] == widget.shopEmail))
                       .toList();
 
                   if (prev.isNotEmpty) {
                     for (var element in prev) {
-                      controller.listCost.remove(element);
+                      controller.costList.remove(element);
                     }
                   }
 
-                  controller.listCost.add({
+                  controller.costList.add({
                     'shopEmail': widget.shopEmail,
                     'cost': {
                       'subTotal': widget.subTotal!.toStringAsFixed(2),

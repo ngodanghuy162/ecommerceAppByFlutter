@@ -20,13 +20,14 @@ class ShopAndProducts extends StatelessWidget {
   ShopAndProducts({
     super.key,
     required this.shop,
+    this.currentShipmentService,
   });
 
   final controller = Get.put(CheckoutController());
   final addressRepository = Get.put(AddressRepository());
   final userRepository = Get.put(UserRepository());
 
-  Map? currentShipmentService;
+  final Map? currentShipmentService;
 
   final Map<String, Map<String, int>> shop;
 
@@ -93,6 +94,17 @@ class ShopAndProducts extends StatelessWidget {
                             e['productVariant'] as ProductVariantModel;
 
                         final quantity = e['quantity'] as int;
+                        controller.productListPaypal.add({
+                          'name': productModel.name,
+                          'quantity': quantity,
+                          'price': (productVariantModel.price -
+                                  productVariantModel.price *
+                                      productModel.discount! /
+                                      100)
+                              .toStringAsFixed(2),
+                          'currency': 'USD'
+                        });
+
                         return ProductOrderItem(
                           brand: brandModel.name,
                           color: getColorFromHex(productVariantModel.color),

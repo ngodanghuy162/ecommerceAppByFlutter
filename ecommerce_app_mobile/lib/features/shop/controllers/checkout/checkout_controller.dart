@@ -13,7 +13,9 @@ import 'package:get/get.dart';
 
 class CheckoutController extends GetxController {
   static CheckoutController get instance => Get.find();
-  RxList<dynamic> listCost = [].obs;
+  RxList<dynamic> costList = [].obs;
+
+  RxList<dynamic> productListPaypal = [].obs;
 
   final shopRepository = Get.put(ShopRepository());
   final productVariantRepository = Get.put(ProductVariantRepository());
