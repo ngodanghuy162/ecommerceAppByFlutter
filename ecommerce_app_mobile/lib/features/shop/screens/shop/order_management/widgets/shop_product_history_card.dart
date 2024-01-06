@@ -16,7 +16,6 @@ import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:developer';
 
 class ShopProductOrderCard extends StatelessWidget {
   ShopProductOrderCard({
@@ -50,7 +49,6 @@ class ShopProductOrderCard extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            log(snapshot.data.toString());
             final data = snapshot.data!;
 
             final firstProduct = (data['products'] as List).first as Map;
@@ -164,14 +162,6 @@ class ShopProductOrderCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (shopAndProducts['status'] == 'completed')
-                      const Divider(
-                        height: 10,
-                        thickness: 1,
-                        indent: 0,
-                        endIndent: 0,
-                        color: TColors.divider,
-                      ),
                   ],
                 ),
               ),

@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class OrderModel {
   final String? id;
   final String shopEmail;
-  final String status;
+  String status;
   final String paymentId;
   final String userId;
   final Map<String, dynamic> package;

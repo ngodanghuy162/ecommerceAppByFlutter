@@ -28,104 +28,130 @@ class _ShopProductHistoryOrderState extends State<ShopProductHistoryOrder> {
         title:
             Text("Shop Order History", style: TextStyle(color: Colors.black)),
       ),
-      body: ContainedTabBarView(
-        tabBarProperties: TabBarProperties(
-          labelColor: TColors.primary,
-          indicatorColor: TColors.primary,
-          height: MediaQuery.of(context).size.height * 0.06,
-          labelStyle: const TextStyle(
-            color: Colors.black,
+      body: Obx(
+        () => ContainedTabBarView(
+          tabBarProperties: TabBarProperties(
+            labelColor: TColors.primary,
+            indicatorColor: TColors.primary,
+            height: MediaQuery.of(context).size.height * 0.06,
+            labelStyle: const TextStyle(
+              color: Colors.black,
+            ),
           ),
-        ),
-        initialIndex: widget.initialIndex,
-        tabs: const [
-          Text("Confirmation",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-          Text("Delivering",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-          Text("Completed",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-          Text("Cancelled",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-        ],
-        views: [
-          Padding(
-            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: shopController.shopOrderList
-                  .where((p0) => p0['status'] == 'confirmation')
-                  .toList()
-                  .length,
-              itemBuilder: (context, index) {
-                return ShopProductOrderCard(
-                  shopAndProducts: shopController.shopOrderList
+          initialIndex: widget.initialIndex,
+          tabs: const [
+            Text("Confirmation",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            Text("Delivering",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            Text("Completed",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            Text("Cancelled",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          ],
+          views: [
+            Padding(
+              padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await shopController.updateShopOrderList();
+                },
+                child: ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: shopController.shopOrderList
                       .where((p0) => p0['status'] == 'confirmation')
-                      .toList()[index],
-                );
-              },
-              separatorBuilder: (ctx, index) =>
-                  const SizedBox(height: TSizes.sm),
+                      .toList()
+                      .length,
+                  itemBuilder: (context, index) {
+                    return ShopProductOrderCard(
+                      shopAndProducts: shopController.shopOrderList
+                          .where((p0) => p0['status'] == 'confirmation')
+                          .toList()[index],
+                    );
+                  },
+                  separatorBuilder: (ctx, index) =>
+                      const SizedBox(height: TSizes.sm),
+                ),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: shopController.shopOrderList
-                  .where((p0) => p0['status'] == 'delivering')
-                  .toList()
-                  .length,
-              itemBuilder: (context, index) {
-                return ShopProductOrderCard(
-                  shopAndProducts: shopController.shopOrderList
+            Padding(
+              padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await shopController.updateShopOrderList();
+                },
+                child: ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: shopController.shopOrderList
                       .where((p0) => p0['status'] == 'delivering')
-                      .toList()[index],
-                );
-              },
-              separatorBuilder: (ctx, index) =>
-                  const SizedBox(height: TSizes.sm),
+                      .toList()
+                      .length,
+                  itemBuilder: (context, index) {
+                    return ShopProductOrderCard(
+                      shopAndProducts: shopController.shopOrderList
+                          .where((p0) => p0['status'] == 'delivering')
+                          .toList()[index],
+                    );
+                  },
+                  separatorBuilder: (ctx, index) =>
+                      const SizedBox(height: TSizes.sm),
+                ),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: shopController.shopOrderList
-                  .where((p0) => p0['status'] == 'completed')
-                  .toList()
-                  .length,
-              itemBuilder: (context, index) {
-                return ShopProductOrderCard(
-                  shopAndProducts: shopController.shopOrderList
+            Padding(
+              padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await shopController.updateShopOrderList();
+                },
+                child: ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: shopController.shopOrderList
                       .where((p0) => p0['status'] == 'completed')
-                      .toList()[index],
-                );
-              },
-              separatorBuilder: (ctx, index) =>
-                  const SizedBox(height: TSizes.sm),
+                      .toList()
+                      .length,
+                  itemBuilder: (context, index) {
+                    return ShopProductOrderCard(
+                      shopAndProducts: shopController.shopOrderList
+                          .where((p0) => p0['status'] == 'completed')
+                          .toList()[index],
+                    );
+                  },
+                  separatorBuilder: (ctx, index) =>
+                      const SizedBox(height: TSizes.sm),
+                ),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(TSizes.spaceBtwItems),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: shopController.shopOrderList
-                  .where((p0) => p0['status'] == 'cancelled')
-                  .toList()
-                  .length,
-              itemBuilder: (context, index) {
-                return ShopProductOrderCard(
-                  shopAndProducts: shopController.shopOrderList
+            Padding(
+              padding: const EdgeInsets.all(TSizes.spaceBtwItems),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await shopController.updateShopOrderList();
+                },
+                child: ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: shopController.shopOrderList
                       .where((p0) => p0['status'] == 'cancelled')
-                      .toList()[index],
-                );
-              },
-              separatorBuilder: (ctx, index) =>
-                  const SizedBox(height: TSizes.sm),
+                      .toList()
+                      .length,
+                  itemBuilder: (context, index) {
+                    return ShopProductOrderCard(
+                      shopAndProducts: shopController.shopOrderList
+                          .where((p0) => p0['status'] == 'cancelled')
+                          .toList()[index],
+                    );
+                  },
+                  separatorBuilder: (ctx, index) =>
+                      const SizedBox(height: TSizes.sm),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

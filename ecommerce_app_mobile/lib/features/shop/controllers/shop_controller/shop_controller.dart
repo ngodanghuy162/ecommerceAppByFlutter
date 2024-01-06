@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/Service/repository/order_respository/order_respository.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/shop_model.dart';
 import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
 
@@ -12,6 +13,7 @@ import 'package:ecommerce_app_mobile/repository/product_repository/product_repos
 import 'package:ecommerce_app_mobile/repository/product_repository/product_variant_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:developer';
 
 class ShopController extends GetxController {
   static ShopController get instance => Get.find();
@@ -42,6 +44,7 @@ class ShopController extends GetxController {
   final productVariantRepository = Get.put(ProductVariantRepository());
   final productRepository = Get.put(ProductRepository());
   final brandRepository = Get.put(BrandRepository());
+  final orderRepository = Get.put(OrderRepository());
 
   final _db = FirebaseFirestore.instance;
 
@@ -50,6 +53,13 @@ class ShopController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
+    await updateShopOrderList();
+  }
+
+  Future<void> setOrderStatus(String id, String status) async {
+    var model = await orderRepository.getOrderDetails(id);
+    model.status = status;
+    await orderRepository.updateOrderDetails(id, model);
     await updateShopOrderList();
   }
 
@@ -114,8 +124,12 @@ class ShopController extends GetxController {
         .collection('Order')
         .where('shopEmail', isEqualTo: shopEmail)
         .get();
-    final orders =
-        snapshot.docs.map((e) => OrderModel.fromSnapshot(e).toMap()).toList();
+    final orders = snapshot.docs.map((e) {
+      return {
+        ...OrderModel.fromSnapshot(e).toMap(),
+        'order_id': e.id,
+      };
+    }).toList();
     List<Map<String, dynamic>> result = [];
     for (var element in orders) {
       final paymentModel =

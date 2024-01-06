@@ -35,84 +35,86 @@ class MyShopScreen extends StatelessWidget {
           child: ListView(
             shrinkWrap: true,
             children: [
-              GridView.count(
-                shrinkWrap: true,
-                primary: false,
-                padding: const EdgeInsets.only(bottom: TSizes.defaultSpace),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                crossAxisCount: 4,
-                physics: const NeverScrollableScrollPhysics(),
-                children: <Widget>[
-                  InkWell(
-                    borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-                    onTap: () => Get.to(
-                        () => const ShopProductHistoryOrder(initialIndex: 0)),
-                    child: TRoundedContainer(
-                      child: Center(
-                        child: ProductOrderHistoryBarItem(
-                          color: color,
-                          icon: Iconsax.card_tick_1,
-                          label: 'Confirmation',
-                          badgeLabel: controller
-                              .getOrderHistoryBarInfo()['confirmation'],
-                          size: double.infinity,
+              Obx(
+                () => GridView.count(
+                  shrinkWrap: true,
+                  primary: false,
+                  padding: const EdgeInsets.only(bottom: TSizes.defaultSpace),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 4,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: <Widget>[
+                    InkWell(
+                      borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
+                      onTap: () => Get.to(
+                          () => const ShopProductHistoryOrder(initialIndex: 0)),
+                      child: TRoundedContainer(
+                        child: Center(
+                          child: ProductOrderHistoryBarItem(
+                            color: color,
+                            icon: Iconsax.card_tick_1,
+                            label: 'Confirmation',
+                            badgeLabel: controller
+                                .getOrderHistoryBarInfo()['confirmation'],
+                            size: double.infinity,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-                    onTap: () => Get.to(
-                        () => const ShopProductHistoryOrder(initialIndex: 1)),
-                    child: TRoundedContainer(
-                      child: Center(
-                        child: ProductOrderHistoryBarItem(
-                          color: color,
-                          icon: Iconsax.truck_fast,
-                          label: 'Delivering',
-                          badgeLabel:
-                              controller.getOrderHistoryBarInfo()['delivering'],
-                          size: double.infinity,
+                    InkWell(
+                      borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
+                      onTap: () => Get.to(
+                          () => const ShopProductHistoryOrder(initialIndex: 1)),
+                      child: TRoundedContainer(
+                        child: Center(
+                          child: ProductOrderHistoryBarItem(
+                            color: color,
+                            icon: Iconsax.truck_fast,
+                            label: 'Delivering',
+                            badgeLabel: controller
+                                .getOrderHistoryBarInfo()['delivering'],
+                            size: double.infinity,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-                    onTap: () => Get.to(
-                        () => const ShopProductHistoryOrder(initialIndex: 2)),
-                    child: TRoundedContainer(
-                      child: Center(
-                        child: ProductOrderHistoryBarItem(
-                          color: color,
-                          icon: Iconsax.truck_tick,
-                          label: 'Completed',
-                          badgeLabel:
-                              controller.getOrderHistoryBarInfo()['completed'],
-                          size: double.infinity,
+                    InkWell(
+                      borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
+                      onTap: () => Get.to(
+                          () => const ShopProductHistoryOrder(initialIndex: 2)),
+                      child: TRoundedContainer(
+                        child: Center(
+                          child: ProductOrderHistoryBarItem(
+                            color: color,
+                            icon: Iconsax.truck_tick,
+                            label: 'Completed',
+                            badgeLabel: controller
+                                .getOrderHistoryBarInfo()['completed'],
+                            size: double.infinity,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-                    onTap: () => Get.to(
-                        () => const ShopProductHistoryOrder(initialIndex: 4)),
-                    child: TRoundedContainer(
-                      child: Center(
-                        child: ProductOrderHistoryBarItem(
-                          color: color,
-                          icon: Iconsax.truck_remove,
-                          label: 'Cancelled',
-                          badgeLabel:
-                              controller.getOrderHistoryBarInfo()['cancelled'],
-                          size: double.infinity,
+                    InkWell(
+                      borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
+                      onTap: () => Get.to(
+                          () => const ShopProductHistoryOrder(initialIndex: 3)),
+                      child: TRoundedContainer(
+                        child: Center(
+                          child: ProductOrderHistoryBarItem(
+                            color: color,
+                            icon: Iconsax.truck_remove,
+                            label: 'Cancelled',
+                            badgeLabel: controller
+                                .getOrderHistoryBarInfo()['cancelled'],
+                            size: double.infinity,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               ListTitleCustom(
                 title: 'Add product',

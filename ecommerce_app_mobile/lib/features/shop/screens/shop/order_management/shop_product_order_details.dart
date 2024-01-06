@@ -11,6 +11,7 @@ import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/bill
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_amout_section.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/checkout/widgets/billing_payment_section.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/widgets/product_history_item.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/shop/order_management/widgets/dropdown_menu_shop_order_status.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/enums.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -19,15 +20,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:developer';
 
-class ShopProductOrderDetails extends StatelessWidget {
+class ShopProductOrderDetails extends StatefulWidget {
   ShopProductOrderDetails({
     super.key,
     required this.shopAndProducts,
   });
 
-  final shopController = Get.put(ShopController());
-
   final Map shopAndProducts;
+
+  @override
+  State<ShopProductOrderDetails> createState() =>
+      _ShopProductOrderDetailsState();
+}
+
+class _ShopProductOrderDetailsState extends State<ShopProductOrderDetails> {
+  final shopController = Get.put(ShopController());
 
   Color getColorFromHex(String hexColor) {
     try {
@@ -54,19 +61,18 @@ class ShopProductOrderDetails extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
         child: FutureBuilder(
-          future: shopController.getShopAndProductsOrderInfo(shopAndProducts),
+          future: shopController
+              .getShopAndProductsOrderInfo(widget.shopAndProducts),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasData) {
-                log(snapshot.data.toString());
-                log(shopAndProducts.toString());
                 final data = snapshot.data!;
                 final products = (data['products'] as List);
 
-                final userAddress = shopAndProducts['user_address'];
+                final userAddress = widget.shopAndProducts['user_address'];
                 // final shopAddress = shopAndProducts['shop_address'];
 
-                return Column(
+                return ListView(
                   children: [
                     TRoundedContainer(
                       width: double.infinity,
@@ -91,30 +97,35 @@ class ShopProductOrderDetails extends StatelessWidget {
                                 ),
                                 const Spacer(),
                                 Text(
-                                  shopAndProducts['status'],
+                                  widget.shopAndProducts['status'],
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge!
                                       .apply(
-                                        color: shopAndProducts['status'] ==
-                                                'confirmation'
-                                            ? TColors.primary.withOpacity(
-                                                0.7,
-                                              )
-                                            : shopAndProducts['status'] ==
-                                                    'delivering'
+                                        color:
+                                            widget.shopAndProducts['status'] ==
+                                                    'confirmation'
                                                 ? TColors.primary.withOpacity(
                                                     0.7,
                                                   )
-                                                : shopAndProducts['status'] ==
-                                                        'completed'
-                                                    ? TColors.success
+                                                : widget.shopAndProducts[
+                                                            'status'] ==
+                                                        'delivering'
+                                                    ? TColors.primary
                                                         .withOpacity(
                                                         0.7,
                                                       )
-                                                    : TColors.error.withOpacity(
-                                                        0.7,
-                                                      ),
+                                                    : widget.shopAndProducts[
+                                                                'status'] ==
+                                                            'completed'
+                                                        ? TColors.success
+                                                            .withOpacity(
+                                                            0.7,
+                                                          )
+                                                        : TColors.error
+                                                            .withOpacity(
+                                                            0.7,
+                                                          ),
                                         fontWeightDelta: 1,
                                       ),
                                 ),
@@ -157,9 +168,9 @@ class ShopProductOrderDetails extends StatelessWidget {
                             color: TColors.divider,
                           ),
                           TBillingAmountSection(
-                            shippingFee: shopAndProducts['shipping'],
-                            subTotal: shopAndProducts['sub_total'],
-                            total: shopAndProducts['total'],
+                            shippingFee: widget.shopAndProducts['shipping'],
+                            subTotal: widget.shopAndProducts['sub_total'],
+                            total: widget.shopAndProducts['total'],
                           ),
                         ],
                       ),
@@ -209,12 +220,14 @@ class ShopProductOrderDetails extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: ElevatedButton(
-          onPressed: () async {},
-          child: const Text("Review"),
-        ),
-      ),
+          padding: const EdgeInsets.all(TSizes.defaultSpace),
+          child: DropdownMenuShopOrderStatus(
+            initialValue: widget.shopAndProducts['status'],
+            onChanged: (String value) async {
+              await shopController.setOrderStatus(
+                  widget.shopAndProducts['order_id'], value);
+            },
+          )),
     );
   }
 }

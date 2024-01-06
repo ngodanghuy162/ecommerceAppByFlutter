@@ -10,7 +10,9 @@ import 'package:ecommerce_app_mobile/repository/product_repository/brand_reposit
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_variant_repository.dart';
 import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class OrderRepository extends GetxController {
@@ -86,6 +88,28 @@ class OrderRepository extends GetxController {
     final snapshot = await _db.collection('Order').doc(id).get();
     final orderDetails = OrderModel.fromSnapshot(snapshot);
     return orderDetails;
+  }
+
+  Future<void> updateOrderDetails(String id, OrderModel orderModel) async {
+    await _db
+        .collection('Order')
+        .doc(id)
+        .update(orderModel.toMap())
+        .whenComplete(() => SmartDialog.showNotify(
+              msg: 'Set order status successfully!',
+              notifyType: NotifyType.success,
+              displayTime: const Duration(seconds: 1),
+            ))
+        .catchError((error, stacktrace) {
+      () => SmartDialog.showNotify(
+            msg: 'Failed to do operation!',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
+          );
+      if (kDebugMode) {
+        print(error.toString());
+      }
+    });
   }
 
   Future<List<Map<String, dynamic>>> getOrdersByUserId(String userId) async {
