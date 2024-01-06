@@ -50,7 +50,7 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
     return Scaffold(
       appBar: const TAppBar(
         showBackArrow: true,
-        title: Text("Delivery Order", style: TextStyle(color: Colors.black)),
+        title: Text("Order History", style: TextStyle(color: Colors.black)),
       ),
       body: ContainedTabBarView(
         tabBarProperties: TabBarProperties(

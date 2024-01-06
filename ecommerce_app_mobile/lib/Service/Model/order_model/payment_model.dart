@@ -6,10 +6,10 @@ class PaymentModel {
   final String? id;
   final String userId;
   final String shopEmail;
-  final double shipping;
-  final double total;
-  final double subTotal;
-  final double discount;
+  final String shipping;
+  final String total;
+  final String subTotal;
+  final String discount;
   final String paymentMethod;
   final Timestamp paymentDate;
 
@@ -19,7 +19,7 @@ class PaymentModel {
     this.id,
     required this.userId,
     required this.shopEmail,
-    this.discount = 0,
+    this.discount = '0',
     required this.paymentMethod,
     required this.total,
     required this.shipping,

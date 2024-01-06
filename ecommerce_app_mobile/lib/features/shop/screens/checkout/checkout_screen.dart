@@ -230,6 +230,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     print("onSuccess: $params");
 
                     if (!isSuccess) {
+                      print('starrt');
                       //process
                       final userId = userController.currentUserModel!.id!;
                       for (var shopEmail
@@ -245,7 +246,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             shopEmail: shopEmail,
                             paymentMethod: 'paypal',
                             shipping: cost['shippingFee'],
-                            discount: 0,
+                            discount: '0',
                             total: cost['total'],
                             subTotal: cost['subTotal'],
                           ),
@@ -270,6 +271,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                         );
                       }
+                      print('end');
 
                       isSuccess = true;
                       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
