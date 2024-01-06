@@ -1,17 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
-import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
 import 'package:ecommerce_app_mobile/common/widgets/product_history/product_order_history_bar_item.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/shop_controller/shop_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/chat/shop_reply_chatting_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
-import 'package:ecommerce_app_mobile/features/shop/screens/statistics/statistics_screen.dart';
-import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
-import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -21,7 +17,7 @@ class MyShopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userRepository = Get.put(UserRepository());
+    final controller = Get.put(ShopController());
     Color color = TColors.darkerGrey;
     return Scaffold(
       backgroundColor: TColors.primaryBackground,
@@ -54,7 +50,8 @@ class MyShopScreen extends StatelessWidget {
                         color: color,
                         icon: Iconsax.card_tick_1,
                         label: 'Confirmation',
-                        badgeLabel: 1,
+                        badgeLabel:
+                            controller.getOrderHistoryBarInfo()['confirmation'],
                         size: double.infinity,
                       ),
                     ),
@@ -65,7 +62,8 @@ class MyShopScreen extends StatelessWidget {
                         color: color,
                         icon: Iconsax.truck_fast,
                         label: 'Delivering',
-                        badgeLabel: 1,
+                        badgeLabel:
+                            controller.getOrderHistoryBarInfo()['delivering'],
                         size: double.infinity,
                       ),
                     ),
@@ -76,7 +74,8 @@ class MyShopScreen extends StatelessWidget {
                         color: color,
                         icon: Iconsax.truck_tick,
                         label: 'Completed',
-                        badgeLabel: 1,
+                        badgeLabel:
+                            controller.getOrderHistoryBarInfo()['completed'],
                         size: double.infinity,
                       ),
                     ),
@@ -87,7 +86,8 @@ class MyShopScreen extends StatelessWidget {
                         color: color,
                         icon: Iconsax.truck_remove,
                         label: 'Cancelled',
-                        badgeLabel: 1,
+                        badgeLabel:
+                            controller.getOrderHistoryBarInfo()['cancelled'],
                         size: double.infinity,
                       ),
                     ),
