@@ -21,7 +21,9 @@ class ListShop extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.done) {
             print("done connection");
             if (CartController.instance.listShop.isEmpty) {
-              return const Text("Empty Cart");
+              return const Center(
+                  child: Text("Your cart is empty",
+                      style: TextStyle(fontSize: 24)));
             } else {
               return SingleChildScrollView(
                 child: Padding(

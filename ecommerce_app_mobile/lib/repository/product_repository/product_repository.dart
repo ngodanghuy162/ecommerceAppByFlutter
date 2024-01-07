@@ -116,11 +116,17 @@ class ProductRepository extends GetxController {
     // String keySearchLower = keySearch.toLowerCase();
     final snapshot1 = await productCollection
         .where('name', isGreaterThanOrEqualTo: '${keySearch}')
-        .where('name', isLessThanOrEqualTo: '${keySearch}z')
+        .where('name', isLessThanOrEqualTo: keySearch + '\uf8ff')
         .get();
+
+    final snapshot2 =
+        await productCollection.where('name', arrayContains: keySearch).get();
 
     final productData =
         snapshot1.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
+
+    productData.addAll(
+        snapshot2.docs.map((e) => ProductModel.fromSnapShot(e)).toList());
 
     for (int i = 0; i < productData.length; i++) {
       List<ProductVariantModel> tmp = await ProductVariantRepository.instance

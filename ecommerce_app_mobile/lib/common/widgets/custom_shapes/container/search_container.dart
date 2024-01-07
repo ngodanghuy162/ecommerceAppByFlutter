@@ -79,7 +79,7 @@ class TSearchContainer extends StatelessWidget {
                       if (searchController.isSearching == false) {
                         searchController.isSearching == true;
                         print("Go to searching");
-                        Get.to(() => const SearchingScreen());
+                        Get.to(() => SearchingScreen());
                       }
                     }
                   },

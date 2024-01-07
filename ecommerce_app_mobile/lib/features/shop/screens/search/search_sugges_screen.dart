@@ -9,8 +9,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-class SearchingScreen extends StatelessWidget {
-  const SearchingScreen({super.key});
+class SearchingScreen extends StatefulWidget {
+  SearchingScreen({super.key});
+  final searchController = Get.put(SearchControllerX());
+  @override
+  State<SearchingScreen> createState() => _SearchingScreenState();
+}
+
+class _SearchingScreenState extends State<SearchingScreen> {
+  @override
+  void dispose() {
+    super.dispose();
+    widget.searchController.keySearch.text = '';
+    widget.searchController.isSearching = false;
+    widget.searchController.keySearchObs.value = '';
+  }
 
   @override
   Widget build(BuildContext context) {

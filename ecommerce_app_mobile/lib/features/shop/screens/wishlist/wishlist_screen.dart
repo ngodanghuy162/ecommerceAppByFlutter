@@ -4,11 +4,9 @@ import 'package:ecommerce_app_mobile/features/shop/controllers/wishlist/wishlist
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
-import 'package:ecommerce_app_mobile/navigation_menu.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:developer' show log;
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -21,12 +19,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
   @override
   void initState() {
     Get.put(WishlistController());
+    print("Hello");
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+    print("dispose");
   }
 
   @override
@@ -72,51 +72,49 @@ class _WishlistScreenState extends State<WishlistScreen> {
                           ),
                           const SizedBox(height: 16.0),
                           Obx(() => ListView.builder(
-                                physics: const ClampingScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: WishlistController
-                                    .instance.listProductSize.value,
-                                itemBuilder: (context, index) {
-                                  ProductModel product = WishlistController
-                                      .instance.listProduct[index];
-                                  // o day lay listVariantInCart thi no se van hien thi dung so san pham, nhung thuc te la no co rat nhieu san pham roi va bi lap moi lan vao lai cảt.
-                                  List<ProductVariantModel> listVariant =
-                                      WishlistController.instance.listVariant[
-                                          index]; // lay list cart mới chuẩn
-                                  BrandModel brand = WishlistController
-                                      .instance.listBrand[index];
-                                  return Column(
-                                    children: [
-                                      TWishListItem(
-                                        brand: brand,
-                                        product: product,
-                                        listVariants: listVariant,
-                                      ),
-                                      IconButton(
-                                          onPressed: () async {
-                                            await UserRepository.instance
-                                                .removeProductFromWishlist(
-                                                    product);
-                                            WishlistController.instance
-                                                .listProductSize.value--;
-                                            WishlistController
-                                                .instance.listProduct
-                                                .remove(product);
-                                            //them xoa variant luon
-                                            WishlistController
-                                                .instance.listVariant
-                                                .remove(listVariant);
-                                            // xoa brand luon
-                                            WishlistController
-                                                .instance.listBrand
-                                                .remove(brand);
-                                          },
-                                          icon:
-                                              const Icon(Icons.delete_forever))
-                                    ],
-                                  );
-                                },
-                              )),
+                              physics: const ClampingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: WishlistController
+                                  .instance.listProductSize.value,
+                              itemBuilder: (context, index) {
+                                ProductModel product = WishlistController
+                                    .instance.listProduct[index];
+                                // o day lay listVariantInCart thi no se van hien thi dung so san pham, nhung thuc te la no co rat nhieu san pham roi va bi lap moi lan vao lai cảt.
+                                List<ProductVariantModel> listVariant =
+                                    WishlistController.instance.listVariant[
+                                        index]; // lay list cart mới chuẩn
+                                BrandModel brand = WishlistController
+                                    .instance.listBrand[index];
+
+                                return Column(
+                                  children: [
+                                    TWishListItem(
+                                      brand: brand,
+                                      product: product,
+                                      listVariants: listVariant,
+                                    ),
+                                    IconButton(
+                                        onPressed: () async {
+                                          await UserRepository.instance
+                                              .removeProductFromWishlist(
+                                                  product);
+                                          WishlistController
+                                              .instance.listProductSize.value--;
+                                          WishlistController
+                                              .instance.listProduct
+                                              .remove(product);
+                                          //them xoa variant luon
+                                          WishlistController
+                                              .instance.listVariant
+                                              .remove(listVariant);
+                                          // xoa brand luon
+                                          WishlistController.instance.listBrand
+                                              .remove(brand);
+                                        },
+                                        icon: const Icon(Icons.delete_forever))
+                                  ],
+                                );
+                              })),
                         ],
                       ),
                     ),

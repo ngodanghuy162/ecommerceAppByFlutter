@@ -3,6 +3,7 @@ import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/profile_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/wishlist/wishlist_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
 import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
@@ -113,7 +114,7 @@ class UserRepository extends GetxController {
       await updateUserDetails();
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Có gì đó không đúng, thử lại',
+            msg: 'Something went wrong, try again!',
             notifyType: NotifyType.failure,
             displayTime: const Duration(seconds: 1),
           );
@@ -190,14 +191,14 @@ class UserRepository extends GetxController {
         .update(userData.toMap())
         .whenComplete(() {
       SmartDialog.showNotify(
-        msg: 'Đặt địa chỉ mặc định thành công',
+        msg: 'Default address set successfully',
         notifyType: NotifyType.success,
         displayTime: const Duration(seconds: 1),
       );
       currentUserModel = userData;
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Có gì đó không đúng, thử lại',
+            msg: 'Something went wrong, try again!',
             notifyType: NotifyType.failure,
             displayTime: const Duration(seconds: 1),
           );
@@ -234,14 +235,14 @@ class UserRepository extends GetxController {
         .update(userData.toMap())
         .whenComplete(() {
       SmartDialog.showNotify(
-        msg: 'Địa chỉ đã được thêm thành công',
+        msg: 'Address added successfully',
         notifyType: NotifyType.success,
         displayTime: const Duration(seconds: 1),
       );
       currentUserModel = userData;
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Có gì đó không đúng, thử lại',
+            msg: 'Something went wrong, try again!',
             notifyType: NotifyType.success,
             displayTime: const Duration(seconds: 1),
           );
@@ -294,11 +295,11 @@ class UserRepository extends GetxController {
           .collection("Users")
           .doc(userId)
           .update({isSellFieldName: true}).then((value) =>
-              Get.snackbar("Success", "You register to be shop successly"));
+              Get.snackbar("Success", "Now you can sell your product"));
     } catch (error) {
       Get.snackbar(
-        'Error',
-        'An error occurred',
+        'Failed',
+        'Something went wrong, try again?',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.redAccent.withOpacity(0.1),
         colorText: Colors.red,
@@ -325,8 +326,8 @@ class UserRepository extends GetxController {
             ))
         .catchError((error, stacktrace) {
       () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
+            'Failed',
+            'Something went wrong, try again?',
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.redAccent.withOpacity(0.1),
             colorText: Colors.red,
@@ -361,8 +362,8 @@ class UserRepository extends GetxController {
         // ignore: body_might_complete_normally_catch_error
         .catchError((error, stacktrace) {
       () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
+            'Failed',
+            'Something went wrong, try again?',
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.redAccent.withOpacity(0.1),
             colorText: Colors.red,
@@ -434,8 +435,8 @@ class UserRepository extends GetxController {
           .doc(ProfileController.instance.crtUser!.id)
           .update(userData.toMap())
           .whenComplete(() => Get.snackbar(
-                "Thành công",
-                "Them sp vao gio hang thanh cong",
+                "Sucess",
+                "Add product to cart successfully",
                 snackPosition: SnackPosition.BOTTOM,
                 backgroundColor: Colors.green.withOpacity(0.1),
                 colorText: Colors.green,
@@ -443,8 +444,8 @@ class UserRepository extends GetxController {
               ))
           .catchError((error, stacktrace) {
         () => Get.snackbar(
-              'Lỗi',
-              'Có gì đó không đúng, thử lại?',
+              'Failed',
+              'Something went wrong, try again?',
               snackPosition: SnackPosition.BOTTOM,
               backgroundColor: Colors.redAccent.withOpacity(0.1),
               colorText: Colors.red,
@@ -514,8 +515,8 @@ class UserRepository extends GetxController {
               ))
           .catchError((error, stacktrace) {
         () => Get.snackbar(
-              'Lỗi',
-              'Có gì đó không đúng, thử lại?',
+              'Failed',
+              'Something went wrong, try again?',
               snackPosition: SnackPosition.BOTTOM,
               backgroundColor: Colors.redAccent.withOpacity(0.1),
               colorText: Colors.red,
@@ -576,8 +577,8 @@ class UserRepository extends GetxController {
           .update(userData.toMap())
           .catchError((error, stacktrace) {
         () => Get.snackbar(
-              'Lỗi',
-              'Có gì đó không đúng, thử lại?',
+              'Failed',
+              'Something went wrong, try again?',
               snackPosition: SnackPosition.BOTTOM,
               backgroundColor: Colors.redAccent.withOpacity(0.1),
               colorText: Colors.red,
@@ -675,7 +676,6 @@ class UserRepository extends GetxController {
             await usersCollection.doc(documentId).update({
               wishlistFieldName: FieldValue.arrayRemove([productModel.id]),
             });
-            print("Da xoa 1");
           }
         } else {
           String? productId = await ProductRepository.instance
@@ -687,7 +687,6 @@ class UserRepository extends GetxController {
               wishlistFieldName: FieldValue.arrayRemove([productId]),
             });
           }
-          print("Da xoa 2");
         }
       } else {
         print('Không tìm thấy ng dùng phù hợp.');
