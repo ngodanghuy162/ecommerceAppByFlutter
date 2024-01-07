@@ -12,6 +12,7 @@ import 'package:ecommerce_app_mobile/repository/product_repository/brand_reposit
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_variant_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'dart:developer';
 
@@ -100,13 +101,11 @@ class ShopController extends GetxController {
   Future<String> addOrderSuccess(OrderModel orderModel) async {
     var ref = await _db.collection('Order').add(orderModel.toMap()).catchError(
       (error, stacktrace) {
-        () => Get.snackbar(
-              'Lỗi',
-              'Có lỗi xảy ra, liên hệ quản trị viên để được hỗ trợ',
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.redAccent.withOpacity(0.1),
-              colorText: Colors.red,
-            );
+        SmartDialog.showNotify(
+          msg: 'Something went wrong, try again?',
+          notifyType: NotifyType.failure,
+          displayTime: const Duration(seconds: 1),
+        );
       },
     );
     return ref.id;

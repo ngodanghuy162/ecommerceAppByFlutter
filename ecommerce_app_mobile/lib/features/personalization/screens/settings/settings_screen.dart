@@ -224,8 +224,8 @@ class SettingsScreen extends StatelessWidget {
                           description: "Are you sure to log out??",
                           onOkPressed: () async {
                             await AuthenticationRepository.instance.logout();
-                            Get.snackbar(
-                                "Logout Sucess", "Pls login again to use app ");
+                            Get.snackbar("Logout successfully",
+                                "Please log in again to continue.");
                           },
                         );
                       },

@@ -34,7 +34,7 @@ class SignInController extends GetxController {
   void onReady() {
     super.onReady();
     final savedEmail = deviceStorage.read('userEmail');
-    if (savedEmail != Null && savedEmail != null ) {
+    if (savedEmail != Null && savedEmail != null) {
       email.text = savedEmail;
     }
   }

@@ -5,6 +5,7 @@ import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class ProductRepository extends GetxController {
@@ -42,8 +43,8 @@ class ProductRepository extends GetxController {
       final documentId = documentReference.id;
 
       Get.snackbar(
-        'Thành công',
-        'Bạn đã tạo sản phẩm mới',
+        'Successfully',
+        'Your product has been created',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.green.withOpacity(0.1),
         colorText: Colors.green,
@@ -62,12 +63,10 @@ class ProductRepository extends GetxController {
         shopEmail: shopEmail,
       );
     } catch (error, stacktrace) {
-      Get.snackbar(
-        'Lỗi',
-        'Có gì đó không đúng, thử lại?',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent.withOpacity(0.1),
-        colorText: Colors.red,
+      SmartDialog.showNotify(
+        msg: 'Something went wrong, try again?',
+        notifyType: NotifyType.failure,
+        displayTime: const Duration(seconds: 1),
       );
 
       print('Lỗi khi tạo sản phẩm: $error');

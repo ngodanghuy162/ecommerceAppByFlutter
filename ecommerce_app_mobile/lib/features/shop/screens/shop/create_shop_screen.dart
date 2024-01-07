@@ -117,7 +117,7 @@ class _CreateShopScreenState extends State<CreateShopScreen> {
                     height: 100,
                   )
                 : Container(),
-          
+
             TextButton(onPressed: () {}, child: Text("Add your shop address")),
             ElevatedButton(
                 onPressed: () async {

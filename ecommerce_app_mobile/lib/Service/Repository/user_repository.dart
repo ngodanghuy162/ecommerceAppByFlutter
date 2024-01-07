@@ -113,7 +113,7 @@ class UserRepository extends GetxController {
       await updateUserDetails();
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Có gì đó không đúng, thử lại',
+            msg: 'Failed to undo operation, try again!',
             notifyType: NotifyType.failure,
             displayTime: const Duration(seconds: 1),
           );
@@ -190,14 +190,14 @@ class UserRepository extends GetxController {
         .update(userData.toMap())
         .whenComplete(() {
       SmartDialog.showNotify(
-        msg: 'Đặt địa chỉ mặc định thành công',
+        msg: 'Default address set successfully',
         notifyType: NotifyType.success,
         displayTime: const Duration(seconds: 1),
       );
       currentUserModel = userData;
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Có gì đó không đúng, thử lại',
+            msg: 'Failed to undo operation, try again!',
             notifyType: NotifyType.failure,
             displayTime: const Duration(seconds: 1),
           );
@@ -218,14 +218,14 @@ class UserRepository extends GetxController {
         .update(userData.toMap())
         .whenComplete(() {
       SmartDialog.showNotify(
-        msg: 'Thay đổi thông tin thành công',
+        msg: 'Information changed successfully',
         notifyType: NotifyType.success,
         displayTime: const Duration(seconds: 1),
       );
       currentUserModel = userData;
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Có gì đó không đúng, thử lại',
+            msg: 'Failed to undo operation, try again!',
             notifyType: NotifyType.failure,
             displayTime: const Duration(seconds: 1),
           );
@@ -262,14 +262,14 @@ class UserRepository extends GetxController {
         .update(userData.toMap())
         .whenComplete(() {
       SmartDialog.showNotify(
-        msg: 'Địa chỉ đã được thêm thành công',
+        msg: 'Address added successfully',
         notifyType: NotifyType.success,
         displayTime: const Duration(seconds: 1),
       );
       currentUserModel = userData;
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Có gì đó không đúng, thử lại',
+            msg: 'Failed to undo operation, try again!',
             notifyType: NotifyType.success,
             displayTime: const Duration(seconds: 1),
           );
@@ -321,15 +321,18 @@ class UserRepository extends GetxController {
       await _db
           .collection("Users")
           .doc(userId)
-          .update({isSellFieldName: true}).then((value) =>
-              Get.snackbar("Success", "You register to be shop successly"));
+          .update({isSellFieldName: true}).then(
+        (value) => SmartDialog.showNotify(
+          msg: 'You register to be shop successfully',
+          notifyType: NotifyType.success,
+          displayTime: const Duration(seconds: 1),
+        ),
+      );
     } catch (error) {
-      Get.snackbar(
-        'Error',
-        'An error occurred',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent.withOpacity(0.1),
-        colorText: Colors.red,
+      SmartDialog.showNotify(
+        msg: 'Failed to undo operation, try again!',
+        notifyType: NotifyType.failure,
+        displayTime: const Duration(seconds: 1),
       );
 
       if (kDebugMode) {
@@ -343,21 +346,16 @@ class UserRepository extends GetxController {
         .collection('Users')
         .doc(userModel.id)
         .update(userModel.toMap())
-        .whenComplete(() => Get.snackbar(
-              "Thành công",
-              "Tài khoản của bạn đã được cập nhật",
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.green.withOpacity(0.1),
-              colorText: Colors.green,
-              duration: const Duration(seconds: 1),
+        .whenComplete(() => SmartDialog.showNotify(
+              msg: 'Update profile successfully',
+              notifyType: NotifyType.success,
+              displayTime: const Duration(seconds: 1),
             ))
         .catchError((error, stacktrace) {
-      () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
+      () => SmartDialog.showNotify(
+            msg: 'Failed to undo operation, try again!',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
           );
       if (kDebugMode) {
         print(error.toString());
@@ -378,22 +376,18 @@ class UserRepository extends GetxController {
         .collection('Users')
         .add(userModel.toMap())
         .whenComplete(
-          () => Get.snackbar(
-            'Thành công',
-            'Tài khoản của bạn đã được tạo',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.green.withOpacity(0.1),
-            colorText: Colors.green,
+          () => SmartDialog.showNotify(
+            msg: 'Your account has been created',
+            notifyType: NotifyType.success,
+            displayTime: const Duration(seconds: 1),
           ),
         )
         // ignore: body_might_complete_normally_catch_error
         .catchError((error, stacktrace) {
-      () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
+      () => SmartDialog.showNotify(
+            msg: 'Failed to undo operation, try again!',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
           );
       if (kDebugMode) {
         print(error.toString());
@@ -461,21 +455,16 @@ class UserRepository extends GetxController {
           .collection('Users')
           .doc(ProfileController.instance.crtUser!.id)
           .update(userData!.toMap())
-          .whenComplete(() => Get.snackbar(
-                "Thành công",
-                "Them sp vao gio hang thanh cong",
-                snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: Colors.green.withOpacity(0.1),
-                colorText: Colors.green,
-                duration: const Duration(seconds: 1),
+          .whenComplete(() => SmartDialog.showNotify(
+                msg: 'Add product to cart successfully!',
+                notifyType: NotifyType.success,
+                displayTime: const Duration(seconds: 1),
               ))
           .catchError((error, stacktrace) {
-        () => Get.snackbar(
-              'Lỗi',
-              'Có gì đó không đúng, thử lại?',
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.redAccent.withOpacity(0.1),
-              colorText: Colors.red,
+        () => () => SmartDialog.showNotify(
+              msg: 'Failed to undo operation, try again!',
+              notifyType: NotifyType.failure,
+              displayTime: const Duration(seconds: 1),
             );
         if (kDebugMode) {
           print(error.toString());
@@ -530,21 +519,16 @@ class UserRepository extends GetxController {
           .collection('Users')
           .doc(ProfileController.instance.crtUser!.id)
           .update(userData.toMap())
-          .whenComplete(() => Get.snackbar(
-                "Sucesss",
-                "Delete from cart successfully",
-                snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: Colors.green.withOpacity(0.1),
-                colorText: Colors.green,
-                duration: const Duration(seconds: 1),
+          .whenComplete(() => () => SmartDialog.showNotify(
+                msg: 'Delete from cart successfully',
+                notifyType: NotifyType.success,
+                displayTime: const Duration(seconds: 1),
               ))
           .catchError((error, stacktrace) {
-        () => Get.snackbar(
-              'Lỗi',
-              'Có gì đó không đúng, thử lại?',
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.redAccent.withOpacity(0.1),
-              colorText: Colors.red,
+        () => () => SmartDialog.showNotify(
+              msg: 'Failed to undo operation, try again!',
+              notifyType: NotifyType.failure,
+              displayTime: const Duration(seconds: 1),
             );
         if (kDebugMode) {
           print(error.toString());

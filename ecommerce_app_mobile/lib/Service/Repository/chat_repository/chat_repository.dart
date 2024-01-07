@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/chat_model/chat_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class ChatRepository extends GetxController {
@@ -9,12 +10,15 @@ class ChatRepository extends GetxController {
   final _db = FirebaseFirestore.instance;
 
   Future<String> createNewChat(ChatModel chatModel) async {
-    var id = await _db.collection('Chat').add(chatModel.toJson()).catchError((error, stacktrace) {
-      () => Get.snackbar('Lỗi', 'Có gì đó không đúng, thử lại?',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent.withOpacity(0.1),
-        colorText: Colors.red,
-      );
+    var id = await _db
+        .collection('Chat')
+        .add(chatModel.toJson())
+        .catchError((error, stacktrace) {
+      () => SmartDialog.showNotify(
+            msg: 'Something went wrong, try again?',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
+          );
     });
     return id.id;
   }
@@ -26,9 +30,7 @@ class ChatRepository extends GetxController {
         .where('shopEmail', isEqualTo: shopEmail)
         .get();
 
-    return snapshot.docs.isNotEmpty
-        ? snapshot.docs.first.id
-        : null;
+    return snapshot.docs.isNotEmpty ? snapshot.docs.first.id : null;
   }
 
   Future<List<ChatModel>> getAllChatModelByShopEmail(String shopEmail) async {
@@ -36,7 +38,8 @@ class ChatRepository extends GetxController {
         .collection('Chat')
         .where('shopEmail', isEqualTo: shopEmail)
         .get();
-    final chatData = snapshot.docs.map((e) => ChatModel.fromSnapshot(e)).toList();
+    final chatData =
+        snapshot.docs.map((e) => ChatModel.fromSnapshot(e)).toList();
     return chatData;
   }
 }

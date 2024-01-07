@@ -1,4 +1,5 @@
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/profile_controller.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/profile/profile_screen.dart';
@@ -17,19 +18,20 @@ class ProfileUpdateScreen extends StatefulWidget {
 
 class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
   final controller1 = Get.put(ProfileController());
+  final userRepository = Get.put(UserRepository());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TAppBar(
         title: const Text(
-          'Thay đổi thông tin',
+          'Change profile info',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
         backOnPress: () {
-          Get.off(const ProfileScreen());
+          Get.back();
         },
         showBackArrow: true,
       ),
@@ -105,6 +107,13 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () async {
+                                  do {
+                                    await userRepository.updateUserDetails();
+                                  } while (
+                                      userRepository.currentUserModel == null);
+                                  final currentUserModel =
+                                      userRepository.currentUserModel!;
+
                                   final userData = UserModel(
                                     id: userModel.id,
                                     firstName: firstName.text.trim(),
@@ -112,6 +121,16 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                                     email: email.text.trim(),
                                     phoneNumber: phoneNumber.text.trim(),
                                     avatar_imgURL: userModel.avatar_imgURL,
+                                    address: currentUserModel.address,
+                                    cart: currentUserModel.cart,
+                                    bankAccount: currentUserModel.bankAccount,
+                                    isSell: currentUserModel.isSell,
+                                    password: currentUserModel.password,
+                                    totalConsumption:
+                                        currentUserModel.totalConsumption,
+                                    userName: currentUserModel.userName,
+                                    voucher: currentUserModel.voucher,
+                                    wishlist: currentUserModel.wishlist,
                                   );
 
                                   await controller1.updateUser(userData);
@@ -124,7 +143,7 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                                 //   side: BorderSide.none,
                                 //   shape: const StadiumBorder(),
                                 // ),
-                                child: const Text('Cập nhật',
+                                child: const Text('Update',
                                     style: TextStyle(
                                         color: TColors.light, fontSize: 18)),
                               ),

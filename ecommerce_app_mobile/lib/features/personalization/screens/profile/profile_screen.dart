@@ -38,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: const Text('My profile'),
         showBackArrow: true,
         backOnPress: () => {
-          Get.back(),
+          Get.off(() => const NavigationMenu(initialIndex: 3)),
         },
       ),
       body: SingleChildScrollView(
@@ -115,15 +115,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       }
                                     }
                                   } else {
-                                    Get.snackbar('Thông báo', 'Không chọn ảnh',
-                                        snackPosition: SnackPosition.BOTTOM,
-                                        backgroundColor:
-                                            Colors.green.withOpacity(0.1),
-                                        colorText: Colors.green,
-                                        duration: const Duration(seconds: 1));
+                                    SmartDialog.showNotify(
+                                      msg: 'You have not selected a picture.s',
+                                      notifyType: NotifyType.alert,
+                                      displayTime: const Duration(seconds: 1),
+                                    );
                                   }
                                 },
-                                child: const Text('Đổi ảnh đại diện'),
+                                child: const Text('Change profle picture'),
                               ),
                             ],
                           ),
@@ -134,14 +133,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const Divider(),
                         const SizedBox(height: TSizes.spaceBtwItems),
                         const TSectionHeading(
-                          title: 'Thông tin hồ sơ',
+                          title: 'My profile',
                           showActionButton: false,
                         ),
                         const SizedBox(height: TSizes.spaceBtwItems),
 
                         TProfileMenu(
                           onPressed: () {},
-                          title: 'Tên đầy đủ',
+                          title: 'Fullname',
                           value: '${data.lastName} ${data.firstName}',
                         ),
 
@@ -160,17 +159,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         TProfileMenu(
                           onPressed: () {},
-                          title: 'Số điện thoại',
+                          title: 'Phone number',
                           value: data.phoneNumber,
                         ),
                         TProfileMenu(
                           onPressed: () {},
-                          title: 'Giới tính',
+                          title: 'Gender',
                           value: 'None',
                         ),
                         TProfileMenu(
                           onPressed: () {},
-                          title: 'Ngày sinh',
+                          title: 'DOB',
                           value: '01/01/1970',
                         ),
                         const Divider(),
@@ -181,7 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Get.off(() => const ProfileUpdateScreen());
                             },
                             child: const Text(
-                              'Sửa đổi thông tin',
+                              'Update profile info',
                               style: TextStyle(
                                 color: Colors.blue,
                                 fontSize: 16,
@@ -197,7 +196,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Get.off(() => const PasswordUpdateScreen());
                               },
                               child: const Text(
-                                'Đổi mật khẩu',
+                                'Change password',
                                 style: TextStyle(
                                   color: Colors.blue,
                                   fontSize: 16,
@@ -212,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Navigator.of(context).pop();
                             },
                             child: const Text(
-                              'Đóng tài khoản',
+                              'Close account',
                               style: TextStyle(
                                 color: Colors.red,
                                 fontSize: 14,

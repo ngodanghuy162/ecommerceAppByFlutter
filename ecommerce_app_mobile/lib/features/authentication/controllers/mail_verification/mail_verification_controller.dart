@@ -6,6 +6,7 @@ import 'package:ecommerce_app_mobile/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class MailVerificationController extends GetxController {
@@ -21,12 +22,10 @@ class MailVerificationController extends GetxController {
     try {
       await AuthenticationRepository.instance.sendEmailVerification();
     } catch (e) {
-      Get.snackbar(
-        'Có lỗi, thử lại?',
-        'Quá trình xác thực diễn ra lỗi',
-        snackPosition: SnackPosition.BOTTOM,
-        colorText: Colors.redAccent,
-        backgroundColor: Colors.redAccent.withOpacity(0.1),
+      SmartDialog.showNotify(
+        msg: e.toString(),
+        notifyType: NotifyType.failure,
+        displayTime: const Duration(seconds: 1),
       );
     }
   }
@@ -68,8 +67,8 @@ class MailVerificationController extends GetxController {
       );
     } else {
       Get.snackbar(
-        'Tài khoản chưa được xác nhận',
-        'Kiểm tra email của bạn và thử lại',
+        'Account not verified',
+        'Check your email and try again',
         snackPosition: SnackPosition.BOTTOM,
         colorText: Colors.redAccent,
         backgroundColor: Colors.redAccent.withOpacity(0.1),

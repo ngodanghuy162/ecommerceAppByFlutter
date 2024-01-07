@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/order_model/payment_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class PaymentRepository extends GetxController {
@@ -12,12 +13,10 @@ class PaymentRepository extends GetxController {
     var ref =
         await _db.collection('Payment').add(paymentModel.toMap()).catchError(
       (error, stacktrace) {
-        () => Get.snackbar(
-              'Lỗi',
-              'Có lỗi xảy ra, liên hệ quản trị viên để được hỗ trợ',
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.redAccent.withOpacity(0.1),
-              colorText: Colors.red,
+        () => SmartDialog.showNotify(
+              msg: 'Something went wrong, try again?',
+              notifyType: NotifyType.failure,
+              displayTime: const Duration(seconds: 1),
             );
       },
     );

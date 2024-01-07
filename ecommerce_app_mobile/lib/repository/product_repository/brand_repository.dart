@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class BrandRepository extends GetxController {
@@ -13,12 +14,10 @@ class BrandRepository extends GetxController {
         .collection('Brand')
         .add(brandModel.toJson())
         .catchError((error, stacktrace) {
-      () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
+      () => SmartDialog.showNotify(
+            msg: 'Something went wrong, try again?',
+            notifyType: NotifyType.failure,
+            displayTime: const Duration(seconds: 1),
           );
       print(error.toString());
     });
@@ -28,9 +27,10 @@ class BrandRepository extends GetxController {
   Future<String> checkDuplicatedBrand(String name) async {
     var queryBrand = await _db.collection('Brand').get();
 
-    for(var document in queryBrand.docs) {
+    for (var document in queryBrand.docs) {
       var documentName = document['name'].toLowerCase();
-      if(documentName == name.trim().replaceAll(RegExp(r'\s+'), ' ').toLowerCase()) {
+      if (documentName ==
+          name.trim().replaceAll(RegExp(r'\s+'), ' ').toLowerCase()) {
         return document.id;
       }
     }

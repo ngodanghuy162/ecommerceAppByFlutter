@@ -8,14 +8,12 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 class SettingsController extends GetxController {
   static SettingsController get instance => Get.find();
 
-  final _authRepo = Get.put(AuthenticationRepository());
   final _userRepo = Get.put(UserRepository());
   getUserData() async {
-    final email = _authRepo.firebaseUser.value?.email;
-    if (email != null) {
-      return await _userRepo.getUserDetails(email);
-    } else {
-      Get.snackbar('Lỗi', 'Bạn phải đăng nhập để tiếp tục');
+    while (_userRepo.currentUserModel == null) {
+      await _userRepo.updateUserDetails();
     }
+
+    return _userRepo.currentUserModel;
   }
 }

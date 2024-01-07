@@ -2,6 +2,7 @@ import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/Service/repository/authentication_repository.dart';
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
@@ -21,7 +22,11 @@ class ProfileController extends GetxController {
     if (email != null) {
       return _userRepo.getUserDetails(email);
     } else {
-      Get.snackbar('Lỗi', 'Bạn phải đăng nhập để tiếp tục');
+      SmartDialog.showNotify(
+        msg: 'You have to login to continue.',
+        notifyType: NotifyType.failure,
+        displayTime: const Duration(seconds: 1),
+      );
     }
   }
 
@@ -32,6 +37,7 @@ class ProfileController extends GetxController {
 
   updateUser(UserModel userModel) async {
     await _userRepo.updateUserDetail(userModel);
+    await _userRepo.updateUserDetails();
   }
 
   Future<void> updatePassword(UserModel userModel) async {

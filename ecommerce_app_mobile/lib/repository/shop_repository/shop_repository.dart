@@ -137,14 +137,14 @@ class ShopRepository extends GetxController {
         .update(shopData.toMap())
         .whenComplete(() {
       SmartDialog.showNotify(
-        msg: 'Thay đổi thông tin thành công',
+        msg: 'Information changed successfully',
         notifyType: NotifyType.success,
         displayTime: const Duration(seconds: 1),
       );
       currentShopModel = shopData;
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Có gì đó không đúng, thử lại',
+            msg: 'Something went wrong, try again?',
             notifyType: NotifyType.failure,
             displayTime: const Duration(seconds: 1),
           );
@@ -187,14 +187,14 @@ class ShopRepository extends GetxController {
         .update(shopData.toMap())
         .whenComplete(() {
       SmartDialog.showNotify(
-        msg: 'Đặt địa chỉ mặc định thành công',
+        msg: 'Default address set successfully',
         notifyType: NotifyType.success,
         displayTime: const Duration(seconds: 1),
       );
       currentShopModel = shopData;
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Có gì đó không đúng, thử lại',
+            msg: 'Something went wrong, try again?',
             notifyType: NotifyType.failure,
             displayTime: const Duration(seconds: 1),
           );
@@ -219,14 +219,14 @@ class ShopRepository extends GetxController {
         .update(shopData.toMap())
         .whenComplete(() {
       SmartDialog.showNotify(
-        msg: 'Địa chỉ đã được thêm thành công',
+        msg: 'Address added successfully',
         notifyType: NotifyType.success,
         displayTime: const Duration(seconds: 1),
       );
       currentShopModel = shopData;
     }).catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
-            msg: 'Có gì đó không đúng, thử lại',
+            msg: 'Something went wrong, try again?',
             notifyType: NotifyType.success,
             displayTime: const Duration(seconds: 1),
           );

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 class ProductVariantRepository extends GetxController {
@@ -35,20 +36,11 @@ class ProductVariantRepository extends GetxController {
         .collection('ProductVariant')
         .add(productVariantModel.toJson())
         .catchError((error, stacktrace) {
-      () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
-          );
-      () => Get.snackbar(
-            'Lỗi',
-            'Có gì đó không đúng, thử lại?',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
-          );
+      SmartDialog.showNotify(
+        msg: 'Something went wrong, try again?',
+        notifyType: NotifyType.failure,
+        displayTime: const Duration(seconds: 1),
+      );
       print(error.toString());
     });
     return id.id;
