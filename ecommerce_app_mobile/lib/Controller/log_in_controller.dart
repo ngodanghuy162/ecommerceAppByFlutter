@@ -54,6 +54,7 @@ class SignInController extends GetxController {
       isGoogleLoading.value = true;
       final auth = AuthenticationRepository.instance;
       await auth.signInWithGoogle();
+
       isGoogleLoading.value = false;
 
       final names = auth.firebaseUser.value!.displayName!.split(' ');
@@ -77,6 +78,7 @@ class SignInController extends GetxController {
         await userRepo.createUser(model);
         auth.setInitialScreen(auth.firebaseUser.value);
       }
+      auth.setInitialScreen(auth.firebaseUser.value);
     } catch (e) {
       isGoogleLoading.value = false;
       Get.snackbar(
@@ -118,6 +120,7 @@ class SignInController extends GetxController {
         await userRepo.createUser(model);
         auth.setInitialScreen(auth.firebaseUser.value);
       }
+      auth.setInitialScreen(auth.firebaseUser.value);
     } catch (e) {
       isFacebookLoading.value = false;
       Get.snackbar(

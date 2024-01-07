@@ -235,7 +235,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const Divider(),
                         const SizedBox(height: TSizes.spaceBtwItems),
                         const TSectionHeading(
-                          title: 'Thông tin cá nhân',
+                          title: 'Infomation',
                           showActionButton: false,
                         ),
                         const SizedBox(height: TSizes.spaceBtwItems),

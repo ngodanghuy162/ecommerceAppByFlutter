@@ -118,7 +118,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Chọn màu'),
+          title: const Text('Pick color'),
           content: SingleChildScrollView(
             child: ColorPicker(
               pickerColor: selectedColor,
@@ -135,7 +135,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Hủy'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -149,7 +149,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 });
                 Navigator.of(context).pop();
               },
-              child: const Text('Xác nhận'),
+              child: const Text('Confirm'),
             ),
           ],
         );
@@ -171,7 +171,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
       },
       child: Scaffold(
         appBar: const TAppBar(
-          title: Text('Đăng Sản Phẩm'),
+          title: Text('Add product'),
           showBackArrow: true,
         ),
         body: SingleChildScrollView(
@@ -482,10 +482,10 @@ class _SellProductScreenState extends State<SellProductScreen> {
                     );
                   },
                 ),
-                ElevatedButton(
+                OutlinedButton(
                   style: const ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll<Color>(Colors.blue),
+                    backgroundColor: MaterialStatePropertyAll<Color>(
+                        Color.fromARGB(255, 255, 255, 255)),
                     minimumSize: MaterialStatePropertyAll<Size>(
                         Size(double.infinity, 50)),
                   ),
@@ -508,13 +508,14 @@ class _SellProductScreenState extends State<SellProductScreen> {
                       _imageList.add(null);
                     });
                   },
-                  child: const Text('Add Variant'),
+                  child: const Text(
+                    'Add Variant',
+                    style: TextStyle(color: TColors.primary),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   style: const ButtonStyle(
-                    backgroundColor:
-                        MaterialStatePropertyAll<Color>(Colors.orange),
                     minimumSize: MaterialStatePropertyAll<Size>(
                         Size(double.infinity, 50)),
                   ),
@@ -566,7 +567,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                       shopEmail: authRepo.firebaseUser.value!.email,
                     );
                   },
-                  child: const Text('Đăng Sản Phẩm'),
+                  child: const Text('Add product'),
                 ),
               ],
             ),
