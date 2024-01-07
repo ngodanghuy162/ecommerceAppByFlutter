@@ -69,7 +69,7 @@ class ProductOrderDetails extends StatelessWidget {
                 final userAddress = shopAndProducts['user_address'];
                 final shopAddress = shopAndProducts['shop_address'];
 
-                return Column(
+                return ListView(
                   children: [
                     TRoundedContainer(
                       width: double.infinity,

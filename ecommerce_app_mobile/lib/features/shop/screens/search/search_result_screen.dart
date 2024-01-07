@@ -104,7 +104,10 @@ class SearchResultScreen extends StatelessWidget {
                       return const Center(child: Text("Something went wrong"));
                     }
                   } else {
-                    return const CircularProgressIndicator();
+                    return const SizedBox(
+                      height: 0,
+                      width: 0,
+                    );
                   }
                 },
               ),
