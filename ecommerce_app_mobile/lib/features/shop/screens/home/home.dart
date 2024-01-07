@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/primary_header_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
@@ -28,12 +29,16 @@ class HomeScreen extends StatelessWidget {
   final productController = Get.put(ProductController());
   final variantController = Get.put(ProductVariantController());
   final homeController = Get.put(HomeController());
+  final userRepository = Get.put(UserRepository());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: RefreshIndicator(
-      onRefresh: () async => (context as Element).reassemble(),
+      onRefresh: () async {
+        await userRepository.updateUserDetails();
+        (context as Element).reassemble();
+      },
       child: SingleChildScrollView(
         child: Column(
           children: [

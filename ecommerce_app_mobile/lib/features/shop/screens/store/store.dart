@@ -3,7 +3,8 @@ import 'package:ecommerce_app_mobile/common/widgets/appbar/tabbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/brands/brand_card.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
-import 'package:ecommerce_app_mobile/common/widgets/products/cart_menu_icon.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/cart/cart_menu_icon.dart';
+
 import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
@@ -34,7 +35,7 @@ class StoreScreen extends StatelessWidget {
           actions: [
             TCartCounterIcon(
               onPressed: () => Get.to(CartScreen()),
-              iconColor: null,
+              iconColor: TColors.black,
             )
           ],
         ),

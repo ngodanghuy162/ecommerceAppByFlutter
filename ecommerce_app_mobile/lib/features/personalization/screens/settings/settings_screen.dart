@@ -105,6 +105,10 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
 
+                  const SizedBox(
+                    height: TSizes.spaceBtwItems,
+                  ),
+
                   /// Account Setting
                   const TSectionHeading(
                     title: "Account Settings",
@@ -121,7 +125,8 @@ class SettingsScreen extends StatelessWidget {
                                     icon: Iconsax.shop,
                                     title: "My Shop",
                                     subTitle: "Get to my shop",
-                                    onTap: () => Get.to(() => MyShopScreen()),
+                                    onTap: () =>
+                                        Get.to(() => const MyShopScreen()),
                                   )
                                 : TSettingsMenuTile(
                                     icon: Iconsax.shop,
@@ -167,50 +172,50 @@ class SettingsScreen extends StatelessWidget {
                     subTitle: 'List of all the discounted coupons',
                     onTap: () => Get.to(() => const VoucherScreen()),
                   ),
-                  const TSettingsMenuTile(
-                    icon: Iconsax.notification,
-                    title: 'Notifications',
-                    subTitle: 'Set any kind of notification message',
-                  ),
-                  const TSettingsMenuTile(
-                    icon: Iconsax.security_card,
-                    title: 'Account Privacy',
-                    subTitle: 'Manage data usage and connected accounts',
-                  ),
+                  // const TSettingsMenuTile(
+                  //   icon: Iconsax.notification,
+                  //   title: 'Notifications',
+                  //   subTitle: 'Set any kind of notification message',
+                  // ),
+                  // const TSettingsMenuTile(
+                  //   icon: Iconsax.security_card,
+                  //   title: 'Account Privacy',
+                  //   subTitle: 'Manage data usage and connected accounts',
+                  // ),
 
                   /// App Settings
-                  const SizedBox(
-                    height: TSizes.spaceBtwSections,
-                  ),
-                  const TSectionHeading(
-                    title: 'App Settings',
-                    showActionButton: false,
-                  ),
-                  const SizedBox(
-                    height: TSizes.spaceBtwItems,
-                  ),
-                  const TSettingsMenuTile(
-                      icon: Iconsax.document_upload,
-                      title: 'Load Data',
-                      subTitle: 'Upload Data to your Cloud Firebase'),
-                  TSettingsMenuTile(
-                    icon: Iconsax.location,
-                    title: 'Geolocation',
-                    subTitle: 'Set recommendation based on location',
-                    trailing: Switch(value: true, onChanged: (value) {}),
-                  ),
-                  TSettingsMenuTile(
-                    icon: Iconsax.security_user,
-                    title: 'Safe Mode',
-                    subTitle: 'Search result is safe for all ages',
-                    trailing: Switch(value: false, onChanged: (value) {}),
-                  ),
-                  TSettingsMenuTile(
-                    icon: Iconsax.image,
-                    title: 'HD Image Quality',
-                    subTitle: 'Set image quality to be seen',
-                    trailing: Switch(value: false, onChanged: (value) {}),
-                  ),
+                  // const SizedBox(
+                  //   height: TSizes.spaceBtwSections,
+                  // ),
+                  // const TSectionHeading(
+                  //   title: 'App Settings',
+                  //   showActionButton: false,
+                  // ),
+                  // const SizedBox(
+                  //   height: TSizes.spaceBtwItems,
+                  // ),
+                  // const TSettingsMenuTile(
+                  //     icon: Iconsax.document_upload,
+                  //     title: 'Load Data',
+                  //     subTitle: 'Upload Data to your Cloud Firebase'),
+                  // TSettingsMenuTile(
+                  //   icon: Iconsax.location,
+                  //   title: 'Geolocation',
+                  //   subTitle: 'Set recommendation based on location',
+                  //   trailing: Switch(value: true, onChanged: (value) {}),
+                  // ),
+                  // TSettingsMenuTile(
+                  //   icon: Iconsax.security_user,
+                  //   title: 'Safe Mode',
+                  //   subTitle: 'Search result is safe for all ages',
+                  //   trailing: Switch(value: false, onChanged: (value) {}),
+                  // ),
+                  // TSettingsMenuTile(
+                  //   icon: Iconsax.image,
+                  //   title: 'HD Image Quality',
+                  //   subTitle: 'Set image quality to be seen',
+                  //   trailing: Switch(value: false, onChanged: (value) {}),
+                  // ),
 
                   /// Logout Button
                   const SizedBox(

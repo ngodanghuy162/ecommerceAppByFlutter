@@ -79,7 +79,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     } else if (snapshot.hasError) {
                       return Center(child: Text(snapshot.error.toString()));
                     } else {
-                      return Center(child: Text("smt went wrong"));
+                      return const Center(child: Text("smt went wrong"));
                     }
                   } else {
                     return const CircularProgressIndicator();

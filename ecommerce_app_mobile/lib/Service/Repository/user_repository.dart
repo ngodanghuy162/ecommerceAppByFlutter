@@ -16,6 +16,7 @@ import '../../common/constant/cloudFieldName/user_model_field.dart';
 class UserRepository extends GetxController {
   static UserRepository get instance => Get.find();
   UserModel? currentUserModel;
+  final RxInt cartAmount = 0.obs;
   @override
   Future<void> onReady() async {
     super.onReady();
@@ -29,6 +30,11 @@ class UserRepository extends GetxController {
   Future<void> updateUserDetails() async {
     currentUserModel =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+    cartAmount.value = currentUserModel!.cart!.fold(
+        0,
+        (previousValue, element) =>
+            previousValue +
+            ((element as Map)['listvariant'] as Map).keys.length);
   }
 
   Future<bool> isEmailExisted(String email) async {
@@ -452,6 +458,7 @@ class UserRepository extends GetxController {
             'Đã thêm sản phẩm vào cart thành công dong 422 voi chua co shop.');
       }
       userData!.cart = myCart;
+      await updateUserDetails();
       await _db
           .collection('Users')
           .doc(ProfileController.instance.crtUser!.id)
