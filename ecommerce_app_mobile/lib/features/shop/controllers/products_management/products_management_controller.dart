@@ -48,7 +48,7 @@ class ProductsManagementController extends GetxController {
     // shopRepository.currentShopModel!.owner
     final productCategoryList =
         await productCategoryRepository.getCategoriesByShopEmail(
-      'mepexa7824@getmola.com',
+      shopRepository.currentShopModel!.owner,
       (List<ProductModel> list) {
         productList.value = List.from(list);
       },

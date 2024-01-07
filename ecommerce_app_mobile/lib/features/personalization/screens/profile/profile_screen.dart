@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
 import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
@@ -28,6 +29,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final controller = Get.put(ProfileController());
   //final controllerNav = Get.put(NavigationController(initialIndex: 3));
+  final userRepository = Get.put(UserRepository());
 
   late String userAvatarURL;
 
@@ -65,6 +67,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               .putFile(File(pickedFile.path));
                           userAvatarURL =
                               await referenceImageToUpload.getDownloadURL();
+                          do {
+                            await userRepository.updateUserDetails();
+                          } while (userRepository.currentUserModel == null);
+                          final currentUserModel =
+                              userRepository.currentUserModel!;
                           //print(userAvatarURL);
                           UserModel userData = UserModel(
                             id: data.id,
@@ -74,6 +81,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             phoneNumber: data.phoneNumber,
                             password: data.password,
                             avatar_imgURL: userAvatarURL,
+                            address: currentUserModel.address,
+                            cart: currentUserModel.cart,
+                            bankAccount: currentUserModel.bankAccount,
+                            isSell: currentUserModel.isSell,
+                            totalConsumption: currentUserModel.totalConsumption,
+                            userName: currentUserModel.userName,
+                            voucher: currentUserModel.voucher,
+                            wishlist: currentUserModel.wishlist,
                           );
 
                           SmartDialog.showLoading(
@@ -131,6 +146,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         userAvatarURL =
                             await referenceImageToUpload.getDownloadURL();
                         //print(userAvatarURL);
+                        do {
+                          await userRepository.updateUserDetails();
+                        } while (userRepository.currentUserModel == null);
+                        final currentUserModel =
+                            userRepository.currentUserModel!;
+                        //print(userAvatarURL);
                         UserModel userData = UserModel(
                           id: data.id,
                           firstName: data.firstName,
@@ -139,6 +160,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           phoneNumber: data.phoneNumber,
                           password: data.password,
                           avatar_imgURL: userAvatarURL,
+                          address: currentUserModel.address,
+                          cart: currentUserModel.cart,
+                          bankAccount: currentUserModel.bankAccount,
+                          isSell: currentUserModel.isSell,
+                          totalConsumption: currentUserModel.totalConsumption,
+                          userName: currentUserModel.userName,
+                          voucher: currentUserModel.voucher,
+                          wishlist: currentUserModel.wishlist,
                         );
 
                         SmartDialog.showLoading(
