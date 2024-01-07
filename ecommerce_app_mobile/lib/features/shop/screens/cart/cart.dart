@@ -37,7 +37,6 @@ class CartScreen extends StatelessWidget {
                     alignment: Alignment.center);
                 Get.to(() => const UserAddressScreen());
               } else {
-                print(CartController.instance.chooSenShopAndProduct);
                 Get.to(
                   () => CheckoutScreen(
                     shopAndProductVariantQuantity:

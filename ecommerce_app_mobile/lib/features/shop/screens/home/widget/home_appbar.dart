@@ -1,5 +1,6 @@
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
+import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,6 @@ import '../../../../../common/widgets/appbar/appbar.dart';
 import '../../../../../common/widgets/products/cart/cart_menu_icon.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/text_strings.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 
 class THomeAppBar extends StatelessWidget {
   THomeAppBar({
@@ -46,10 +45,10 @@ class THomeAppBar extends StatelessWidget {
                     print(snapshot.error.toString());
                     return Center(child: Text(snapshot.error.toString()));
                   } else {
-                    return Center(child: Text("smt went wrong"));
+                    return const Center(child: Text("smt went wrong"));
                   }
                 } else {
-                  return const CircularProgressIndicator();
+                  return const Center(child: CustomLoading());
                 }
               })
         ],

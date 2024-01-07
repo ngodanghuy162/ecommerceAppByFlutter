@@ -1,7 +1,7 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/icons/t_circular_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
-import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_horizontal.dart';
+import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/wishlist/wishlist_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
@@ -46,7 +46,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
             Text("Wishlist", style: Theme.of(context).textTheme.headlineMedium),
         actions: [
           TCircularIcon(
-            icon: Iconsax.add,
+            icon: Iconsax.shopping_bag,
             onPressed: () => Get.to(CartScreen()),
           ),
         ],
@@ -68,12 +68,15 @@ class _WishlistScreenState extends State<WishlistScreen> {
                       children: [
                         SizedBox(height: 50.0), // Adjust the height as needed
                         Center(
-                          child: Text(
-                            "Empty Wishlist",
-                            style: TextStyle(
-                              fontSize: 20.0, // Adjust the font size as needed
-                              fontWeight: FontWeight.bold,
-                              fontFamily: '',
+                          child: Center(
+                            child: Text(
+                              "Empty Wishlist",
+                              style: TextStyle(
+                                fontSize:
+                                    20.0, // Adjust the font size as needed
+                                fontWeight: FontWeight.bold,
+                                fontFamily: '',
+                              ),
                             ),
                           ),
                         ),
@@ -110,10 +113,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     );
                   }
                 } else {
-                  return Text("Snap shot has no data");
+                  return const Text("Snap shot has no data");
                 }
               } else {
-                return Text("Waiting pls");
+                return const Center(child: CustomLoading());
               }
             },
           ),

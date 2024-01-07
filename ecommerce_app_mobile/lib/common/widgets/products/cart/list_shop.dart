@@ -1,3 +1,4 @@
+import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart/shop_and_pro_widget.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
@@ -19,11 +20,13 @@ class ListShop extends StatelessWidget {
         future: CartController.instance.getCartList(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            print("done connection");
             if (CartController.instance.listShop.isEmpty) {
               return const Center(
-                  child: Text("Your cart is empty",
-                      style: TextStyle(fontSize: 24)));
+                child: Text(
+                  "Your cart is empty",
+                  style: TextStyle(fontSize: 24),
+                ),
+              );
             } else {
               return SingleChildScrollView(
                 child: Padding(
@@ -49,7 +52,7 @@ class ListShop extends StatelessWidget {
               );
             }
           } else {
-            return const Text("Waiting pls");
+            return const Center(child: CustomLoading());
           }
         });
   }

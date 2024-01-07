@@ -4,6 +4,7 @@ import 'package:ecommerce_app_mobile/Service/Model/chat_model/message_model.dart
 import 'package:ecommerce_app_mobile/Service/repository/authentication_repository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
+import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/chat_controller/chat_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/chat_controller/message_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
@@ -198,7 +199,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('Loading');
+          return const Center(child: CustomLoading());
         }
 
         messageList = snapshot.data!;
