@@ -93,6 +93,15 @@ class _TSortableProductsState extends State<TSortableProducts> {
             }
           });
     } else if (type == 'popular') {
+      if (status == 'Name') {
+        productController.listPopular
+            .sort(((a, b) => a.product.name.compareTo(b.product.name)));
+      } else if (status == 'Higher Price') {
+      } else if (status == 'Lower Price') {
+      } else if (status == 'Sale') {
+        productController.listPopular.sort(
+            ((a, b) => b.product.discount!.compareTo(a.product.discount!)));
+      }
       showWidget = TGridLayout(
           itemCount: productController.listPopular.length,
           itemBuilder: (_, index) => TProductCardVertical(

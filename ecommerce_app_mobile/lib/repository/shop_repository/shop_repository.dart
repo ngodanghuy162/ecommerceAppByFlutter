@@ -96,7 +96,7 @@ class ShopRepository extends GetxController {
     currentShopModel = await getShopDetails();
   }
 
-  Future<ShopModel> getShopDetails() async {
+  Future<ShopModel?> getShopDetails() async {
     do {
       await userRepo.updateUserDetails();
     } while (userRepo.currentUserModel == null);
@@ -115,6 +115,9 @@ class ShopRepository extends GetxController {
         }
       },
     );
+    if (snapshot.docs.map((e) => ShopModel.fromSnapshot(e)).isEmpty) {
+      return null;
+    }
 
     final shopData = snapshot.docs.map((e) => ShopModel.fromSnapshot(e)).single;
     return shopData;

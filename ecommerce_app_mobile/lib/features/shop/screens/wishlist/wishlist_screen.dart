@@ -10,6 +10,7 @@ import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
+import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -63,19 +64,19 @@ class _WishlistScreenState extends State<WishlistScreen> {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
                   if (WishlistController.instance.listProduct.isEmpty) {
-                    return const Column(
+                    return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 50.0), // Adjust the height as needed
-                        Center(
+                        SizedBox(
+                          height: THelperFunctions.screenHeight() / 2 -
+                              TSizes.appBarHeight,
+                        ), // Adjus,t the height as needed
+                        const Center(
                           child: Center(
-                            child: Text(
-                              "Empty Wishlist",
-                              style: TextStyle(
-                                fontSize:
-                                    20.0, // Adjust the font size as needed
-                                fontWeight: FontWeight.bold,
-                                fontFamily: '',
+                            child: Center(
+                              child: Text(
+                                "Your wishlist is empty",
+                                style: TextStyle(fontSize: 24),
                               ),
                             ),
                           ),

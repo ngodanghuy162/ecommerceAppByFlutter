@@ -31,7 +31,7 @@ class MailVerificationController extends GetxController {
   }
 
   void setTimerForAutoRedirect() {
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       FirebaseAuth.instance.currentUser?.reload();
       final user = FirebaseAuth.instance.currentUser;
       if (user!.emailVerified) {
@@ -53,19 +53,7 @@ class MailVerificationController extends GetxController {
   void manuallyCheckEmailVerification() {
     FirebaseAuth.instance.currentUser?.reload();
     final user = FirebaseAuth.instance.currentUser;
-    if (user!.emailVerified) {
-      _timer.cancel();
-      Get.off(
-        SuccessScreen(
-          image: TImages.staticSuccessIllustration,
-          title: TTexts.yourAccountCreatedTitle,
-          subtitle: TTexts.yourAccountCreatedSubTitle,
-          callback: () {
-            AuthenticationRepository.instance.setInitialScreen(user);
-          },
-        ),
-      );
-    } else {
+    if (!user!.emailVerified) {
       Get.snackbar(
         'Account not verified',
         'Check your email and try again',

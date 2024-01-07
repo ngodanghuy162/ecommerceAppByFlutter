@@ -133,6 +133,14 @@ class _TSignupFormState extends State<TSignupForm> {
                     email: controller.email.text,
                     phoneNumber: controller.phoneNumber.text,
                     password: controller.password.text,
+                    address: [],
+                    wishlist: [],
+                    bankAccount: '',
+                    cart: [],
+                    isSell: false,
+                    totalConsumption: 0,
+                    userName: '',
+                    voucher: [],
                   );
 
                   SignUpController.instance.createUser(userModel);

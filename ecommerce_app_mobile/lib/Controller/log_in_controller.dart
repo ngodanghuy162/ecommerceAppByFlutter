@@ -56,7 +56,6 @@ class SignInController extends GetxController {
       await auth.signInWithGoogle();
       isGoogleLoading.value = false;
 
-      auth.setInitialScreen(auth.firebaseUser.value);
       final names = auth.firebaseUser.value!.displayName!.split(' ');
 
       final model = UserModel(
@@ -65,9 +64,18 @@ class SignInController extends GetxController {
         email: auth.firebaseUser.value!.email!,
         phoneNumber: auth.firebaseUser.value!.phoneNumber ?? '000000000',
         password: '',
+        address: [],
+        wishlist: [],
+        bankAccount: '',
+        cart: [],
+        isSell: false,
+        totalConsumption: 0,
+        userName: '',
+        voucher: [],
       );
       if (!await userRepo.isEmailExisted(model.email)) {
-        userRepo.createUser(model);
+        await userRepo.createUser(model);
+        auth.setInitialScreen(auth.firebaseUser.value);
       }
     } catch (e) {
       isGoogleLoading.value = false;
@@ -89,7 +97,6 @@ class SignInController extends GetxController {
       await auth.signInWithFacebook();
       isFacebookLoading.value = false;
 
-      auth.setInitialScreen(auth.firebaseUser.value);
       final names = auth.firebaseUser.value!.displayName!.split(' ');
 
       final model = UserModel(
@@ -98,9 +105,18 @@ class SignInController extends GetxController {
         email: auth.firebaseUser.value!.email!,
         phoneNumber: auth.firebaseUser.value!.phoneNumber ?? '000000000',
         password: '',
+        address: [],
+        wishlist: [],
+        bankAccount: '',
+        cart: [],
+        isSell: false,
+        totalConsumption: 0,
+        userName: '',
+        voucher: [],
       );
       if (!await userRepo.isEmailExisted(model.email)) {
-        userRepo.createUser(model);
+        await userRepo.createUser(model);
+        auth.setInitialScreen(auth.firebaseUser.value);
       }
     } catch (e) {
       isFacebookLoading.value = false;

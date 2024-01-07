@@ -127,7 +127,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                   },
                   child: isCountdownDone()
                       ? const Text(TTexts.resendEmail)
-                      : Text('Gửi lại sau ${widget.start}'),
+                      : Text('Resend after ${widget.start}'),
                 ),
               ),
             ],

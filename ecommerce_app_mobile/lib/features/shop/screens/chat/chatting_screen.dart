@@ -94,12 +94,11 @@ class _ChattingScreenState extends State<ChattingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const TAppBar(
-          title: Text(
-            "Chatting with shop",
-            style: TextStyle(color: TColors.white),
-          ),
-          showBackArrow: true,
-          backgroundColor: Colors.blue),
+        title: Text(
+          "Chatting with shop",
+        ),
+        showBackArrow: true,
+      ),
       body: Column(
         children: [
           TRoundedContainer(
@@ -110,7 +109,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
             margin: const EdgeInsets.all(12),
             child: Column(
               children: [
-                Text('Bạn đang trao đổi với Người bán về sản phẩm này'),
+                const Text('Talk about:'),
                 const Divider(height: 8),
                 Row(
                   children: [

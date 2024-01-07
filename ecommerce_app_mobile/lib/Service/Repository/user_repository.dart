@@ -30,6 +30,7 @@ class UserRepository extends GetxController {
   Future<void> updateUserDetails() async {
     currentUserModel =
         await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
+
     cartAmount.value = currentUserModel!.cart!.fold(
         0,
         (previousValue, element) =>
@@ -377,7 +378,7 @@ class UserRepository extends GetxController {
     return userData;
   }
 
-  createUser(UserModel userModel) async {
+  Future<void> createUser(UserModel userModel) async {
     await _db
         .collection('Users')
         .add(userModel.toMap())
@@ -389,7 +390,8 @@ class UserRepository extends GetxController {
           ),
         )
         // ignore: body_might_complete_normally_catch_error
-        .catchError((error, stacktrace) {
+        .catchError((error, stacktrace) async {
+      await updateUserDetails();
       SmartDialog.showNotify(
         msg: 'Failed to undo operation, try again!',
         notifyType: NotifyType.failure,
