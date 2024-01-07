@@ -48,7 +48,7 @@ class StoreScreen extends StatelessWidget {
                 backgroundColor: THelperFunctions.isDarkMode(context)
                     ? TColors.black
                     : TColors.white,
-                expandedHeight: 440,
+                expandedHeight: 460,
 
                 flexibleSpace: Padding(
                   padding: const EdgeInsets.all(TSizes.defaultSpace),

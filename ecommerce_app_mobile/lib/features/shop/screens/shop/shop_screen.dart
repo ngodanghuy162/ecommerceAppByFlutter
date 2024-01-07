@@ -6,6 +6,8 @@ import 'package:ecommerce_app_mobile/features/shop/screens/address/address.dart'
 import 'package:ecommerce_app_mobile/features/shop/screens/chat/shop_reply_chatting_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/shop/order_management/shop_product_history_order_screen.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/shop/products_management/products_management_screen.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/statistics/statistics_screen.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -133,6 +135,18 @@ class MyShopScreen extends StatelessWidget {
                 subTitle: 'Add shop address',
                 icon: Iconsax.location,
                 onTap: () => Get.to(() => const ShopAddressScreen()),
+              ),
+              ListTitleCustom(
+                title: 'My products',
+                subTitle: 'Management products',
+                icon: Iconsax.shopping_bag,
+                onTap: () => Get.to(() => const ProductsManagementScreen()),
+              ),
+              ListTitleCustom(
+                title: 'Statistics',
+                subTitle: 'See chart',
+                icon: Iconsax.chart,
+                onTap: () => Get.to(() => const StatisticScreen()),
               ),
             ],
           )),

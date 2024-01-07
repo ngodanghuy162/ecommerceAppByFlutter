@@ -87,8 +87,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
       setState(() {
         _imageList.last = _image;
       });
-      String uniqueFileName =
-          '${DateTime.now().millisecondsSinceEpoch}.jpg';
+      String uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
 
       Reference referenceRoot = FirebaseStorage.instance.ref();
       Reference referenceDirImages = referenceRoot.child('images');
@@ -195,9 +194,10 @@ class _SellProductScreenState extends State<SellProductScreen> {
                       selectedCategory = dropdownValue;
                     });
                   },
-                  dropdownMenuEntries:
-                      categoryList.map<DropdownMenuEntry<String>>((String value) {
-                    return DropdownMenuEntry<String>(value: value, label: value);
+                  dropdownMenuEntries: categoryList
+                      .map<DropdownMenuEntry<String>>((String value) {
+                    return DropdownMenuEntry<String>(
+                        value: value, label: value);
                   }).toList(),
                 ),
                 const SizedBox(height: 16),
@@ -213,7 +213,10 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           if (textEditingValue.text == '') {
                             return const Iterable<String>.empty();
                           }
-                          String query = textEditingValue.text.toLowerCase().trim().replaceAll(RegExp(r'\s+'), ' ');
+                          String query = textEditingValue.text
+                              .toLowerCase()
+                              .trim()
+                              .replaceAll(RegExp(r'\s+'), ' ');
                           return brandList.where((String item) {
                             return item.toLowerCase().contains(query);
                           });
@@ -223,7 +226,10 @@ class _SellProductScreenState extends State<SellProductScreen> {
                             brandName = selectedBrand;
                           });
                         },
-                        fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+                        fieldViewBuilder: (BuildContext context,
+                            TextEditingController textEditingController,
+                            FocusNode focusNode,
+                            VoidCallback onFieldSubmitted) {
                           return TextField(
                             controller: textEditingController,
                             focusNode: focusNode,
@@ -343,10 +349,11 @@ class _SellProductScreenState extends State<SellProductScreen> {
                                   width: 30,
                                   height: 30,
                                   decoration: BoxDecoration(
-                                    color: _isValidHexColor(variants[index].color)
-                                        ? Color(int.parse(
-                                            '0xff${variants[index].color}'))
-                                        : Colors.transparent,
+                                    color:
+                                        _isValidHexColor(variants[index].color)
+                                            ? Color(int.parse(
+                                                '0xff${variants[index].color}'))
+                                            : Colors.transparent,
                                     borderRadius: BorderRadius.circular(30),
                                     border: Border.all(
                                         color: Colors
@@ -477,39 +484,39 @@ class _SellProductScreenState extends State<SellProductScreen> {
                 ),
                 ElevatedButton(
                   style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll<Color>(Colors.blue),
-                    minimumSize:
-                        MaterialStatePropertyAll<Size>(Size(double.infinity, 50)),
+                    backgroundColor:
+                        MaterialStatePropertyAll<Color>(Colors.blue),
+                    minimumSize: MaterialStatePropertyAll<Size>(
+                        Size(double.infinity, 50)),
                   ),
                   onPressed: () {
                     setState(() {
                       // Add an empty variant when the button is pressed
                       variants.add(ProductVariantModel(
-                          size: '',
-                          color: '',
-                          price: 0.0,
-                          imageURL: '',
-                          id: '',
-                          quantity: 0,
-                          descriptionVariant: '',
-                          height: 0,
-                          width: 0,
-                          length: 0,
-                          weight: 0,
+                        size: '',
+                        color: '',
+                        price: 0.0,
+                        imageURL: '',
+                        id: '',
+                        quantity: 0,
+                        descriptionVariant: '',
+                        height: 0,
+                        width: 0,
+                        length: 0,
+                        weight: 0,
                       ));
                       _imageList.add(null);
                     });
                   },
                   child: const Text('Add Variant'),
                 ),
-
                 const SizedBox(height: 16),
                 ElevatedButton(
                   style: const ButtonStyle(
                     backgroundColor:
                         MaterialStatePropertyAll<Color>(Colors.orange),
-                    minimumSize:
-                        MaterialStatePropertyAll<Size>(Size(double.infinity, 50)),
+                    minimumSize: MaterialStatePropertyAll<Size>(
+                        Size(double.infinity, 50)),
                   ),
                   onPressed: () async {
                     // Handle product submission logic here
@@ -544,8 +551,8 @@ class _SellProductScreenState extends State<SellProductScreen> {
                         imageUrl: categoryResult.imageUrl,
                         userId: authRepo.firebaseUser.value!.uid,
                       );
-                      brandId =
-                          await BrandController.instance.createBrand(brandModel);
+                      brandId = await BrandController.instance
+                          .createBrand(brandModel);
                     }
 
                     /// Tao san pham

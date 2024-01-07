@@ -176,4 +176,12 @@ class ProductRepository extends GetxController {
     final productModel = ProductModel.fromSnapShot(snapshot);
     return productModel;
   }
+
+  Future<List<ProductModel>> queryProductsByShopEmail(String shopEmail) async {
+    final snapshot =
+        await productCollection.where('shopEmail', isEqualTo: shopEmail).get();
+    final productData =
+        snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
+    return productData;
+  }
 }
