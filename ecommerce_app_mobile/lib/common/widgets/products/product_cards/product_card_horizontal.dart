@@ -1,5 +1,6 @@
 import 'package:ecommerce_app_mobile/common/styles/product_price_text.dart';
 import 'package:ecommerce_app_mobile/common/styles/product_title_text.dart';
+import 'package:ecommerce_app_mobile/common/styles/shadows.dart';
 
 import 'package:ecommerce_app_mobile/common/styles/t_brand_title_text_with_verified_icon.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
@@ -18,17 +19,16 @@ class TProductCardHorizontal extends StatelessWidget {
   Widget build(BuildContext context) {
     final dark = THelperFunctions.isDarkMode(context);
     return Container(
-      width: 180,
+      width: 310,
       padding: const EdgeInsets.all(1),
       decoration: BoxDecoration(
-          // boxShadow: [TShadowStyle.verticalProductShadow],
           borderRadius: BorderRadius.circular(TSizes.productImageRadius),
           color: dark ? TColors.darkerGrey : TColors.softGrey),
       child: Row(
         children: [
           //thumbnail
           TRoundedContainer(
-            height: 100,
+            height: 120,
             padding: const EdgeInsets.all(TSizes.sm),
             backgroundColor: dark ? TColors.dark : TColors.light,
             child: Stack(
@@ -75,9 +75,9 @@ class TProductCardHorizontal extends StatelessWidget {
               child: Column(
                 children: [
                   const Padding(
-                    padding: EdgeInsets.only(top: TSizes.sm),
+                    padding: EdgeInsets.only(top: TSizes.sm, left: TSizes.sm),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         TProductTitleText(
                           title: "Green Nike Half",
@@ -94,7 +94,10 @@ class TProductCardHorizontal extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Flexible(child: TProductPriceText(price: "256.0")),
+                      const Padding(
+                        padding: EdgeInsets.only(left: TSizes.sm),
+                        child: TProductPriceText(price: '35.0'),
+                      ),
                       //add to cart
                       Container(
                         decoration: const BoxDecoration(

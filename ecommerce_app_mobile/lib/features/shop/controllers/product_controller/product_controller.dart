@@ -15,6 +15,8 @@ class ProductController extends GetxController {
   final brandController = Get.put(BrandController());
   List<DetailProductModel> listPopular = [];
 
+  RxBool inWishList = false.obs;
+
   var choosedProduct = ProductModel(
           brand_id: "brand_id",
           description: "description",

@@ -13,7 +13,6 @@ import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_p
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/category/category_products.dart';
-import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,7 +29,7 @@ class TCategoryTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     categoriesController.choosedCategories.value = topic;
-    print(categoriesController.choosedCategories.value);
+    categoriesController.listCategoryProducts = [];
 
     return ListView(
       shrinkWrap: true,
@@ -173,7 +172,6 @@ class TCategoryTab extends StatelessWidget {
                                                       return TProductCardVertical(
                                                         modelDetail: model,
                                                       );
-                                                      // return Container();
                                                     } else if (snapshot
                                                         .hasError) {
                                                       return Center(

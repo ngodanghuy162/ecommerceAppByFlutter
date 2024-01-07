@@ -4,7 +4,8 @@ import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class AllProductsScreen extends StatelessWidget {
-  const AllProductsScreen({super.key});
+  const AllProductsScreen({super.key, required this.typeShowAll});
+  final String typeShowAll;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class AllProductsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(TSizes.defaultSpace),
-          child: TSortableProducts(type: "popular"),
+          child: TSortableProducts(type: typeShowAll),
         ),
       ),
     );
