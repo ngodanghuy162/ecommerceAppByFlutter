@@ -10,6 +10,7 @@ class ShopCreateVoucher extends StatefulWidget {
 }
 
 class _ShopCreateVoucherState extends State<ShopCreateVoucher> {
+  double discount = 0.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +18,45 @@ class _ShopCreateVoucherState extends State<ShopCreateVoucher> {
         showBackArrow: true,
         title: Text("Create Voucher"),
       ),
-      body: Container(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Enter your name voucher',
+                border: OutlineInputBorder(), // Customize border
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Due date',
+                border: OutlineInputBorder(), // Customize border
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Description',
+                border: OutlineInputBorder(), // Customize border
+              ),
+            ),
+            SizedBox(
+              height: 100,
+            ),
+            Slider(
+              value: discount,
+              onChanged: (newRating) {
+                setState(() {
+                  discount = newRating;
+                });
+              },
+              min: 0,
+              max: 100,
+              divisions: 100,
+              label: "${discount.toInt()}%",
+            )
+          ],
+        ),
+      ),
     );
   }
 }

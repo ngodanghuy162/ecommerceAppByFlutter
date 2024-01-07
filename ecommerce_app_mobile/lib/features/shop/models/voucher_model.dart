@@ -4,28 +4,28 @@ class VoucherModel {
   final String? id;
   final String name;
   final int discount;
-  final String? fromShop; // id shop
-  final bool isUsed;
+  final String? shopEmail; // null nếu voucher apply tất cả sản phẩm
   final DateTime outDateTime;
   final String? description;
+  final String? brand;
 
   VoucherModel(
       {this.id,
       required this.name,
       required this.discount,
-      this.fromShop = "",
-      this.isUsed = false,
+      this.shopEmail,
       required this.outDateTime,
-      this.description});
+      this.description,
+      this.brand});
 
   toJson() {
     return {
       'name': name,
       'discount': discount,
-      'from_shop': fromShop,
-      'is_used': isUsed,
+      'shop_email': shopEmail,
       'out_date_time': outDateTime,
-      'description': description
+      'description': description,
+      'brand': brand
     };
   }
 
@@ -36,9 +36,9 @@ class VoucherModel {
         id: document.id,
         name: data['name'],
         discount: data['discount'],
-        fromShop: data['from_shop'],
-        isUsed: data['is_used'],
+        shopEmail: data['shop_email'],
         outDateTime: data['out_date_time'],
+        brand: data['brand'],
         description: data['description']);
   }
 }

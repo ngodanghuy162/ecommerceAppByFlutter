@@ -25,10 +25,10 @@ class _ShopAddressScreenState extends State<ShopAddressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Get.to(() => const NewShopAddressScreen()),
-          // onPressed: () async {
-          //   print(await controller.getAllUserAddress());
-          // },
+          // onPressed: () => Get.to(() => const NewShopAddressScreen()),
+          onPressed: () async {
+            print(controller.listShopAddress);
+          },
           backgroundColor: TColors.primary,
           child: const Icon(
             Iconsax.add,
