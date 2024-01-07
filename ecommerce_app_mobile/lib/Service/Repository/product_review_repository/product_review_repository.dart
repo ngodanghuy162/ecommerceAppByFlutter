@@ -11,12 +11,16 @@ class ProductReviewRepository extends GetxController {
 
   createReview(ProductReviewModel productReviewModel,
       {String? productId}) async {
-    productId = 'r8reTOR7C1yFNE1tUDlB';
     await _db
         .collection('Product')
         .doc(productId)
         .collection('Review')
         .add(productReviewModel.toJson())
+        .whenComplete(() => SmartDialog.showNotify(
+              msg: 'Product review posted successfully.!',
+              notifyType: NotifyType.success,
+              displayTime: const Duration(seconds: 1),
+            ))
         .catchError((error, stacktrace) {
       () => SmartDialog.showNotify(
             msg: 'Something went wrong, try again?',

@@ -11,10 +11,11 @@ import 'package:get/get.dart';
 
 //! Sau này có trang đơn hang đã mua thì ghép vào sau
 class CreateProductReview extends StatefulWidget {
-  const CreateProductReview({super.key});
+  const CreateProductReview({super.key, required this.productId});
 
   @override
   State<CreateProductReview> createState() => _CreateProductReviewState();
+  final String productId;
 }
 
 class _CreateProductReviewState extends State<CreateProductReview> {
@@ -23,7 +24,7 @@ class _CreateProductReviewState extends State<CreateProductReview> {
   final _authRepo = Get.put(AuthenticationRepository());
   late double finalRating;
 
-  void addReview() async {
+  Future<void> addReview() async {
     String content = commentController.text;
     String? userEmail = _authRepo.firebaseUser.value?.email;
     if (content.isNotEmpty) {
@@ -33,7 +34,7 @@ class _CreateProductReviewState extends State<CreateProductReview> {
         content: content,
         date: Timestamp.fromDate(DateTime.now()),
       );
-      await reviewController.createReview(newReview);
+      await reviewController.createReview(newReview, widget.productId);
       // Get.to(() => ProductReviewsScreen()); //! điều hướng sau
     }
   }
@@ -124,9 +125,9 @@ class _CreateProductReviewState extends State<CreateProductReview> {
                 ),
                 const SizedBox(width: TSizes.spaceBtwSections),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // Add logic to submit the review
-                    addReview();
+                    await addReview();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepOrange,

@@ -9,13 +9,13 @@ import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_
 import 'package:ecommerce_app_mobile/features/shop/models/shop_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/product_order_details.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/widgets/product_history_item.dart';
+import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/enums.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:developer';
 
 class ProductOrderCard extends StatelessWidget {
   ProductOrderCard({
@@ -24,8 +24,10 @@ class ProductOrderCard extends StatelessWidget {
     required this.shopAndProducts,
   });
 
-  final void Function(BuildContext context)? showReviewModal;
+  final void Function(BuildContext context, List<Map<String, String>> products)?
+      showReviewModal;
   final orderRepository = Get.put(OrderRepository());
+  final productRepository = Get.put(ProductRepository());
 
   final Map shopAndProducts;
 
@@ -51,7 +53,6 @@ class ProductOrderCard extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
-            log(snapshot.data.toString());
             final data = snapshot.data!;
 
             final firstProduct = (data['products'] as List).first as Map;
@@ -67,6 +68,7 @@ class ProductOrderCard extends StatelessWidget {
               onTap: () {
                 Get.to(() => ProductOrderDetails(
                       shopAndProducts: shopAndProducts,
+                      showReviewModal: showReviewModal,
                     ));
               },
               child: TRoundedContainer(
@@ -178,7 +180,26 @@ class ProductOrderCard extends StatelessWidget {
                           children: [
                             const Spacer(),
                             ElevatedButton(
-                              onPressed: () => showReviewModal!(context),
+                              onPressed: () async {
+                                final productVariantList =
+                                    (shopAndProducts['package'] as Map)
+                                        .keys
+                                        .toList();
+                                final List<ProductModel?> productModelList = [];
+                                for (var element in productVariantList) {
+                                  productModelList.add(await productRepository
+                                      .getProductByVariantId(element));
+                                }
+
+                                final List<Map<String, String>>
+                                    dropdownProductMap = productModelList
+                                        .map((e) =>
+                                            {'key': e!.id!, 'value': e.name})
+                                        .toList();
+
+                                // ignore: use_build_context_synchronously
+                                showReviewModal!(context, dropdownProductMap);
+                              },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 16.0,

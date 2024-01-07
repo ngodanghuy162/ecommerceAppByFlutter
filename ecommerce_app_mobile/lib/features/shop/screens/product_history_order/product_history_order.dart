@@ -4,11 +4,13 @@ import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_
 import 'package:ecommerce_app_mobile/Service/repository/order_respository/order_respository.dart';
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_review_controller/product_review_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/widgets/dropdown_products_review.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/widgets/product_history_card.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 
 import '../../../../Service/repository/authentication_repository.dart';
@@ -30,7 +32,7 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
 
   late double finalRating;
 
-  void addReview() async {
+  Future<void> addReview(String productId) async {
     String content = commentController.text;
     String? userEmail = _authRepo.firebaseUser.value?.email;
     if (content.isNotEmpty) {
@@ -40,7 +42,10 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
         content: content,
         date: Timestamp.fromDate(DateTime.now()),
       );
-      await reviewController.createReview(newReview);
+      await reviewController.createReview(newReview, productId);
+      finalRating = 5.0;
+      content = '';
+      Get.back();
       // Get.to(() => ProductReviewsScreen()); //! điều hướng sau
     }
   }
@@ -155,29 +160,41 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
     );
   }
 
-  void showBottomModal(BuildContext context) {
+  void showBottomModal(
+      BuildContext context, List<Map<String, String>> products) {
+    String productId = products.first['key']!;
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.4,
+          height: MediaQuery.of(context).size.height * 0.6,
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               // Star ratings widget (you can use your own star rating widget)
               // Replace the following line with your actual star rating widget
               const Text(
-                'Tên sản phẩm',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                'ProductName',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.left,
+              ),
+              DropdownProductsReview(
+                initialValue: productId,
+                options: products,
+                onChanged: (value) {
+                  productId = value;
+                },
               ),
               const SizedBox(
-                height: TSizes.spaceBtwSections,
+                height: TSizes.defaultSpace,
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text('Chất lượng sản phẩm:'),
+                  const Text('Rating:'),
                   const SizedBox(width: TSizes.spaceBtwItems),
                   RatingBar.builder(
                     itemSize: 32,
@@ -217,7 +234,7 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(18)),
                   ),
-                  hintText: 'Nhập bình luận của bạn',
+                  hintText: 'Type your comment...',
                 ),
               ),
 
@@ -240,15 +257,15 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
                         horizontal: 24.0), // Đặt khoảng cách giữa chữ và viền
                   ),
                   child: const Text(
-                    'Trở lại',
+                    'Back',
                     style: TextStyle(color: TColors.black),
                   ),
                 ),
                 const SizedBox(width: TSizes.spaceBtwSections),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // Add logic to submit the review
-                    addReview();
+                    await addReview(productId);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -261,7 +278,7 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
                         horizontal: 24.0), // Đặt khoảng cách giữa chữ và viền
                   ),
                   child: const Text(
-                    'Hoàn thành',
+                    'Confirm',
                   ),
                 ),
               ]),
