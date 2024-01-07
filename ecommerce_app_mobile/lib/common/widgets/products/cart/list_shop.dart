@@ -1,9 +1,5 @@
-import 'package:ecommerce_app_mobile/common/styles/product_in_cart.dart';
-import 'package:ecommerce_app_mobile/common/widgets/products/cart/cart_item_by_huy.dart';
 import 'package:ecommerce_app_mobile/common/widgets/products/cart/shop_and_pro_widget.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
-import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -19,87 +19,58 @@ class SearchingScreen extends StatelessWidget {
     final dark = THelperFunctions.isDarkMode(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Suggest Screen'),
-      ),
-      body: FutureBuilder(
-        future: SearchControllerX.instance.getSuggestList(),
-        builder: (context, snapshot) {
-          // Check for data loading or error
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
-          }
-
-          return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-              child: Container(
-                width: TDeviceUtils.getScreenWidth(context),
-                padding: const EdgeInsets.all(TSizes.md),
-                decoration: BoxDecoration(
-                  color: true
-                      ? dark
-                          ? TColors.dark
-                          : TColors.light
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-                  border: true ? Border.all(color: TColors.grey) : null,
-                ),
-                child:
-                    // Search input and submit button
-                    Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Iconsax.search_normal,
-                          color: TColors.darkerGrey),
-                      onPressed: () {
-                        if (searchController.keySearch.text.isNotEmpty) {
-                          searchController.isSearching = true;
-                          SearchControllerX.instance.updateSearchKey();
-                          Get.to(() => SearchResultScreen(
-                                keySearch: searchController.keySearch.text,
-                              ));
-                        }
+        appBar: AppBar(),
+        body: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+            child: Container(
+              width: TDeviceUtils.getScreenWidth(context),
+              padding: const EdgeInsets.all(TSizes.md),
+              decoration: BoxDecoration(
+                color: dark ? TColors.dark : TColors.light,
+                borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
+                border: Border.all(color: TColors.grey),
+              ),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Iconsax.search_normal,
+                        color: TColors.darkerGrey),
+                    onPressed: () {
+                      if (searchController.keySearch.text.isNotEmpty) {
+                        searchController.isSearching = true;
+                        SearchControllerX.instance.updateSearchKey();
+                        Get.to(() => SearchResultScreen(
+                              keySearch: searchController.keySearch.text,
+                            ));
+                      }
+                    },
+                  ),
+                  Expanded(
+                    child: SearchField(
+                      suggestions: SearchControllerX.instance.suggestedKeywords!
+                          .map((e) => SearchFieldListItem(e))
+                          .toList(),
+                      controller: searchController.keySearch,
+                      suggestionState: Suggestion.expand,
+                      textInputAction: TextInputAction.next,
+                      suggestionsDecoration: SuggestionDecoration(
+                          padding: const EdgeInsets.all(10),
+                          color: dark
+                              ? const Color.fromARGB(255, 50, 48, 48)
+                              : const Color.fromARGB(255, 252, 248, 247),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
+                      maxSuggestionsInViewPort: 10,
+                      itemHeight: 50,
+                      onSuggestionTap: (SearchFieldListItem<dynamic> a) {
+                        Get.to(
+                            () => SearchResultScreen(keySearch: a.searchKey));
                       },
                     ),
-                    // Autocomplete text field
-                    Expanded(
-                      child: SearchField(
-                        suggestions: SearchControllerX
-                            .instance.suggestedKeywords!
-                            .map((e) => SearchFieldListItem(e))
-                            .toList(),
-                        controller: searchController.keySearch,
-                        suggestionState: Suggestion.expand,
-                        textInputAction: TextInputAction.next,
-                        suggestionsDecoration: SuggestionDecoration(
-                            padding: const EdgeInsets.all(10),
-                            color: dark
-                                ? Color.fromARGB(255, 36, 34, 34)
-                                : Color.fromARGB(255, 252, 248, 247),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        maxSuggestionsInViewPort: 10,
-                        itemHeight: 50,
-                        onSuggestionTap: (SearchFieldListItem<dynamic> a) {
-                          // print(a.item);
-                          // print(a.searchKey);
-                          // return a;
-                          Get.to(
-                              () => SearchResultScreen(keySearch: a.searchKey));
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              )
-              // Display key search + suggested keywords
-
-              );
-        },
-      ),
-    );
+                  ),
+                ],
+              ),
+            )));
   }
 }

@@ -13,6 +13,18 @@ class SearchControllerX extends GetxController {
 
   List<String>? suggestedKeywords = [];
 
+  @override
+  void onInit() {
+    getSuggestList();
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    print("on close");
+  }
+
   void updateSearchKey() {
     keySearchObs.value = keySearch.text;
   }

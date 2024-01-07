@@ -25,37 +25,53 @@ class SearchResultScreen extends StatelessWidget {
     print("Search Rs day");
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Result Screen'),
+        title: const Text('Search Result'),
       ),
       body: Obx(
         () => Column(
           children: [
-            Text(
-                "KeySearch la: ${SearchControllerX.instance.keySearchObs.value}"),
             const TSearchContainer(
               text: "Test TSEARCH TEXT",
             ),
+            const SizedBox(
+              height: 20,
+            ),
+
+            Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                child: DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(Iconsax.sort),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: TSizes.defaultSpace, vertical: 25),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: const BorderSide(color: Colors.grey),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: const BorderSide(color: Colors.blue),
+                        gapPadding: 20),
+                  ),
+                  onChanged: (value) {
+                    // Handle dropdown value change
+                  },
+                  items: [
+                    'Name',
+                    'Higher Price',
+                    'Sale',
+                    'Newest',
+                  ]
+                      .map((option) =>
+                          DropdownMenuItem(value: option, child: Text(option)))
+                      .toList(),
+                )),
 
             /// Drop down
-            DropdownButtonFormField(
-              decoration: const InputDecoration(prefixIcon: Icon(Iconsax.sort)),
-              onChanged: (value) {
-                // Handle dropdown value change
-              },
-              items: [
-                'Name',
-                'Higher Price',
-                'Lower Price',
-                'Sale',
-                'Newest',
-                'Popularity'
-              ]
-                  .map((option) =>
-                      DropdownMenuItem(value: option, child: Text(option)))
-                  .toList(),
-            ),
+
             const SizedBox(
-              height: TSizes.spaceBtwItems,
+              height: 10,
             ),
 
             /// Product
@@ -68,15 +84,18 @@ class SearchResultScreen extends StatelessWidget {
                     if (snapshot.hasData) {
                       List<DetailProductModel> listDetailProduct =
                           snapshot.data!;
-                      print(
-                          "codata o search result: list size la: ${listDetailProduct.length}");
                       return SingleChildScrollView(
-                        padding: const EdgeInsets.all(TSizes.defaultSpace),
-                        child: TGridLayout(
-                          itemCount: listDetailProduct.length,
-                          itemBuilder: (context, index) => TProductCardVertical(
-                              modelDetail: listDetailProduct[index]),
-                          // ),
+                        padding: const EdgeInsets.all(2),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              right: 30, top: 30, left: 24, bottom: 24),
+                          child: TGridLayout(
+                            itemCount: listDetailProduct.length,
+                            itemBuilder: (context, index) =>
+                                TProductCardVertical(
+                                    modelDetail: listDetailProduct[index]),
+                            // ),
+                          ),
                         ),
                       );
                     } else if (snapshot.hasError) {
