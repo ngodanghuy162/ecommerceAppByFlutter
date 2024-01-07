@@ -12,6 +12,7 @@ import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart'
 import 'package:ecommerce_app_mobile/features/personalization/controllers/settings_controller.dart';
 import 'package:ecommerce_app_mobile/features/personalization/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/coupons/voucher_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/product_history_order/product_history_order.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/shop/create_shop_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/shop/shop_screen.dart';
@@ -160,10 +161,11 @@ class SettingsScreen extends StatelessWidget {
                     onTap: () => Get.to(
                         () => const ProductHistoryOrder(initialIndex: 0)),
                   ),
-                  const TSettingsMenuTile(
+                  TSettingsMenuTile(
                     icon: Iconsax.discount_shape,
-                    title: 'My Coupons',
+                    title: 'My Vouchers',
                     subTitle: 'List of all the discounted coupons',
+                    onTap: () => Get.to(() => const VoucherScreen()),
                   ),
                   const TSettingsMenuTile(
                     icon: Iconsax.notification,

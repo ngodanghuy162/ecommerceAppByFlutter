@@ -4,6 +4,7 @@ import 'package:ecommerce_app_mobile/common/widgets/product_history/product_orde
 import 'package:ecommerce_app_mobile/features/shop/controllers/shop_controller/shop_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/chat/shop_reply_chatting_screen.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/coupons/shop/shop_create_voucher.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/shop/order_management/shop_product_history_order_screen.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/shop/products_management/products_management_screen.dart';
@@ -147,6 +148,12 @@ class MyShopScreen extends StatelessWidget {
                 subTitle: 'See chart',
                 icon: Iconsax.chart,
                 onTap: () => Get.to(() => const StatisticScreen()),
+              ),
+              ListTitleCustom(
+                title: 'Create Voucher',
+                subTitle: 'Create your shop voucher',
+                icon: Iconsax.ticket_discount,
+                onTap: () => Get.to(() => const ShopCreateVoucher()),
               ),
             ],
           )),
