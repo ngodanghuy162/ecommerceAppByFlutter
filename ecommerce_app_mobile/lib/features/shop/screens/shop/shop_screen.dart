@@ -1,6 +1,7 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/chat/shop_reply_chatting_screen.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/coupons/shop/shop_create_voucher.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/sell_product/sell_product.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,21 @@ class MyShopScreen extends StatelessWidget {
             ),
             child: const Text(
               "Add Shop address",
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Get.to(() => ShopCreateVoucher()),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blueAccent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+            ),
+            child: const Text(
+              "Create Voucher",
               style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
