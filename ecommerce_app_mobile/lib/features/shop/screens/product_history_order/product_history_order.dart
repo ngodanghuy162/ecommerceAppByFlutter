@@ -251,10 +251,10 @@ class _ProductHistoryOrderState extends State<ProductHistoryOrder> {
                     addReview();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepOrange,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(
-                          10), // Đặt độ cong cho viền của nút
+                        10,
+                      ), // Đặt độ cong cho viền của nút
                     ),
                     padding: const EdgeInsets.symmetric(
                         vertical: 16.0,

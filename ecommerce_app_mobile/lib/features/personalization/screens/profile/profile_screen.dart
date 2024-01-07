@@ -31,6 +31,146 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   late String userAvatarURL;
 
+  Future<void> showChooseImageSourceBottomModal(
+      BuildContext context, UserModel data) async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
+            child: ListView(
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      final imagePicker = ImagePicker();
+
+                      final XFile? pickedFile = await imagePicker.pickImage(
+                          source: ImageSource.camera);
+
+                      if (pickedFile != null) {
+                        String uniqueFileName =
+                            '${DateTime.now().millisecondsSinceEpoch}.jpg';
+                        // You might need to update the imageURL in the controller or wherever it is stored
+                        Reference referenceRoot =
+                            FirebaseStorage.instance.ref();
+                        Reference referenceDirImages =
+                            referenceRoot.child('profiles');
+
+                        Reference referenceImageToUpload =
+                            referenceDirImages.child(uniqueFileName);
+
+                        try {
+                          await referenceImageToUpload
+                              .putFile(File(pickedFile.path));
+                          userAvatarURL =
+                              await referenceImageToUpload.getDownloadURL();
+                          //print(userAvatarURL);
+                          UserModel userData = UserModel(
+                            id: data.id,
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                            email: data.email,
+                            phoneNumber: data.phoneNumber,
+                            password: data.password,
+                            avatar_imgURL: userAvatarURL,
+                          );
+
+                          SmartDialog.showLoading(
+                            animationType: SmartAnimationType.scale,
+                            builder: (_) => const CustomLoading(),
+                          );
+                          await controller.updateUser(userData);
+                          setState(() {
+                            userAvatarURL = userAvatarURL;
+                          });
+                          SmartDialog.dismiss();
+                        } catch (error) {
+                          if (kDebugMode) {
+                            print(error);
+                          }
+                        }
+                      } else {
+                        SmartDialog.showNotify(
+                          msg: 'You have not selected a picture',
+                          notifyType: NotifyType.alert,
+                          displayTime: const Duration(seconds: 1),
+                        );
+                      }
+                    } catch (err) {
+                      SmartDialog.showNotify(
+                        msg: err.toString(),
+                        notifyType: NotifyType.alert,
+                        displayTime: const Duration(seconds: 1),
+                      );
+                    }
+                  },
+                  child: const Text('Camera'),
+                ),
+                const SizedBox(height: TSizes.spaceBtwItems),
+                ElevatedButton(
+                  onPressed: () async {
+                    final imagePicker = ImagePicker();
+                    final XFile? pickedFile = await imagePicker.pickImage(
+                        source: ImageSource.gallery);
+
+                    if (pickedFile != null) {
+                      String uniqueFileName =
+                          '${DateTime.now().millisecondsSinceEpoch}.jpg';
+                      // You might need to update the imageURL in the controller or wherever it is stored
+                      Reference referenceRoot = FirebaseStorage.instance.ref();
+                      Reference referenceDirImages =
+                          referenceRoot.child('profiles');
+
+                      Reference referenceImageToUpload =
+                          referenceDirImages.child(uniqueFileName);
+
+                      try {
+                        await referenceImageToUpload
+                            .putFile(File(pickedFile.path));
+                        userAvatarURL =
+                            await referenceImageToUpload.getDownloadURL();
+                        //print(userAvatarURL);
+                        UserModel userData = UserModel(
+                          id: data.id,
+                          firstName: data.firstName,
+                          lastName: data.lastName,
+                          email: data.email,
+                          phoneNumber: data.phoneNumber,
+                          password: data.password,
+                          avatar_imgURL: userAvatarURL,
+                        );
+
+                        SmartDialog.showLoading(
+                          animationType: SmartAnimationType.scale,
+                          builder: (_) => const CustomLoading(),
+                        );
+                        await controller.updateUser(userData);
+                        setState(() {
+                          userAvatarURL = userAvatarURL;
+                        });
+                        SmartDialog.dismiss();
+                      } catch (error) {
+                        if (kDebugMode) {
+                          print(error);
+                        }
+                      }
+                    } else {
+                      SmartDialog.showNotify(
+                        msg: 'You have not selected a pictures',
+                        notifyType: NotifyType.alert,
+                        displayTime: const Duration(seconds: 1),
+                      );
+                    }
+                  },
+                  child: const Text('Library'),
+                ),
+              ],
+            ));
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,61 +206,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               TextButton(
                                 onPressed: () async {
-                                  final imagePicker = ImagePicker();
-                                  final XFile? pickedFile = await imagePicker
-                                      .pickImage(source: ImageSource.gallery);
-
-                                  if (pickedFile != null) {
-                                    String uniqueFileName =
-                                        '${DateTime.now().millisecondsSinceEpoch}.jpg';
-                                    // You might need to update the imageURL in the controller or wherever it is stored
-                                    Reference referenceRoot =
-                                        FirebaseStorage.instance.ref();
-                                    Reference referenceDirImages =
-                                        referenceRoot.child('profiles');
-
-                                    Reference referenceImageToUpload =
-                                        referenceDirImages
-                                            .child(uniqueFileName);
-
-                                    try {
-                                      await referenceImageToUpload
-                                          .putFile(File(pickedFile.path));
-                                      userAvatarURL =
-                                          await referenceImageToUpload
-                                              .getDownloadURL();
-                                      //print(userAvatarURL);
-                                      UserModel userData = UserModel(
-                                        id: data.id,
-                                        firstName: data.firstName,
-                                        lastName: data.lastName,
-                                        email: data.email,
-                                        phoneNumber: data.phoneNumber,
-                                        password: data.password,
-                                        avatar_imgURL: userAvatarURL,
-                                      );
-
-                                      SmartDialog.showLoading(
-                                        animationType: SmartAnimationType.scale,
-                                        builder: (_) => const CustomLoading(),
-                                      );
-                                      await controller.updateUser(userData);
-                                      setState(() {
-                                        userAvatarURL = userAvatarURL;
-                                      });
-                                      SmartDialog.dismiss();
-                                    } catch (error) {
-                                      if (kDebugMode) {
-                                        print(error);
-                                      }
-                                    }
-                                  } else {
-                                    SmartDialog.showNotify(
-                                      msg: 'You have not selected a picture.s',
-                                      notifyType: NotifyType.alert,
-                                      displayTime: const Duration(seconds: 1),
-                                    );
-                                  }
+                                  showChooseImageSourceBottomModal(
+                                      context, data);
                                 },
                                 child: const Text('Change profle picture'),
                               ),
