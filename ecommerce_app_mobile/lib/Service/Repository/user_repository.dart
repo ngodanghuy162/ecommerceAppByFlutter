@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
 import 'package:ecommerce_app_mobile/Service/Model/user_model.dart';
 import 'package:ecommerce_app_mobile/features/personalization/controllers/profile_controller.dart';
-import 'package:ecommerce_app_mobile/features/shop/controllers/shop_address_controller/shop_address_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/cart_controller/cart_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
 import 'package:ecommerce_app_mobile/repository/product_repository/product_repository.dart';
 import 'package:ecommerce_app_mobile/repository/shop_repository/shop_repository.dart';
@@ -384,11 +384,12 @@ class UserRepository extends GetxController {
         )
         // ignore: body_might_complete_normally_catch_error
         .catchError((error, stacktrace) {
-      () => SmartDialog.showNotify(
-            msg: 'Failed to undo operation, try again!',
-            notifyType: NotifyType.failure,
-            displayTime: const Duration(seconds: 1),
-          );
+      SmartDialog.showNotify(
+        msg: 'Failed to undo operation, try again!',
+        notifyType: NotifyType.failure,
+        displayTime: const Duration(seconds: 1),
+      );
+
       if (kDebugMode) {
         print(error.toString());
       }
@@ -479,6 +480,7 @@ class UserRepository extends GetxController {
   Future<bool> deleteProductFromCart(
       String productVariantId, ProductModel product) async {
     Get.put(ShopRepository());
+    Get.put(CartController());
     bool isDeleteShop = false;
     try {
       if (ProfileController.instance.crtUser == null) {
@@ -505,6 +507,7 @@ class UserRepository extends GetxController {
               myCart.removeAt(index);
               isDeleteShop = true;
             }
+            CartController.instance.getCartList();
             print('Delete "$productVariantId" in cart.');
           }
         } else {
@@ -534,6 +537,7 @@ class UserRepository extends GetxController {
           print(error.toString());
         }
       });
+      //    await CartController.instance.getCartList();
       return isDeleteShop;
     } catch (e) {
       print('Lỗi khi xoa san pham khoi cart: $e');
@@ -541,11 +545,13 @@ class UserRepository extends GetxController {
     }
   }
 
-  Future<void> updateQuantityInCart(
+  updateQuantityInCart(
       int quantity, String productVariantId, ProductModel? productModel) async {
     Get.put(ShopRepository());
+    Get.put(CartController());
     try {
-      if (ProfileController.instance.crtUser == null) {
+      if (ProfileController.instance.crtUser == null &&
+          currentUserModel == null) {
         final currentUser =
             await getUserDetails(FirebaseAuth.instance.currentUser!.email!);
         ProfileController.instance.crtUser = currentUser;
@@ -581,18 +587,10 @@ class UserRepository extends GetxController {
           .collection('Users')
           .doc(ProfileController.instance.crtUser!.id)
           .update(userData.toMap())
-          .whenComplete(() => Get.snackbar(
-                "Thành công",
-                "Them sp vao gio hang thanh cong",
-                snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: Colors.green.withOpacity(0.1),
-                colorText: Colors.green,
-                duration: const Duration(seconds: 1),
-              ))
           .catchError((error, stacktrace) {
         () => Get.snackbar(
-              'Lỗi',
-              'Có gì đó không đúng, thử lại?',
+              'Failed',
+              'Something went wrong, try again?',
               snackPosition: SnackPosition.BOTTOM,
               backgroundColor: Colors.redAccent.withOpacity(0.1),
               colorText: Colors.red,
@@ -601,9 +599,10 @@ class UserRepository extends GetxController {
           print(error.toString());
         }
       });
+      //await CartController.instance.getCartList();
       return;
     } catch (e) {
-      print('Lỗi khi thêm sản phẩm vào cart: $e');
+      print('Lỗi khiupdate quantity in cart: $e');
     }
   }
 
@@ -689,7 +688,6 @@ class UserRepository extends GetxController {
             await usersCollection.doc(documentId).update({
               wishlistFieldName: FieldValue.arrayRemove([productModel.id]),
             });
-            print("Da xoa 1");
           }
         } else {
           String? productId = await ProductRepository.instance
@@ -701,7 +699,6 @@ class UserRepository extends GetxController {
               wishlistFieldName: FieldValue.arrayRemove([productId]),
             });
           }
-          print("Da xoa 2");
         }
       } else {
         print('Không tìm thấy ng dùng phù hợp.');

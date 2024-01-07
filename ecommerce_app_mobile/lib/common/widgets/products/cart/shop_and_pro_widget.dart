@@ -72,65 +72,67 @@ class _ShopAndProductState extends State<ShopAndProduct> {
             Text(widget.shopModel.name),
           ],
         ),
-        SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(TSizes.defaultSpace),
-            child: ListView.builder(
-              physics: const ClampingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: widget.listProductOneShop.length,
-              itemBuilder: (context, index) {
-                ProductModel product = widget.listProductOneShop[index];
-                // o day lay listVariantInCart thi no se van hien thi dung so san pham, nhung thuc te la no co rat nhieu san pham roi va bi lap moi lan vao lai cảt.
-                ProductVariantModel productVariant = widget
-                    .listVariantInOneShop[index]; // lay list cart mới chuẩn
-                int num = widget.listQuantityOneShop[index];
-                var color = getColorFromHex(productVariant.color);
-                return Column(
-                  children: [
-                    TCartItemByHuy(
-                        title: product.name,
-                        imgUrl: productVariant.imageURL,
-                        color: color,
-                        size: productVariant.size,
-                        indexInShop: index,
-                        indexinCart: widget.indexInCart,
-                        checkboxValue: listCheckBoxProduct[index],
-                        onCheckboxChanged: (newValue) {
-                          // Kiểm tra xem tất cả checkbox sản phẩm đã được tích hay chưa
-                          setState(() {
-                            listCheckBoxProduct[index] = newValue;
-                            if (listCheckBoxProduct.every((value) => value)) {
-                              checkboxShop = true;
-                            } else {
-                              checkboxShop = false;
-                            }
-                          });
-                        }),
-                    if (widget.showAddRemoveButton)
-                      const SizedBox(height: TSizes.spaceBtwItems),
-                    if (widget.showAddRemoveButton)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SizedBox(width: 70),
-                          //TProductQuantityWithAddAndRemove(),
-                          TProductInCart(
-                              price: productVariant.price.toString(),
-                              isShowQuantity: true,
-                              quantity: num,
-                              indexInShop: index,
-                              productModel: product,
-                              productVariantId: productVariant.id,
-                              indexInCart: widget.indexInCart),
-                        ],
-                      ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ),
+        Obx(() => SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(TSizes.defaultSpace),
+                child: ListView.builder(
+                  physics: const ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: CartController
+                      .instance.listSizeProductInShop[widget.indexInCart].value,
+                  itemBuilder: (context, index) {
+                    ProductModel product = widget.listProductOneShop[index];
+                    // o day lay listVariantInCart thi no se van hien thi dung so san pham, nhung thuc te la no co rat nhieu san pham roi va bi lap moi lan vao lai cảt.
+                    ProductVariantModel productVariant = widget
+                        .listVariantInOneShop[index]; // lay list cart mới chuẩn
+                    int num = widget.listQuantityOneShop[index];
+                    var color = getColorFromHex(productVariant.color);
+                    return Column(
+                      children: [
+                        TCartItemByHuy(
+                            title: product.name,
+                            imgUrl: productVariant.imageURL,
+                            color: color,
+                            size: productVariant.size,
+                            indexInShop: index,
+                            indexinCart: widget.indexInCart,
+                            checkboxValue: listCheckBoxProduct[index],
+                            onCheckboxChanged: (newValue) {
+                              // Kiểm tra xem tất cả checkbox sản phẩm đã được tích hay chưa
+                              setState(() {
+                                listCheckBoxProduct[index] = newValue;
+                                if (listCheckBoxProduct
+                                    .every((value) => value)) {
+                                  checkboxShop = true;
+                                } else {
+                                  checkboxShop = false;
+                                }
+                              });
+                            }),
+                        if (widget.showAddRemoveButton)
+                          const SizedBox(height: TSizes.spaceBtwItems),
+                        if (widget.showAddRemoveButton)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SizedBox(width: 70),
+                              //TProductQuantityWithAddAndRemove(),
+                              TProductInCart(
+                                  price: productVariant.price.toString(),
+                                  isShowQuantity: true,
+                                  quantity: num,
+                                  indexInShop: index,
+                                  productModel: product,
+                                  productVariantId: productVariant.id,
+                                  indexInCart: widget.indexInCart),
+                            ],
+                          ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            )),
       ],
     );
   }

@@ -2,8 +2,14 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app_mobile/Service/Model/product_review_model/product_review_model.dart';
+import 'package:ecommerce_app_mobile/features/admin/screens/display_all_product.dart/widgets/product_variant.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_product_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
+import 'package:ecommerce_app_mobile/repository/product_repository/brand_repository.dart';
+import 'package:ecommerce_app_mobile/repository/product_repository/product_variant_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
@@ -102,17 +108,35 @@ class ProductRepository extends GetxController {
   }
 
 // de tim kiem san pham
-  Future<List<ProductModel>> queryAllProductByName(String keySearch) async {
-    String keySearchUpper = keySearch.toUpperCase();
-    String keySearchLower = keySearch.toLowerCase();
-    final snapshot = await productCollection
-        .where('name', isGreaterThanOrEqualTo: '${keySearch}A')
-        .where('name', isLessThanOrEqualTo: '${keySearch}z')
+  Future<List<DetailProductModel>?> queryAllProductByName(
+      String keySearch) async {
+    List<DetailProductModel> rs = [];
+    // String keySearchUpper = keySearch.toUpperCase();
+    // String keySearchLower = keySearch.toLowerCase();
+    final snapshot1 = await productCollection
+        .where('name', isGreaterThanOrEqualTo: '${keySearch}')
+        .where('name', isLessThanOrEqualTo: keySearch + '\uf8ff')
         .get();
-    log("o ham query key: $keySearch :::$snapshot");
+
+    final snapshot2 =
+        await productCollection.where('name', arrayContains: keySearch).get();
+
     final productData =
-        snapshot.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
-    return productData;
+        snapshot1.docs.map((e) => ProductModel.fromSnapShot(e)).toList();
+
+    productData.addAll(
+        snapshot2.docs.map((e) => ProductModel.fromSnapShot(e)).toList());
+
+    for (int i = 0; i < productData.length; i++) {
+      List<ProductVariantModel> tmp = await ProductVariantRepository.instance
+          .queryVariants(productData[i].variants_path);
+      BrandModel tmp2 = await BrandRepository.instance
+          .queryBrandById(productData[i].brand_id);
+      rs.add(DetailProductModel(
+          brand: tmp2, product: productData[i], listVariants: tmp));
+    }
+    print("Size rs: ${rs.length}");
+    return rs;
   }
 
   Future<String?> getDocumentIdForProduct(ProductModel productModel) async {

@@ -52,7 +52,7 @@ class ProductController extends GetxController {
     return await _productRepo.queryAllProductsFiltedBrand(brandId);
   }
 
-  Future<List<ProductModel>> getAllProductByName(String keySearch) async {
+  Future<List<DetailProductModel>?> getAllProductBySearching(String keySearch) async {
     return await _productRepo.queryAllProductByName(keySearch);
   }
 

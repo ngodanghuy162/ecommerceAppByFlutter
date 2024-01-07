@@ -26,12 +26,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
   @override
   void initState() {
     Get.put(WishlistController());
+    print("Hello");
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+    print("dispose");
   }
 
   @override

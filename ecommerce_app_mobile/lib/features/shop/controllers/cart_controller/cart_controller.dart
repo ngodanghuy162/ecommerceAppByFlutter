@@ -10,32 +10,23 @@ import 'package:get/get.dart';
 class CartController extends GetxController {
   static CartController get instance => Get.find();
 
-  RxInt quantityShop = 1.obs;
+  RxInt numberOfShop = 1.obs;
 
-  RxList eachQuantity = [].obs;
+  //RxList<int> listNumberProductInOneShop = <int>[].obs;
+
+  List<RxInt> listSizeProductInShop = [];
 
   RxDouble totalAmount = 0.0.obs;
-
-  // void updateTotalAmount() {
-  //   // Tính tổng của mảng eachPriceInCart
-  //   double sum =
-  //       eachPriceInCart.fold(0, (previous, current) => previous + current);
-  //   // Cập nhật giá trị của biến totalAmount
-  //   totalAmount.value = sum;
-  //   print("Sum: ${sum.toString()}");
-  // }
 
   Map<String, Map<String, int>> chooSenShopAndProduct = {};
 
   ProductVariantModel? chosenVariant;
 
-  RxInt totalPrice = 1.obs;
-
   RxInt chosenShopInex = 0.obs;
 
   List<int> chosenIndex = [];
 
-  List<List<double>> listPrice = [];
+  // List<List<double>> listPrice = [];
 
   List<List<ProductVariantModel>> listVariant = [];
 
@@ -49,9 +40,12 @@ class CartController extends GetxController {
   Future<bool> getCartList() async {
     Get.put(ShopRepository());
     final listCart = await UserRepository.instance.getUserCart();
+    numberOfShop.value = (listCart == null) ? 0 : listCart.length;
+    //listNumberProductInOneShop = <int>[].obs;
+    listSizeProductInShop = [];
     listProduct = [];
     listQuantity = [];
-    listPrice = [];
+    // listPrice = [];
     listVariant = [];
     listShop = [];
     if (listCart != null && listCart.isNotEmpty) {
@@ -76,12 +70,14 @@ class CartController extends GetxController {
           listProductTmp.add(productModel!);
           listVariantTMp.add(productVariantModel);
           listQuantityTmp.add(value);
-          ecchPriceTmp.add(value * productVariantModel.price);
+          // ecchPriceTmp.add(value * productVariantModel.price);
         });
+        listSizeProductInShop.add(listProductTmp.length.obs);
+       // listNumberProductInOneShop.add(listProductTmp.length);
         listProduct.add(listProductTmp);
         listQuantity.add(listQuantityTmp);
         listVariant.add(listVariantTMp);
-        listPrice.add(ecchPriceTmp);
+        // listPrice.add(ecchPriceTmp);
       });
     }
     return true;
