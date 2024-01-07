@@ -47,18 +47,38 @@ class _TBillingShipmentSectionState extends State<TBillingShipmentSection> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                ...widget.shipmentServiceAvailable.map(
-                  (e) => ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        currentService = e;
-                      });
-                    },
-                    child: Text(
-                      e['short_name'],
-                    ),
-                  ),
-                )
+                ...widget.shipmentServiceAvailable.map((e) => Card(
+                      elevation: 5,
+                      color: TColors.primary,
+                      child: ListTile(
+                        onTap: () {
+                          setState(() {
+                            currentService = e;
+                            Get.back();
+                          });
+                        },
+                        leading: const Icon(
+                          Iconsax.truck_fast,
+                          color: TColors.light,
+                        ),
+                        title: Text(
+                          e['short_name'],
+                          style: const TextStyle(
+                            color: TColors.light,
+                          ),
+                        ),
+                        subtitle: const Text(
+                          'Shipment method',
+                          style: TextStyle(
+                            color: TColors.light,
+                          ),
+                        ),
+                        trailing: const Icon(
+                          Iconsax.arrow_right_34,
+                          color: TColors.light,
+                        ),
+                      ),
+                    ))
               ],
             ));
       },

@@ -35,10 +35,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TAppBar(
-        title: const Text('Hồ sơ'),
+        title: const Text('My profile'),
         showBackArrow: true,
         backOnPress: () => {
-          Get.off(() => const NavigationMenu(initialIndex: 3)),
+          Get.back(),
         },
       ),
       body: SingleChildScrollView(

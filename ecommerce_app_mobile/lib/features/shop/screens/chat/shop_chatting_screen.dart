@@ -12,12 +12,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ShopChattingScreen extends StatefulWidget {
-  const ShopChattingScreen({
-    super.key,
-    required this.chatId,
-    required this.userEmail,
-    required this.userName
-  });
+  const ShopChattingScreen(
+      {super.key,
+      required this.chatId,
+      required this.userEmail,
+      required this.userName});
 
   final String chatId;
   final String userEmail;
@@ -29,7 +28,7 @@ class ShopChattingScreen extends StatefulWidget {
 
 class _ShopChattingScreenState extends State<ShopChattingScreen> {
   final TextEditingController _textEditingControllerController =
-  TextEditingController();
+      TextEditingController();
   final _authRepo = Get.put(AuthenticationRepository());
   final messageController = Get.put(MessageController());
   final chatController = Get.put(ChatController());
@@ -40,7 +39,6 @@ class _ShopChattingScreenState extends State<ShopChattingScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     chatId = widget.chatId;
   }
@@ -62,12 +60,11 @@ class _ShopChattingScreenState extends State<ShopChattingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TAppBar(
-          title: Text(
-            "Chatting with ${widget.userName}",
-            style: const TextStyle(color: TColors.white),
-          ),
-          showBackArrow: true,
-          backgroundColor: Colors.blue),
+        title: Text(
+          "Chatting with ${widget.userName}",
+        ),
+        showBackArrow: true,
+      ),
       body: Column(
         children: [
           const SizedBox(
@@ -86,15 +83,16 @@ class _ShopChattingScreenState extends State<ShopChattingScreen> {
 
                   /// User input
                   Positioned(
-                      bottom: 0,
-                      left: 0,
-                      child: Container(
-                        color: Colors.white,
-                        padding: const EdgeInsets.all(8.0),
-                        width: THelperFunctions.screenWidth(),
-                        child: _buildMessageInput(),
-                        // child: Row(children: [Text('keke')],),
-                      )),
+                    bottom: 0,
+                    left: 0,
+                    child: Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.all(8.0),
+                      width: THelperFunctions.screenWidth(),
+                      child: _buildMessageInput(),
+                      // child: Row(children: [Text('keke')],),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -126,8 +124,8 @@ class _ShopChattingScreenState extends State<ShopChattingScreen> {
           itemBuilder: (context, index) {
             return index == messageList.length
                 ? const SizedBox(
-              height: 75,
-            )
+                    height: 75,
+                  )
                 : _buildMessageItem(messageList[index]);
           },
         );
@@ -150,9 +148,9 @@ class _ShopChattingScreenState extends State<ShopChattingScreen> {
         padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment:
-          checkUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              checkUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           mainAxisAlignment:
-          checkUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+              checkUser ? MainAxisAlignment.end : MainAxisAlignment.start,
           children: [
             Text(messageModel.emailFrom),
             ChatBubble(

@@ -5,9 +5,11 @@ import 'package:ecommerce_app_mobile/Service/repository/authentication_repositor
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/chat_controller/chat_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/chat/shop_chatting_screen.dart';
+import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ShopReplyChattingScreen extends StatefulWidget {
   const ShopReplyChattingScreen({super.key});
@@ -30,9 +32,7 @@ class _ShopReplyChattingScreenState extends State<ShopReplyChattingScreen> {
       appBar: const TAppBar(
         title: Text(
           'Chatting with customer',
-          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.blue,
         showBackArrow: true,
       ),
       body: Padding(
@@ -91,49 +91,49 @@ class _ShopReplyChattingScreenState extends State<ShopReplyChattingScreen> {
     );
   }
 
-  Widget _buildChatItem({
-    required String userName,
-    required String lastMessage,
-    required String avatarUrl,
-    required String chatId,
-    required userEmail
-  }) {
+  Widget _buildChatItem(
+      {required String userName,
+      required String lastMessage,
+      required String avatarUrl,
+      required String chatId,
+      required userEmail}) {
     return InkWell(
-      onTap: () {
-        // Add logic to navigate to the chat screen for this user
-        Get.to(() => ShopChattingScreen(chatId: chatId, userEmail: userEmail, userName: userName,));
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16.0),
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.grey[400],
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
+        onTap: () {
+          // Add logic to navigate to the chat screen for this user
+          Get.to(
+            () => ShopChattingScreen(
+              chatId: chatId,
+              userEmail: userEmail,
+              userName: userName,
+            ),
+          );
+        },
+        child: Card(
+          elevation: 5,
+          color: TColors.primary,
+          child: ListTile(
+            leading: CircleAvatar(
               backgroundImage: NetworkImage(avatarUrl),
               radius: 30.0,
             ),
-            const SizedBox(width: 16.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  userName,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 4.0),
-                Text(
-                  lastMessage,
-                  style: const TextStyle(color: Colors.black),
-                ),
-              ],
+            title: Text(
+              userName,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: TColors.light,
+              ),
             ),
-          ],
-        ),
-      ),
-    );
+            subtitle: Text(
+              lastMessage,
+              style: const TextStyle(
+                color: TColors.light,
+              ),
+            ),
+            trailing: const Icon(
+              Iconsax.arrow_right_34,
+              color: TColors.light,
+            ),
+          ),
+        ));
   }
 }

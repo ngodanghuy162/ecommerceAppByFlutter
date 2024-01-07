@@ -45,7 +45,7 @@ class _TUserProfileTitleState extends State<TUserProfileTitle> {
             ),
       ),
       trailing: IconButton(
-        onPressed: () => Get.off(const ProfileScreen()),
+        onPressed: () => Get.to(const ProfileScreen()),
         icon: const Icon(
           Iconsax.edit,
           color: TColors.white,
